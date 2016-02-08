@@ -1170,15 +1170,6 @@ $(document).ready(function(){
                heightStyle:"fill",
               // collapsible:true,
                //hide:"slideUp"
-
-
-
-
-
-
-
-
-
                
     });
 

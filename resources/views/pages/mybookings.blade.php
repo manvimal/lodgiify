@@ -19,7 +19,7 @@
           <table class="main-list content" border="1" align="center">
             <?php if (isset($bookings)){ ?>
                     <tr class="booking">             
-                        <th class="package">Package</th>
+                        <th class="package"> Number</th>
                         <th class="checkin">Check in date </span></th>
                         <th class="checkout">Check out date </th>
                         <th class="adults">No adults </th>      
@@ -27,24 +27,30 @@
                         <th class="Action">Action </th>                 
                     </tr>
                                    
-                   <?php foreach($bookings as $booking){ 
-                      $lattitude = $booking->package-> building->lattitude ;
-                      $longitude = $booking->package-> building->longitude ;
-                      $building = $booking->package-> building->buildingName . " : ".  $booking->package-> building->buildingLocation;
-                      $getDirection =  "/booking/getDirections?lattitude=". $lattitude."&longitude=".$longitude."&building=" .$building;
-
-                      $deleteLink =  "/booking/delete?id=". $booking->id;
-                      $viewBookingLink =  "/booking/viewBooking?id=". $booking->id;
-                    ?>
-                        <tr class="booking">
-                          <td><?php echo $booking->package-> packageName . ' - ' .  $booking->package-> packageDesc ;?> </td>
-                          <td><?php echo $booking->checkin  ?></td>
-                          <td><?php echo $booking->checkOut  ?></td>
-                          <td></td>
-                          <td></td>
-                          <td>  <a href="<?php echo $getDirection; ?>" class="direction">Get directions</a>  <a href="<?php echo $viewBookingLink; ?>" class="Order" target="_blank">View booking</a>  <a href="<?php echo $deleteLink; ?>" class="deleteBooking" >Delete</a></td>
-                        </tr>
-                     <?php 
+                   <?php $i = 1;
+                      foreach($bookings as $booking){ 
+                            if (count($booking->packages) > 0){
+                                 $lattitude = $booking->packages[0]-> building->lattitude ;
+                                 $longitude = $booking->packages[0]-> building->longitude ;
+                                 $building = $booking->packages[0]-> building->buildingName . " : ".  $booking->packages[0]-> building->buildingLocation;
+                                 $getDirection =  "/booking/getDirections?lattitude=". $lattitude."&longitude=".$longitude."&building=" .$building;
+                            } 
+                            
+                            $deleteLink =  "/booking/delete?id=". $booking->id;
+                            $viewBookingLink =  "/booking/viewBooking?id=". $booking->id;
+                              
+                          ?>
+                           <tr class="booking">
+                              <td><?php echo $i ;?> </td>
+                              <td><?php echo $booking->checkin  ?></td>
+                              <td><?php echo $booking->checkOut  ?></td>
+                              <td></td>
+                              <td></td>
+                              <td> <?php if (count($booking->packages) > 0){  ?> <a href="<?php echo $getDirection; ?>" class="direction">Get directions</a>  <?php } ?> <a href="<?php echo $viewBookingLink; ?>" class="Order" target="_blank">View booking</a>  <a href="<?php echo $deleteLink; ?>" class="deleteBooking" >Delete</a></td>
+                           
+                            </tr> 
+                           <?php 
+                            $i ++;
                               }
 
                           }

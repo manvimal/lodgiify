@@ -48,6 +48,12 @@ class packageModel extends Model implements AuthenticatableContract,
         return $this->belongsTo('App\roomCategory' , 'roomCategoryID');
     }
 
+
+    /* public function building()
+    {
+        return $this->belongsTo('App\buildingModel' , 'tblbookingPackage','booking_id', 'package_id');
+    }*/
+
    
 }
 

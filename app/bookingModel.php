@@ -31,10 +31,10 @@ class bookingModel extends Model implements AuthenticatableContract,
      */
 
      protected $fillable = ['id',
-                            'tenantID', 'travelID', 'checkin', 'checkOut','packageId','price'];
+                            'tenantID', 'travelID', 'checkin', 'checkOut','price'];
 
     //displays the relationships in json format
-    protected $with = array('tenant'/*,'travel'*/ , 'package');
+    protected $with = array('tenant'/*,'travel'*/ , 'packages');
 
 
    
@@ -43,9 +43,9 @@ class bookingModel extends Model implements AuthenticatableContract,
         return $this->belongsTo('App\tenantModel' , 'tenantID');
     }
 
-    public function package()
+    public function packages()
     {
-        return $this->belongsTo('App\packageModel' , 'packageId');
+        return $this->belongsToMany('App\packageModel' , 'tblbookingPackage','booking_id', 'package_id');
     }
 
     public function getPrice($package, $booking){

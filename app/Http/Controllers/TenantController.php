@@ -117,6 +117,7 @@ use App\bookingModel as bookingModel;
 
 		if ($request['id'] != null){
 			$deleteBookings = bookingModel::where('id', '=', $request['id'])->delete();
+			return redirect()->action('tenantController@myBookings');
 		}
 			print json_encode(array(1));
 	
