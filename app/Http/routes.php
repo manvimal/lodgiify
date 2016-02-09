@@ -16,6 +16,8 @@ Route::get('/mybooking','tenantController@myBookings');
 Route::post('/feedback','MainController@customerQuery');
 Route::get('/userAccount', 'MainController@userAccount');
 Route::get('/viewPackage','packageController@viewPackage');
+
+
 /**** USER ***/
 Route::get('/user/registration', 'MainController@registerUser');
 Route::post('/user/update', 'MainController@updateAccount');
@@ -65,3 +67,20 @@ Route::get('/booking/getDirections', 'tenantController@getDirections');
 Route::get('/insertPackage','LandlordController@insertPackage');
 Route::post('/package/register','packageController@registerPackage');
 Route::get('/package/delete','packageController@delete');
+
+/**Admin **/
+Route::get('/viewTenant', 'adminController@viewTenant');
+Route::get('/tenant/delete','adminController@deleteTenant');
+Route::get('/tenant/update','adminController@updateTenant');
+Route::get('/viewLandlord', 'adminController@viewLandlord');
+Route::get('/landlord/delete','adminController@deleteLandlord');
+Route::get('/landlord/update','adminController@updateLandlord');
+Route::get('/viewVehicleOwner', 'adminController@viewVehicleOwner');
+Route::get('/vehicleowner/delete','adminController@deleteVehicleOwner');
+Route::get('/vehicleowner/update','adminController@updateVehicleOwner');
+Route::get('/addCategoryPage','adminController@addCategoryPage');
+Route::post('/addCategories','adminController@addCategories');
+
+Route::get('/viewCategoryPage','adminController@viewCategoryPage');
+
+

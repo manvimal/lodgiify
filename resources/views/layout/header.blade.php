@@ -9,7 +9,7 @@
 
 				if (empty($user)){
 			 ?>
-				<form name="login" action="/user/login" onsubmit="return validateLogin(this)">
+				<form name="login" action="{{ URL::asset('/user/login') }}" onsubmit="return validateLogin(this)">
 					<table class="login">
 							<tr>
 							<td>User Name:</td> 
@@ -28,7 +28,23 @@
 					else{
 				?>
 					<span class="userInfo">
+
+						<?php if($user[0]->type == "admin"){
+						?>
+						<a href="#">
+
+						<?php
+
+						}
+
+						else {
+						?>
+
+
 						<a href="userAccount">
+						<?php
+						}
+						?>
 							<?php
 
 								echo ($user[0]->type .": ". $user[0]->LastName . " ". $user[0]->FirstName);
@@ -36,7 +52,7 @@
 
 						 </a>
 
-						 <a href="/user/logoff">Log out</a>
+						 <a href="{{ URL::asset('/user/logoff') }}">Log out</a>
 
 					</span>
 				<?php

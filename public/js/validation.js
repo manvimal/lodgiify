@@ -1519,25 +1519,60 @@ removeAllErrors($(form));
 
 
 
-/**
-	$("body").on('click','.deleteBooking', function(){
-		var r = confirm("Are you sure you want to delete your booking!");
-		if (r == true) {
-		    $.getJSON( $(this).attr("href"), function( data ) {
-    			$(".inner_wrapper").html("");
-    			$(".inner-list li.active").remove();
-    			$(".inner-list a:eq(0)").click();
-    		
+function validateAddCategories(form){
+
+	
+removeAllErrors($(form));
+		var hasError = false;
+		var hasError1 = false;
+		var hasError2 = false;
+
+	var roomCatName = form['roomCatName'];
+		if (!checkError(roomCatName)) clearError(roomCatName);
+
+		else hasError = true;
+
+
+	var buildingcatName = form['buildingcatName'];
+		if (!checkError(buildingcatName)) clearError(buildingcatName);
+
+		else hasError1 = true;
+
+
+	var vehiclecatName = form['vehiclecatName'];
+		if (!checkError(vehiclecatName)) clearError(vehiclecatName);
+
+		else hasError2 = true;
+
+
+	if ((!hasError) || (!hasError1) || (|| !hasError2)) {
+			url = "/addCategories";
+			data =  $(form).serialize();
+			$.ajax({
+			  type: "POST",
+			  url: url,
+			  data: data,
+			  success: function(response){
+			  	  var obj = $.parseJSON( response );
+			  	  if (obj.status == -1){
+			  	  	//user eists
+			  	  	alert(obj.msg);
+			  	  }
+			  	  else if(obj.status == 1){
+			  	  		alert(obj.msg);
+			  	  		//location.reload();
+			  	  		//redirect 
+			  	  }
+				
+			  }
 			});
 		}
-		return false;
-	})
-**/
+
+	return !hasError;
 
 
 
-
-
+}
 
 
 //packages update delete view

@@ -2,8 +2,6 @@
 			 <div class="cssmenu">
 				<ul>
 					<li class=""><a href="{{ URL::asset('/index') }}">Home</a></li>
-					<!-- <li><a href="portfolio.html">Portfolio</a></li> 
-					<li><a href="blog.html">Blog</a></li>  -->
 					
 
 					<?php
@@ -16,6 +14,18 @@
 						}
 			 		?>
 			 		
+
+			 		<?php
+						if($user['type'] == 'admin'){
+					?>
+						<li><a href="{{ URL::asset('/viewTenant') }}">View Tenants</a></li>
+						<li><a href="{{ URL::asset('/viewLandlord') }}">View Landlords</a></li>
+						<li><a href="{{ URL::asset('/viewVehicleOwner') }}">View Vehicle Owners</a></li>
+						<li><a href="{{ URL::asset('/addCategoryPage') }}">Add Categories</a></li>
+					<?php
+						}
+					?>
+
 
 					<?php
 						if($user['type'] == 'tenant'){

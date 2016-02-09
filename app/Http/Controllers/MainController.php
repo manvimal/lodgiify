@@ -227,7 +227,7 @@ use App\UserAdmin as UserAdmin;
 		
 
 
-		if (!empty($userName) && !empty($password)){
+			if (!empty($userName) && !empty($password)){
 			$users = DB::table('tbltenant')
 			                     ->select(DB::raw('*'))
 			                     ->where('UserName', '=', $userName)
@@ -274,11 +274,35 @@ use App\UserAdmin as UserAdmin;
 
 
 													else{
-															 if(!empty($users)){
+															 //if(!empty($users)){
+														//$messge['status'] = 1;
+														//$messge['msg'] = "User logged in";
+
+														$users = DB::table('tbladmin')
+							                     ->select(DB::raw('*'))
+							                     ->where('UserName', '=', $userName)
+							                     ->where('Password', '=', $password)
+							                     ->get();
+
+
+
+													if(!empty($users)){
+													$messge['status'] = 1;
+													$messge['msg'] = "User logged in";
+													$users['type'] = 'admin';
+													$request->session()->put('user', $users);
+														
+													}
+
+													else{
+
+														if(!empty($users)){
 														$messge['status'] = 1;
 														$messge['msg'] = "User logged in";
-														
-																				}
+													}
+												}
+
+
 			}
 				
 			}
@@ -466,7 +490,8 @@ if(($user[0]->type)=="tenant"){
 
 
 }
-
+	
+	
 	
 }
 ?>
