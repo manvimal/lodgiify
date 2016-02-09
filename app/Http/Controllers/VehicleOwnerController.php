@@ -19,6 +19,8 @@ use App\buildingModel as buildingModel;
 use App\roomModel as roomModel;
 use App\vehicleCategory as vehiclecategory;
 use App\vehicleModel as vehicleModel;
+use App\travelModel as travelModel;
+
 
  class VehicleOwnerController extends BaseController
 {
@@ -41,6 +43,26 @@ use App\vehicleModel as vehicleModel;
 		$vehicles = vehicleModel::where('vehicleOwnerID', '=', $user[0]->id)->get();
 
 		return view('pages.vehicleOwnerAddVehicle',  array('categories' => $categories,'user' => $user, 'vehicles' => $vehicles));
+	}
+
+
+	//viewVehicleBookinga
+
+	public function viewVehicleBookinga(Request $request){
+		//saves user sesssion in $user to be used in the redirected page
+		$user = $request->session()->get('user');
+
+		$bookings = travelModel::get();
+
+/**
+$bookings = travelModel::with('vehicle')
+			->where('vehicleOwnerID', '=', $user[0]->id)->get();
+**/
+
+		
+
+		return view('pages.vehicleBookings',  array('user' => $user, 'bookings' => $bookings));
+
 	}
 
 }

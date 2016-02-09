@@ -59,6 +59,7 @@
 					?>
 						<li><a href="{{ URL::asset('/addVehicle') }}">Add vehicle</a></li>
 						<li><a href="{{ URL::asset('/viewVehicles') }}">Vehicles</a></li>
+						<li><a href="{{ URL::asset('/viewVehicleBookings') }}">View my jobs</a></li> 
 						<li><a href="{{ URL::asset('/aboutus') }}">About Us</a></li>
 						<li><a href="{{ URL::asset('/contactus') }}">Contact Us</a></li> 
 					<?php
