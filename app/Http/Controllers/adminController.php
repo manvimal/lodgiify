@@ -21,6 +21,8 @@ use App\roomModel as roomModel;
 use App\packageModel as packageModel;
 use App\vehicleOwnerModel as vehicleOwnerModel;
 use App\vehicleCategory as vehicleCategory;
+use App\facilityModel as facilityModel;
+
 
 
 
@@ -29,11 +31,13 @@ use App\vehicleCategory as vehicleCategory;
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
-	public function viewTenant(Request $request){
+	public function viewUsers(Request $request){
 		
 		$user = $request->session()->get('user');
 		$tenants = User::all();
-		return view('pages.adminViewTenants',  array('user'=>$user, 'tenants' => $tenants));
+		 $landlords = userLandlord::all();
+		 $vehicleowners = vehicleOwnerModel::all();
+		return view('pages.adminViewUsers',  array('user'=>$user, 'tenants' => $tenants, 'landlords' => $landlords, 'vehicleowners' => $vehicleowners));
 	}
 
 
@@ -42,7 +46,7 @@ use App\vehicleCategory as vehicleCategory;
 
 			if ($request['id'] != null){
 			$deleteTenant = User::where('id', '=', $request['id'])->delete();
-			return redirect()->action('adminController@viewTenant');
+			return redirect()->action('adminController@viewUsers');
 		}
 			print json_encode(array(1));
 	}
@@ -58,20 +62,17 @@ use App\vehicleCategory as vehicleCategory;
 	}
 
 
-	public function viewLandlord(Request $request){
-
-		$user = $request->session()->get('user');
-		 $landlords = userLandlord::all();
-		 return view('pages.adminViewLandlords',  array('user'=>$user, 'landlords' => $landlords)); 
-	}
+	
 
 
 	public function deleteLandlord(Request $request){
 			
 
-			if ($request['id'] != null){
-			$deletelandlord = userLandlord::where('id', '=', $request['id'])->delete();
-			return redirect()->action('adminController@viewLandlord');
+			if ($_REQUEST['id'] != null){
+			$deletelandlord = userLandlord::where('id', '=', $_REQUEST['id'])->delete();
+
+			var_dump($_REQUEST['id']);
+			return redirect()->action('adminController@viewUsers');
 		}
 			print json_encode(array(1));
 	
@@ -88,12 +89,6 @@ use App\vehicleCategory as vehicleCategory;
 	}
 
 
-	public function viewVehicleOwner(Request $request){
-
-		$user = $request->session()->get('user');
-		$vehicleowners = vehicleOwnerModel::all();
-		return view('pages.adminViewVehicleOwner',  array('user'=>$user, 'vehicleowners' => $vehicleowners)); 
-	}
 
 
 	public function deleteVehicleOwner(Request $request){
@@ -101,7 +96,7 @@ use App\vehicleCategory as vehicleCategory;
 
 			if ($request['id'] != null){
 			$deletevehicleowner = vehicleOwnerModel::where('id', '=', $request['id'])->delete();
-			return redirect()->action('adminController@viewVehicleOwner');
+			return redirect()->action('adminController@viewUsers');
 		}
 			print json_encode(array(1));
 	
@@ -161,7 +156,6 @@ use App\vehicleCategory as vehicleCategory;
 
 				
 					}
-
 
 
 
@@ -247,6 +241,284 @@ use App\vehicleCategory as vehicleCategory;
 		$buildingCategories = buildingCategory::all();
 		$vehicleCategories = vehicleCategory::all();
 		return view('pages.adminViewCategories',  array('user'=>$user, 'roomCategories' => $roomCategories, 'buildingCategories' => $buildingCategories, 'vehicleCategories' => $vehicleCategories)); 
+	}
+
+	function deleteRoomCat(Request $request){
+			
+
+			if ($request['id'] != null){
+			$deleteRoomcat = roomCategory::where('id', '=', $request['id'])->delete();
+			return redirect()->action('adminController@viewCategoryPage');
+		}
+			print json_encode(array(1));
+	
+	}
+
+
+
+	function deleteBuildingCat(Request $request){
+			
+
+			if ($request['id'] != null){
+			$deleteBuildingCat = buildingCategory::where('id', '=', $request['id'])->delete();
+			return redirect()->action('adminController@viewCategoryPage');
+		}
+			print json_encode(array(1));
+	
+	}
+
+
+	function deleteVehicleCat(Request $request){
+			
+
+			if ($request['id'] != null){
+			$deletevehicleCat = vehicleCategory::where('id', '=', $request['id'])->delete();
+			return redirect()->action('adminController@viewCategoryPage');
+		}
+			print json_encode(array(1));
+	
+	}
+
+
+
+	public function addFacilityPage(Request $request){
+
+		$user = $request->session()->get('user');
+		$facilities = facilityModel::all();
+		
+		return view('pages.adminAddFacility',  array('user'=>$user, 'facilities'=>$facilities)); 
+	}
+
+
+	public function addFacilities(Request $request){
+			$error=True;
+			$messge  = array(
+			    "status" => 0,
+			);
+
+
+		if ((isset($request['facilityName'])) && (!empty($request['facilityName'])) ){
+			$facilityName = $request['facilityName'];
+			$error=false;
+		}
+		else{
+			$error=true;
+
+		}
+
+		if ((isset($request['facilityType'])) && (!empty($request['facilityType'])) ){
+				$facilityType = $request['facilityType'];
+				$error=false;
+		}
+		else{
+			$error=true;
+
+		}
+	
+		if($error==false){
+
+		$facilityNameCheck = DB::table('tblfacility')
+	                    ->select(DB::raw('*'))
+	                    ->where('name', '=', $facilityName)
+	                    ->get();
+
+	                     
+				
+			if(!empty($facilityNameCheck)) {
+			$messge['status'] = -1;
+			$messge['msg'] = "Already exists";
+
+			}
+
+
+			else{
+
+					//Save vehicles for specific user
+					$facility = new facilityModel;
+					$facility-> name = $facilityName; 
+					$facility-> type = $facilityType ;
+					
+
+					$facility->save();
+
+
+					return Redirect::to('addFacilityPage');
+							
+				}
+				echo json_encode ($messge);
+
+			}
+
+	}
+
+	public function deleteFacility(Request $request){
+			
+
+			if ($_REQUEST['id'] != null){
+			$deletFacility = facilityModel::where('id', '=', $request['id'])->delete();
+			return redirect()->action('adminController@addFacilityPage');
+		}
+			print json_encode(array(1));
+	}
+
+
+
+
+	public function updateFacilityPage(Request $request){
+	
+
+		if(isset($_REQUEST['id'])) {
+			$facilityid = $_REQUEST['id'];
+		
+		}
+
+		$user = $request->session()->get('user');
+		$facility = facilityModel::where('id', '=', $facilityid)->get();
+
+		return view('pages.adminUpdateFacility',  array('user' => $user, 'facility'=>$facility));	
+	}
+
+	public function updateFacility(Request $request){
+
+		$user = $request->session()->get('user');
+
+
+		if((isset($_REQUEST['facilityType'])) && (isset($_REQUEST['idText'])))  {
+			$facilityType = $_REQUEST['facilityType'];
+			$idText = $_REQUEST['idText'];
+
+		}
+
+		$facilityUpdate = facilityModel::find($idText);
+
+		$facilityUpdate-> type = $facilityType ;
+
+		$facilityUpdate->save();
+
+		return Redirect::to('/addFacilityPage');
+	
+	}
+
+
+	function updateRoomCatPage(Request $request){
+
+		if(isset($_REQUEST['id'])) {
+			$roomcatId = $_REQUEST['id'];
+		
+		}
+
+		$user = $request->session()->get('user');
+		$roomCat = roomCategory::where('id', '=', $roomcatId)->get();
+
+		return view('pages.adminUpdateCategories',  array('user' => $user, 'roomCat'=>$roomCat));	
+
+
+		
+	}
+
+	function updateBuildingCatPage(Request $request){
+
+		if(isset($_REQUEST['id'])) {
+			$buildingcatId = $_REQUEST['id'];
+		
+		}
+
+		$user = $request->session()->get('user');
+		$buildingCat = buildingCategory::where('id', '=', $buildingcatId)->get();
+
+		return view('pages.adminUpdateCategories',  array('user' => $user, 'buildingCat'=>$buildingCat));	
+
+		
+	}
+
+	function updateVehicleCatPage(Request $request){
+			if(isset($_REQUEST['id'])) {
+			$vehiclecatId = $_REQUEST['id'];
+		
+		}
+
+		$user = $request->session()->get('user');
+		$vehicleCat = vehicleCategory::where('id', '=', $vehiclecatId)->get();
+
+		return view('pages.adminUpdateCategories',  array('user' => $user, 'vehicleCat'=>$vehicleCat));	
+
+	
+		
+	}
+
+
+
+	function updateCategories(Request $request){
+	
+		$user = $request->session()->get('user');
+
+
+
+		if((isset($_REQUEST['roomCatName'])) && (!empty($_REQUEST['roomCatName'])) && (isset($_REQUEST['roomCategoryID'])) && (!empty($_REQUEST['roomCategoryID'])))  {
+			$roomCatName = $_REQUEST['roomCatName'];
+			$roomCategoryID = $_REQUEST['roomCategoryID'];
+
+		
+
+		$roomCatNameUpdate = roomCategory::find($roomCategoryID);
+
+		$roomCatNameUpdate-> roomCatName = $roomCatName ;
+
+		$roomCatNameUpdate->save();
+
+		return Redirect::to('/viewCategoryPage');
+	}
+
+	
+		if((isset($_REQUEST['buildingcatName'])) && (!empty($_REQUEST['buildingcatName'])) && (!empty($_REQUEST['buildingCategoryID'])) && (isset($_REQUEST['buildingCategoryID'])))  {
+			$buildingcatName = $_REQUEST['buildingcatName'];
+			$buildingCategoryID = $_REQUEST['buildingCategoryID'];
+
+		
+
+		$buildingcatNameUpdate = buildingCategory::find($buildingCategoryID);
+
+		$buildingcatNameUpdate-> buildingCatName = $buildingcatName ;
+
+		$buildingcatNameUpdate->save();
+
+		return Redirect::to('/viewCategoryPage');
+	}
+
+
+
+		else  {
+			$vehiclecatName = $_REQUEST['vehiclecatName'];
+			$vehicleCategoryID = $_REQUEST['vehicleCategoryID'];
+
+		
+
+		$vehiclecatNameUpdate = vehicleCategory::find($vehicleCategoryID);
+
+		$vehiclecatNameUpdate-> vehiclecatnameType = $vehiclecatName ;
+
+		$vehiclecatNameUpdate->save();
+
+		return Redirect::to('/viewCategoryPage');
+	}
+
+
+
+	}
+
+
+	function tenantUpdatePage(Request $request){
+		if(isset($_REQUEST['id'])) {
+			$tenantID = $_REQUEST['id'];
+		
+		}
+
+		$user = $request->session()->get('user');
+		$tenant = User::where('id', '=', $tenantID)->get();
+
+		return view('pages.adminUpdateUsers',  array('user' => $user, 'tenant'=>$tenant));	
+
+
 	}
 
 }

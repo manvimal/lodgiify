@@ -52,7 +52,7 @@
 
 						 </a>
 
-						 <a href="{{ URL::asset('/user/logoff') }}">Log out</a>
+						 <a href="{{ URL::asset('/user/logoff') }}" class="btnLogin">Log out</a>
 
 					</span>
 				<?php

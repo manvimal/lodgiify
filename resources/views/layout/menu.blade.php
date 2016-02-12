@@ -18,10 +18,10 @@
 			 		<?php
 						if($user['type'] == 'admin'){
 					?>
-						<li><a href="{{ URL::asset('/viewTenant') }}">View Tenants</a></li>
-						<li><a href="{{ URL::asset('/viewLandlord') }}">View Landlords</a></li>
-						<li><a href="{{ URL::asset('/viewVehicleOwner') }}">View Vehicle Owners</a></li>
+						<li><a href="{{ URL::asset('/viewUsers') }}">Manage All Users</a></li>
 						<li><a href="{{ URL::asset('/addCategoryPage') }}">Add Categories</a></li>
+						<li><a href="{{ URL::asset('/viewCategoryPage') }}">Manage All Categories</a></li>
+						<li><a href="{{ URL::asset('/addFacilityPage') }}">Administer Facility</a></li>
 					<?php
 						}
 					?>

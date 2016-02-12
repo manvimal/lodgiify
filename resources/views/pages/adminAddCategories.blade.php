@@ -57,7 +57,7 @@ $(document).ready(function() {
 
    <div class="banner">
       	<div class="wrap">
-      	     <h2>Registration</h2><div class="clear"></div>
+      	     <h2>Add Room/Building/Vehicle Categories</h2><div class="clear"></div>
       	</div>
     </div>
 	<div class="main">	
@@ -77,15 +77,10 @@ $(document).ready(function() {
 
 
     <select id="types" name="types" >
-    <option value="Other">Please select a category to add</option>
-     <option value="room">Room Category</option>
-     <option value="building">Building Category</option>
-     <option value="vehicle">Vehicle Category</option>
-     
-     
-     <p id="firstParagraph"> Enter room category </p>  
-     <p id="secondParagraph"> Enter building category </p> 
-     
+        <option value="Other">Please select a category to add</option>
+        <option value="room">Room Category</option>
+        <option value="building">Building Category</option>
+        <option value="vehicle">Vehicle Category</option>
     </select>
 
 <form method="post"  action="/addCategories" onSubmit="return validateAddCategories(this)">
@@ -108,7 +103,7 @@ $(document).ready(function() {
     
      <tr id="fourthR">
             <td></td>
-            <td> <input type="submit" name="submit"/> </td>
+            <td> <input type="submit" class="btnLogin" name="submit"/> </td>
         </tr>
         </table>
           </form>

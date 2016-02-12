@@ -1545,7 +1545,7 @@ removeAllErrors($(form));
 		else hasError2 = true;
 
 
-	if ((!hasError) || (!hasError1) || (|| !hasError2)) {
+	if ((!hasError) || (!hasError1) || (!hasError2)) {
 			url = "/addCategories";
 			data =  $(form).serialize();
 			$.ajax({
@@ -1573,6 +1573,60 @@ removeAllErrors($(form));
 
 
 }
+
+
+
+function validateAddFacilities(form){
+
+
+removeAllErrors($(form));
+		var hasError = false;
+	
+
+	var facilityName = form['facilityName'];
+		if (!checkError(facilityName)) clearError(facilityName);
+
+		else hasError = true;
+
+
+	var facilityType = form['facilityType'];
+		if (!checkError(facilityType)) clearError(facilityType);
+
+		else hasError = true;
+
+
+	
+
+	if (!hasError) {
+			url = "/addFacilities";
+			data =  $(form).serialize();
+			$.ajax({
+			  type: "POST",
+			  url: url,
+			  data: data,
+			  success: function(response){
+			  	  var obj = $.parseJSON( response );
+			  	  if (obj.status == -1){
+			  	  	//user eists
+			  	  	alert(obj.msg);
+			  	  }
+			  	  else if(obj.status == 1){
+			  	  		alert(obj.msg);
+			  	  		//location.reload();
+			  	  		//redirect 
+			  	  }
+				
+			  }
+			});
+		}
+
+	return !hasError;
+
+
+}
+
+
+
 
 
 //packages update delete view
