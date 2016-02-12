@@ -1409,7 +1409,7 @@ $(document).ready(function(){
 function ValidateAddVehicles(form){
 
 	
-removeAllErrors($(form));
+	removeAllErrors($(form));
 		var hasError = false;
 
 	var location = form['location'];
@@ -1431,11 +1431,14 @@ removeAllErrors($(form));
 
 	var numOfSeats = form['numOfSeats'];
 
-		if (!checkError(numOfSeats)) clearError(numOfSeats);
+		if (!checkError(numOfSeats)){
+			clearError(numOfSeats);
+	
+		} 
 		
 		else hasError = true;
 
-		return hasError;
+		
 
 	var name = form['name'];
 
@@ -1443,6 +1446,13 @@ removeAllErrors($(form));
 		
 		else hasError = true;
 
+
+
+	var price = form['price'];
+
+		if (!checkError(price)) clearError(price);
+		
+		else hasError = true;
 
 
 	return !hasError;
@@ -1545,7 +1555,8 @@ removeAllErrors($(form));
 		else hasError2 = true;
 
 
-	if ((!hasError) || (!hasError1) || (!hasError2)) {
+
+	if ((!hasError) || (!hasError1) || ( !hasError2)) {
 			url = "/addCategories";
 			data =  $(form).serialize();
 			$.ajax({
