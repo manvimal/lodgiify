@@ -16,6 +16,7 @@ Route::get('/mybooking','tenantController@myBookings');
 Route::post('/feedback','MainController@customerQuery');
 Route::get('/userAccount', 'MainController@userAccount');
 Route::get('/viewPackage','packageController@viewPackage');
+Route::get('/viewVehicleBookings','VehicleOwnerController@viewVehicleBookinga');
 
 
 /**** USER ***/

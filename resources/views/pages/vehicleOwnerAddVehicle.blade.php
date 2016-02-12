@@ -18,7 +18,7 @@
 			</div>
 
 		<div class="blog-img">
-    <form method="post"  action="/vehicle/register" onSubmit="ValidateAddVehicles(this)" enctype='multipart/form-data'  >
+    <form method="post"  action="/vehicle/register" onSubmit="return ValidateAddVehicles(this)" enctype='multipart/form-data'  >
     <input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
     <table class="alignLeft container ">
         <tr>
@@ -79,6 +79,12 @@
             <td><label>Number of seats: </label></td>
             <td><input type = "number" class="required" name = "numOfSeats" id = "numOfSeats" ></textarea><span class="errorMsg"></span></td>
         </tr>
+
+        <tr>
+            <td><label>Price per km: </label></td>
+            <td><input type = "text" class="required numeric" name = "price" id = "price" ></textarea><span class="errorMsg"></span></td>
+        </tr>
+
 
         <tr>
             <td><label>Transmission: </label></td>

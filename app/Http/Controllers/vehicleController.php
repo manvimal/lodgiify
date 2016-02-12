@@ -60,6 +60,11 @@ use Redirect;
 				$transmission = $request['transmission'];
 		}
 
+
+		if ((isset($request['price'])) && (!empty($request['price'])) ){
+				$price = $request['price'];
+		}
+
 		$uploadMsg = "";
 
 
@@ -68,9 +73,9 @@ use Redirect;
 		{
 		   $extension = Input::file('image')->getClientOriginalExtension(); // getting image extension
 		   $fileName = rand(11111,99999).'.'.$extension; // renameing image
-		   $name = $this->destinationPath ;
+		   $nameF = $this->destinationPath ;
 		   
-		   RequestStatic::file('image')->move($name,  $fileName );
+		   RequestStatic::file('image')->move($nameF,  $fileName );
 		}
 
 	
@@ -88,6 +93,7 @@ use Redirect;
 		$vehicle-> image = $fileName;
 		$vehicle-> models = $models;
 		$vehicle-> vehicleCatID = $category;		
+		$vehicle-> price = $price;	
 
 		$vehicle->save();
 		Session::flash('success', 'vehicle successfully registered'); 
