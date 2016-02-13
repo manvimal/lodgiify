@@ -17,14 +17,14 @@
     </div>
   <div class="main tenantDealPackage">  
     <input type="hidden" id="token" value="{{ csrf_token() }}" />    
-   <div class="project-wrapper">
+   <div class="project-wrapper vehicleBooking-wrapper">
    
 
 
       <?php if (isset($bookings)){    ?>
         
            <table border="1">
-            <tr>
+            <tr class="trheader">
              
                <th>Vehicle</th>
                 <th>Booking id</th>

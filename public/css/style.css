@@ -3896,3 +3896,26 @@ table.main-list {
 background:#f6f6f6;
 border:0px
 }
+
+
+.vehicleBooking-wrapper table{
+	margin:0 auto;
+
+}
+
+
+.vehicleBooking-wrapper .trheader{
+	background-color: #ffea00;
+    height: 30px;
+    font-size: 1em;
+    color: black;
+    text-align: center;
+    text-transform: uppercase;
+
+}
+
+
+.vehicleBooking-wrapper th{
+	padding: 0.5em;
+
+}
