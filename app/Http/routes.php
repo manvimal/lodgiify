@@ -70,18 +70,32 @@ Route::post('/package/register','packageController@registerPackage');
 Route::get('/package/delete','packageController@delete');
 
 /**Admin **/
-Route::get('/viewTenant', 'adminController@viewTenant');
+Route::get('/viewUsers', 'adminController@viewUsers');
 Route::get('/tenant/delete','adminController@deleteTenant');
 Route::get('/tenant/update','adminController@updateTenant');
-Route::get('/viewLandlord', 'adminController@viewLandlord');
 Route::get('/landlord/delete','adminController@deleteLandlord');
 Route::get('/landlord/update','adminController@updateLandlord');
-Route::get('/viewVehicleOwner', 'adminController@viewVehicleOwner');
 Route::get('/vehicleowner/delete','adminController@deleteVehicleOwner');
 Route::get('/vehicleowner/update','adminController@updateVehicleOwner');
 Route::get('/addCategoryPage','adminController@addCategoryPage');
 Route::post('/addCategories','adminController@addCategories');
+Route::get('/roomCategory/delete','adminController@deleteRoomCat');
+Route::get('/buildingCategory/delete','adminController@deleteBuildingCat');
+Route::get('/vehicleCategory/delete','adminController@deleteVehicleCat');
+
 
 Route::get('/viewCategoryPage','adminController@viewCategoryPage');
+Route::get('/addFacilityPage','adminController@addFacilityPage');
+Route::post('/addFacilities','adminController@addFacilities');
+Route::get('/facility/delete','adminController@deleteFacility');
+Route::get('/facility/updatePage','adminController@updateFacilityPage');
+Route::get('/updateFacilities','adminController@updateFacility');
 
 
+Route::get('/roomCategory/update','adminController@updateRoomCatPage');
+Route::get('/buildingCategory/update','adminController@updateBuildingCatPage');
+Route::get('/vehicleCategory/update','adminController@updateVehicleCatPage');
+Route::get('/updateCategories','adminController@updateCategories');
+
+
+Route::get('/tenant/update','adminController@tenantUpdatePage');

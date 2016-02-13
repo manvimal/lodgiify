@@ -62,9 +62,6 @@ use App\bookingModel as bookingModel;
 
 		$bookings = bookingModel::where('tenantID', '=', $user[0]->ID)->orderBy('created_at', 'DESC')->get();
 
-		
-
-
 		return view('pages.mybookings',  array('user' => $user, 'bookings' => $bookings));
 
 

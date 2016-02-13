@@ -7,8 +7,12 @@
 <script type="text/javascript">
 function confirm_alert(node) {
     return confirm("Please click on OK to delete tenant.");
+
+    onclick="return confirm_alert(this);"
 }
 </script>
+
+
 
    <div class="banner">
         <div class="wrap">
@@ -27,27 +31,27 @@ function confirm_alert(node) {
  <table class="main-list content" border="1" align="center">
             <?php if (isset($roomCategories)){ ?>
                     <tr class="booking"> 
-                        <th class="Category Name"> Number</th>        
-                        <th class="TenantUsername"> User Name</th>
-                            
+                        <th class="catNumbr"> Category Number</th>        
+                        <th class="catName"> Category Name</th>
+                         <th class="catType"> Category Type</th>
+                         <th class="catAction">Action</th>
                                         
                     </tr>
                                    
                    <?php $i = 1;
-                      foreach($roomCategories as $landlord){ 
+                      foreach($roomCategories as $roomCategory){ 
                        
-                                 $deleteLink =  "/landlord/delete?id=". $landlord->ID;
-                           // $viewBookingLink =  "/booking/viewBooking?id=". $booking->id;
+                                 $deleteLink =  "/roomCategory/delete?id=". $roomCategory->id;
+                                   $updateLink =  "/roomCategory/update?id=". $roomCategory->id;
                           ?>
 
                        
                            <tr class="booking">
                               <td><?php echo $i ;?> </td>
-                              <td><?php echo $landlord->UserName  ?></td>
-                              <td><?php echo $landlord->LastName  ?></td>
-                              <td><?php echo $landlord->FirstName  ?></td>
-                              <td><?php echo $landlord->Email  ?></td>
-                              <td> <?php if (count($landlord->ID) > 0){  ?> <a href="" class="direction" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" class="deleteBooking" onclick="return confirm_alert(this);" >Delete</a></td>
+                              <td><?php echo $roomCategory->roomCatName;  ?></td>
+                              <td><?php echo "Room Category";  ?></td>
+                            
+                              <td> <?php if (count($roomCategory->id) > 0){  ?> <a href="<?php echo $updateLink; ?>" class="btnLogin" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" class="btnLogin" onclick="return confirm_alert(this);" >Delete</a></td>
                            
                             
                             </tr> 
@@ -55,22 +59,45 @@ function confirm_alert(node) {
                             $i ++;
                               }
 
+                              ?>
 
-                              <?php $i = 1;
-                      foreach($roomCategories as $landlord){ 
+
+                              <?php
+                      foreach($buildingCategories as $buildingCategory){ 
                        
-                                 $deleteLink =  "/landlord/delete?id=". $landlord->ID;
-                           // $viewBookingLink =  "/booking/viewBooking?id=". $booking->id;
+                                 $deleteLink =  "/buildingCategory/delete?id=". $buildingCategory->id;
+                                  $updateLink =  "/buildingCategory/update?id=". $buildingCategory->id;
                           ?>
 
                        
                            <tr class="booking">
                               <td><?php echo $i ;?> </td>
-                              <td><?php echo $landlord->UserName  ?></td>
-                              <td><?php echo $landlord->LastName  ?></td>
-                              <td><?php echo $landlord->FirstName  ?></td>
-                              <td><?php echo $landlord->Email  ?></td>
-                              <td> <?php if (count($landlord->ID) > 0){  ?> <a href="" class="direction" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" class="deleteBooking" onclick="return confirm_alert(this);" >Delete</a></td>
+                              <td><?php echo $buildingCategory->buildingCatName;  ?></td>
+                              <td><?php echo "Building Category";  ?></td>
+                             
+                              <td> <?php if (count($buildingCategory->id) > 0){  ?> <a href="<?php echo $updateLink; ?>" class="btnLogin" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" class="btnLogin" onclick="return confirm_alert(this);" >Delete</a></td>
+                           
+                            
+                            </tr> 
+                           <?php 
+                            $i ++;
+                              }
+
+                              ?>
+
+                                      <?php 
+                      foreach($vehicleCategories as $vehicleCategory){ 
+                       
+                                 $deleteLink =  "/vehicleCategory/delete?id=". $vehicleCategory->id;
+                             $updateLink =  "/vehicleCategory/update?id=". $vehicleCategory->id;
+                          ?>
+
+                       
+                           <tr class="booking">
+                              <td><?php echo $i ;?> </td>
+                              <td><?php echo $vehicleCategory->vehiclecatnameType;  ?></td>
+                              <td><?php echo "Vehicle Category";  ?></td>
+                              <td> <?php if (count($vehicleCategory->id) > 0){  ?> <a href="<?php echo $updateLink; ?>" class="btnLogin" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" class="btnLogin" onclick="return confirm_alert(this);" >Delete</a></td>
                            
                             
                             </tr> 

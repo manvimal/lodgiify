@@ -1555,6 +1555,7 @@ removeAllErrors($(form));
 		else hasError2 = true;
 
 
+
 	if ((!hasError) || (!hasError1) || ( !hasError2)) {
 			url = "/addCategories";
 			data =  $(form).serialize();
@@ -1585,6 +1586,60 @@ removeAllErrors($(form));
 }
 
 
+
+function validateAddFacilities(form){
+
+
+removeAllErrors($(form));
+		var hasError = false;
+	
+
+	var facilityName = form['facilityName'];
+		if (!checkError(facilityName)) clearError(facilityName);
+
+		else hasError = true;
+
+
+	var facilityType = form['facilityType'];
+		if (!checkError(facilityType)) clearError(facilityType);
+
+		else hasError = true;
+
+
+	
+
+	if (!hasError) {
+			url = "/addFacilities";
+			data =  $(form).serialize();
+			$.ajax({
+			  type: "POST",
+			  url: url,
+			  data: data,
+			  success: function(response){
+			  	  var obj = $.parseJSON( response );
+			  	  if (obj.status == -1){
+			  	  	//user eists
+			  	  	alert(obj.msg);
+			  	  }
+			  	  else if(obj.status == 1){
+			  	  		alert(obj.msg);
+			  	  		//location.reload();
+			  	  		//redirect 
+			  	  }
+				
+			  }
+			});
+		}
+
+	return !hasError;
+
+
+}
+
+
+
+
+
 //packages update delete view
 	
 $(document).ready(function(){
@@ -1602,7 +1657,6 @@ $(document).ready(function(){
     			var str = packageSearchSkeleton(data[0]);
     			$(".building_wrapper1").html(str);
 
-    			console.log(str);
     			var map=new google.maps.Map(document.getElementById("googleMap"), initMap());
     			var marker=new google.maps.Marker({
 				  position:myCenter,
@@ -1679,6 +1733,10 @@ $(document).ready(function(){
 				
             
          //  alert(data.packages.length);
+          var packagelen = 0;
+           if (typeof data.packages !== "undefined") {
+           		packagelen = data.packages.length;
+           }
             
   			$html += '</div>';
         	$html += '<div class="building-footer">';
@@ -1689,7 +1747,7 @@ $(document).ready(function(){
             $html += '<div class="buildingdesc">  Description : <span> '+ data.desc +'</span></div>';
 
             $html += '<div class="buildingLoc">  Address : <span> '+ data.buildingLocation +'</span></div>';
-            $html += '<div class="buildingpackages">  No of packages : <span> '+ data.packages.length +'</span></div>';
+            $html += '<div class="buildingpackages">  No of packages : <span> '+ packagelen +'</span></div>';
             $html += '<div class="buildingrooms">  Image : <span> <img height="80" width="120" src  = "' + ' upload/' + data.image +' " </span></div>';
          	$html += '</div>';
            
@@ -1697,7 +1755,7 @@ $(document).ready(function(){
             $html += '';
           	$html += '</div>';
         	$html += '<div class="clear"></div></div>';
-       alert(data.longitude);
+       
 
         		infowindow = new google.maps.InfoWindow({
 				content:data.buildingName + " - " + data.desc
@@ -1707,8 +1765,9 @@ $(document).ready(function(){
 
 			$html += '</div>';
 			$html += '<div class="rooms">';
-	console.log(data.packages);
-			for (i=0 ; i< data.packages.length ; i++){
+			
+			 if (typeof data.packages !== "undefined") {
+           		for (i=0 ; i< data.packages.length ; i++){
 				packages =  data.packages[i];
 				$html += '<div class="room">';
 				$html += '<div class="roomDetails">';
@@ -1721,9 +1780,12 @@ $(document).ready(function(){
               	$html += '<div class="capacityAdult"> Capacity Adult : <span> '+ packages.capacityAdult +'</span></div>';
 	         
 	              
-          	$html += '</div>';
-			$html += '</div>';
-			}
+	          	$html += '</div>';
+				$html += '</div>';
+				}
+           	 }
+
+			
         	$html += ' </div>';
        
 	   		$html += '<div class="clear"></div>';
@@ -1740,5 +1802,7 @@ $(document).ready(function(){
 		};
 		return mapProp;
 	}
+
+	$(".buildings-list1 .active a").click();
 
 });
