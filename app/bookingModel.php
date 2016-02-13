@@ -40,7 +40,7 @@ class bookingModel extends Model implements AuthenticatableContract,
    
     public function tenant()
     {
-        return $this->belongsTo('App\tenantModel' , 'tenantID');
+        return $this->belongsTo('App\tenantModel' , 'tenantID', 'ID');
     }
 
     public function packages()

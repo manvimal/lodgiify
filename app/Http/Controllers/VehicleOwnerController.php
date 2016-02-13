@@ -54,15 +54,35 @@ use App\travelModel as travelModel;
 
 		$bookings = travelModel::get();
 
-/**
-$bookings = travelModel::with('vehicle')
-			->where('vehicleOwnerID', '=', $user[0]->id)->get();
-**/
-
-		
-
-		return view('pages.vehicleBookings',  array('user' => $user, 'bookings' => $bookings));
+		return view('pages.vehicleBookings',  array('user' => $user, 'bookings' => $this->getVehicleBookingRemaining($bookings)));
 
 	}
+
+
+	//Display booking in future for go and return journey
+	private function getVehicleBookingRemaining($bookings){
+		$bookinRemaining = array();
+		foreach ($bookings as $booking){
+			
+			if (new \DateTime() <=   new \DateTime($booking->pickUpTime1)){
+				array_push($bookinRemaining, $booking);
+			}
+			
+			
+			if (($booking->dispach =='true') && (new \DateTime() <=   new \DateTime($booking->pickUpTime2))){
+				$bookingCpy = clone $booking;
+				$bookingCpy ->pickUpTime1 = $bookingCpy ->pickUpTime2;
+				$bookingCpy->pickUpLocation1 = $bookingCpy->pickUpLocation2;
+				$bookingCpy ->pickUpDestination1 = $bookingCpy ->pickUpDestination2;
+				array_push($bookinRemaining, $bookingCpy);
+				
+			}
+		}
+
+		
+		return $bookinRemaining ;
+	}
+
+
 
 }

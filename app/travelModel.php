@@ -39,7 +39,7 @@ class travelModel extends Model implements AuthenticatableContract,
                             'pickUpLocation2',
                             'pickUpDestination1',
                             'pickUpDestination2',
-                            'dispatch',
+                            'dispach',
                                             ];
 
     //displays the relationships in json format
