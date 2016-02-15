@@ -99,3 +99,12 @@ Route::get('/updateCategories','adminController@updateCategories');
 
 
 Route::get('/tenant/update','adminController@tenantUpdatePage');
+
+
+
+
+Route::post('/landlord/addRoomFacility','RoomController@addRoomFacility');
+Route::post('/landlord/addBuildingFacility', 'BuildingController@addBuildingFacility');
+Route::get('/buildingFacility/delete', 'BuildingController@deleteBuildingFacility');
+
+Route::get('/RoomFacility/delete', 'RoomController@deleteRoomFacility');

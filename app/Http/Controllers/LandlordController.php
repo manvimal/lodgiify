@@ -17,6 +17,9 @@ use App\BuildingCategory as buildingCategory;
 use App\RoomCategory as roomCategory;
 use App\buildingModel as buildingModel;
 use App\roomModel as roomModel;
+use App\facilityModel as facilityModel;
+use App\buildingFacilityModel as buildingFacilityModel;
+use App\roomFacilityModel as roomFacilityModel;
 
 
 
@@ -39,8 +42,25 @@ use App\roomModel as roomModel;
 		//Gets building categories
 		$categories = buildingCategory::all();
 		$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
+		$hasBuildings = buildingModel::where('landlordID','=',$user[0]->ID)->get();
 
-		return view('pages.landlordAddBuilding',  array('categories' => $categories,'user' => $user, 'buildings' => $buildings));
+		$facilities = facilityModel::all();
+
+		$buildingFacAr = array();
+		foreach($buildings as $building){
+
+			$buildingFacilities = buildingFacilityModel::where('buildingid', '=', $building->id)->get();
+//
+			array_push($buildingFacAr , $buildingFacilities );
+
+		}
+
+	
+//var_dump($buildings);
+//
+		//die;
+
+		return view('pages.landlordAddBuilding',  array('categories' => $categories,'buildingFacilities'=>$buildingFacAr, 'user' => $user, 'buildings' => $buildings, 'facilities' => $facilities, 'hasBuildings'=>$hasBuildings));
 	}
 
 
@@ -54,11 +74,29 @@ use App\roomModel as roomModel;
 		//Gets buildings
 		$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
 		
+		$facilities = facilityModel::all();
+
+
 
 		//Get rooms
 		$rooms = roomModel::where('landlordID', '=', $user[0]->ID)->get();
 		
-		return view('pages.landlordAddRoom',  array('categories' => $categories,'user' => $user, 'buildings' => $buildings, 'rooms' => $rooms));
+		$AddRoomFacilities = roomModel::where('landlordID', '=', $user[0]->ID)->get();
+
+
+		$roomFacAr = array();
+		foreach($rooms as $room){
+
+			$roomFacilities = roomFacilityModel::where('roomid', '=', $room->id)->get();
+//
+			array_push($roomFacAr , $roomFacilities );
+
+		}
+
+
+	
+		
+		return view('pages.landlordAddRoom',  array('categories' => $categories,'user' => $user, 'roomFacilities'=> $roomFacAr, 'buildings' => $buildings, 'facilities'=>$facilities, 'rooms' => $rooms, 'AddRoomFacilities' => $AddRoomFacilities));
 	}
 
 	//Administere building packages

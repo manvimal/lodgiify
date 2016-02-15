@@ -14,12 +14,45 @@
             var latlngbounds = new google.maps.LatLngBounds();
             var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
             google.maps.event.addListener(map, 'click', function (e) {
-            alert("Latitude: " + e.latLng.lat() + "\r\nLongitude: " + e.latLng.lng());
+           // alert("Latitude: " + e.latLng.lat() + "\r\nLongitude: " + e.latLng.lng());
       
       window.location='addBuilding?lat='+e.latLng.lat()+'&long='+e.latLng.lng();
         
             });
         }
+    </script>
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+                 $('#roomFacilityTableHide').hide();
+                 $('#back').hide();
+            
+
+             
+            $('#edit').click(function() {
+                $('#formRoomFacilityHide').hide();
+                $('#edit').hide();
+                $('#back').show();
+               $('#roomFacilityTableHide').show();
+
+             
+            });
+        });
+        
+          $(document).ready(function() {
+            $('#back').click(function() {
+                 $('#back').hide();
+                   $('#formRoomFacilityHide').show();
+                  $('#edit').show();
+                $('#roomFacilityTableHide').hide();
+          
+             
+            });
+        });
+
     </script>
 
    <div class="banner">
@@ -40,7 +73,7 @@
 			<div class="blog-img">
 
     <form method="post"  action="/building/register"  id="registerBuildingFrm" onsubmit="return validateAddBuilding(this)" enctype='multipart/form-data'>
-    <input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
+    
     <table class="alignLeft container ">
 
       <tr>
@@ -68,6 +101,30 @@
             <td width="70%"> <input type="text" class="required onlyLetters" name = "buildingName" id = "buildingName"/><span class="errorMsg"></span> </td>
             <span class="errorMsg"></span>
         </tr>
+
+
+         <tr>
+            <td> <label>Facilities</label></td>
+
+              <td>
+                   <?php $i = 1;
+                      foreach($facilities as $facility){ 
+                       
+                    ?>
+                            
+                      <?php echo " $facility->name:<input type=Checkbox name='facilityCheckboxes[]' value=$facility->id> &nbsp" ?>
+                        
+                    <?php 
+                    $i ++;
+                      }
+
+                    ?>
+             </td>
+
+
+
+        </tr>
+        
 
         <tr>
             <td><label>category: </label></td>
@@ -126,18 +183,130 @@
 	 
 	 </div>
 	 <div class="project-sidebar">
-	 	<div class="project-list">
-	 	 <div class="search_box">
-			<form>
-				<input type="text" value="Search...." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search';}">
-				<input type="submit" value="">
-			</form>
-		 </div>
-		</div>
+	
 		<div class="project-list">
-	     	<h4>My Buildings</h4>
+	     	<h4>Add Building Facilities</h4>
+       
 			<ul class="blog-list">
-			<?php if (isset($buildings)){
+
+
+        <input id="back" type="button" class="btnLogin" value="Add"/>
+        <input id="edit" type="button" class="btnLogin" value="View/Delete"/>
+
+			
+        <form method="post" id="formRoomFacilityHide" action="{{ URL::asset('/landlord/addBuildingFacility') }}">
+          <input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
+          <ul class="blog-list">
+
+        <table class="ddlRoomFacilities">
+           <tr>
+            <td><label>Buildings: </label></td>
+         <td>
+      
+
+            <select type="text" class="required onlyLetters" name = "ddlAddBuildingFacility" id ="building" > 
+
+                    <?php 
+
+                        if (isset($hasBuildings)){
+
+                            foreach($hasBuildings as $hasBuilding){
+                                ?>
+                                    <option value="<?php echo $hasBuilding->id ?>" > <?php echo  $hasBuilding->buildingName  ?></option>
+                                <?php 
+                            }
+
+                        }
+                    ?>
+                    
+                </select> <span class="errorMsg"></span></td>
+        </tr>  
+
+ <tr>
+            <td> <label>Facilities</label></td>
+
+              <td>
+                   <?php $i = 1;
+                      foreach($facilities as $facility){ 
+                       
+                    ?>
+                            
+                      <?php echo " $facility->name:<input type=Checkbox name='addBuildingFacilityCheckboxes[]' value=$facility->id> &nbsp" ?>
+                        
+                    <?php 
+                    $i ++;
+                      }
+
+                    ?>
+             </td>
+
+             <tr>
+              <td></td>
+              <td><input type="submit" name="addBuildingFacilities" class="btnLogin" id="addBuildingFacilities" /></td>
+             </tr>
+
+             <tr>
+              <td><div id="Message1"></div></td>
+             </tr>
+
+</table>
+
+      </ul>
+    </form>
+
+
+    <table id="roomFacilityTableHide" class="main-list2 content" border="1" align="center">
+            <?php if (isset($buildingFacilities)){ ?>
+                    <tr class="booking">             
+                        <th class="package"> Number</th>
+                        <th class="facilityName">Building Name </span></th>
+                        <th class="facilityType">Facility </th>
+                        <th class="action">Actions </th>
+                                
+                    </tr>
+                                   
+                   <?php $i = 1;
+
+
+                      foreach($buildingFacilities as $facilityind){ 
+                            foreach( $facilityind as $facility){ 
+                                 
+                            $deleteLink =  "/buildingFacility/delete?id=". $facility->id;
+                           // $viewBookingLink =  "/facility/viewBooking?id=". $booking->id;
+                             
+                          ?>
+                           <tr class="booking">
+                              <td><?php echo $i ;?> </td>
+                              <td><?php echo $facility->building->buildingName  ?></td>
+                              <td><?php echo $facility->facility->name ?></td>
+                              <td> <?php if (count($facility->id) > 0){  ?>  <?php } ?>  <a href="<?php echo $deleteLink; ?>"  class="btnLogin deleteBuildingFacility" >Delete</a></td>
+                           
+                            </tr> 
+                           <?php 
+                            $i ++;
+                            }
+                          }
+                              
+
+                          }
+                      ?>
+          </table>
+      
+
+
+
+			</ul>
+			
+			<div class="clear"></div>
+		 </div>
+		 
+		 
+
+  <div class="project-list">
+     <div class="project-list">
+        <h4>My Buildings</h4>
+      <ul class="blog-list">
+      <?php if (isset($buildings)){
                 foreach($buildings as $building){
                                 ?>
                                     <li><img src="images/arrow.png" alt=""><p><a href="#"> <?php echo $building->buildingName  ?></a></p><div class="clear"></div></li>
@@ -146,12 +315,16 @@
 
                         }
                     ?>
-			</ul>
-			
-			<div class="clear"></div>
-		 </div>
-		 
-		 
+      </ul>
+      
+      <div class="clear"></div>
+     </div>
+    </div>
+
+
+
+
+
 		 
 	 </div>
 

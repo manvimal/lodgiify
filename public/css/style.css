@@ -3919,3 +3919,43 @@ border:0px
 	padding: 0.5em;
 
 }
+
+.ddlRoomFacilities{
+	color:white;
+}
+
+
+
+.main-list2{
+	width:100%;
+	text-align:center;
+}
+
+
+table.main-list2 {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.main-list2 th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+.main-list2 tr:nth-child(even){
+	background-color:#ffff99
+}
+.main-list2 tr:nth-child(odd){
+	background-color:#ffff66
+}
+
+
+.main-list2 th {
+        background-color: #ffff00;
+    color: #0E0C0C;
+
+}
+
+#roomFacilityTableHide{
+	font-size:0.57em;
+}

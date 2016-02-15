@@ -1657,6 +1657,7 @@ $(document).ready(function(){
     			var str = packageSearchSkeleton(data[0]);
     			$(".building_wrapper1").html(str);
 
+
     			var map=new google.maps.Map(document.getElementById("googleMap"), initMap());
     			var marker=new google.maps.Marker({
 				  position:myCenter,
@@ -1733,10 +1734,6 @@ $(document).ready(function(){
 				
             
          //  alert(data.packages.length);
-          var packagelen = 0;
-           if (typeof data.packages !== "undefined") {
-           		packagelen = data.packages.length;
-           }
             
   			$html += '</div>';
         	$html += '<div class="building-footer">';
@@ -1747,7 +1744,7 @@ $(document).ready(function(){
             $html += '<div class="buildingdesc">  Description : <span> '+ data.desc +'</span></div>';
 
             $html += '<div class="buildingLoc">  Address : <span> '+ data.buildingLocation +'</span></div>';
-            $html += '<div class="buildingpackages">  No of packages : <span> '+ packagelen +'</span></div>';
+            $html += '<div class="buildingpackages">  No of packages : <span> '+ data.packages.length +'</span></div>';
             $html += '<div class="buildingrooms">  Image : <span> <img height="80" width="120" src  = "' + ' upload/' + data.image +' " </span></div>';
          	$html += '</div>';
            
@@ -1755,7 +1752,7 @@ $(document).ready(function(){
             $html += '';
           	$html += '</div>';
         	$html += '<div class="clear"></div></div>';
-       
+       alert(data.longitude);
 
         		infowindow = new google.maps.InfoWindow({
 				content:data.buildingName + " - " + data.desc
@@ -1765,9 +1762,8 @@ $(document).ready(function(){
 
 			$html += '</div>';
 			$html += '<div class="rooms">';
-			
-			 if (typeof data.packages !== "undefined") {
-           		for (i=0 ; i< data.packages.length ; i++){
+	console.log(data.packages);
+			for (i=0 ; i< data.packages.length ; i++){
 				packages =  data.packages[i];
 				$html += '<div class="room">';
 				$html += '<div class="roomDetails">';
@@ -1780,12 +1776,9 @@ $(document).ready(function(){
               	$html += '<div class="capacityAdult"> Capacity Adult : <span> '+ packages.capacityAdult +'</span></div>';
 	         
 	              
-	          	$html += '</div>';
-				$html += '</div>';
-				}
-           	 }
-
-			
+          	$html += '</div>';
+			$html += '</div>';
+			}
         	$html += ' </div>';
        
 	   		$html += '<div class="clear"></div>';
@@ -1803,6 +1796,129 @@ $(document).ready(function(){
 		return mapProp;
 	}
 
-	$(".buildings-list1 .active a").click();
+
+
+	//Insert Room facility by ajax
+	$("#addRoomFacilities").click(function(){
+
+
+		$url = $(this).parents("form").attr("action");
+			$data =  $(this).parents("form").serialize();
+			var $html = "";
+			$.ajax({
+			  type: "POST",
+			  url: $url,
+			  data: $data,
+			  success: function(response){
+			  	  var obj = $.parseJSON( response );
+			  	  console.log(obj);
+			  	  //  $("#Message").html(obj);
+				
+			  	 for (i =0; i< obj.length; i++){
+			  	 	if (obj[i].status == 1 ){
+			  	 		$html += "<span class='successMsg'>";
+			  	 		$html += obj[i].msg ;
+			  	 		$html += "</span><br />";
+			  	 	}
+			  	 	else if (obj[i].status == -1 )	{
+			  	 		$html += "<span class='errorMsg'>";
+			  	 		$html += obj[i].msg ;
+			  	 		$html += "</span><br />";
+			  	 	}
+			  	 }
+				$("#Message").html($html);
+			  }
+			});
+		return false;
+	})
+
+
+
+
+
+ //Insert building facility by ajax
+ $("#addBuildingFacilities").click(function(){
+
+
+		$url = $(this).parents("form").attr("action");
+			$data =  $(this).parents("form").serialize();
+			var $html = "";
+			$.ajax({
+			  type: "POST",
+			  url: $url,
+			  data: $data,
+			  success: function(response){
+			  	  var obj = $.parseJSON( response );
+			  	  console.log(obj);
+			  	  //  $("#Message").html(obj);
+				
+			  	 for (i =0; i< obj.length; i++){
+			  	 	if (obj[i].status == 1 ){
+			  	 		$html += "<span class='successMsg'>";
+			  	 		$html += obj[i].msg ;
+			  	 		$html += "</span><br />";
+			  	 	}
+			  	 	else if (obj[i].status == -1 )	{
+			  	 		$html += "<span class='errorMsg'>";
+			  	 		$html += obj[i].msg ;
+			  	 		$html += "</span><br />";
+			  	 	}
+			  	 }
+				$("#Message1").html($html);
+			  }
+			});
+		return false;
+	})
+
+
+
+ 			
+	
+	$('a.deleteBuildingFacility').click(function(e) {
+
+		var r = confirm("Are you sure you want to delete the building!");
+		if (r == true) {
+
+			var obj = $(this);
+			$.ajax({
+			  type: "GET",
+			  url: $(this).attr("href"),
+			  data: {"_token": $("#token").val()},
+			  success: function(response){
+			  	  //var obj = $.parseJSON( response );
+			  	  $(obj).parents("tr.booking").remove();
+	    			
+    				
+			  }
+			});
+		}
+		return false;
+		})
+
+
+	$('a.deleteRoomFacility').click(function(e) {
+
+		var r = confirm("Are you sure you want to delete the building!");
+		if (r == true) {
+
+			var obj = $(this);
+			$.ajax({
+			  type: "GET",
+			  url: $(this).attr("href"),
+			  data: {"_token": $("#token").val()},
+			  success: function(response){
+			  	  //var obj = $.parseJSON( response );
+			  	  $(obj).parents("tr.booking").remove();
+	    			
+    				
+			  }
+			});
+		}
+		return false;
+		})
+
+
+
 
 });
+

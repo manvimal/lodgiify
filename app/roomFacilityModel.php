@@ -11,7 +11,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use DB;
 
-class roomModel extends Model implements AuthenticatableContract,
+class roomFacilityModel extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
 {
@@ -22,7 +22,7 @@ class roomModel extends Model implements AuthenticatableContract,
      *
      * @var string
      */
-    protected $table = 'tblroom';
+    protected $table = 'tblroomfacility';
 
     /**
      * The attributes that are mass assignable.
@@ -31,24 +31,21 @@ class roomModel extends Model implements AuthenticatableContract,
      */
 
      protected $fillable = ['id',
-                            'buildingID','roomCatID','desc','capacity','price','startDate' 
-                            ,'endDate','isOccupied','roomName'];
+                            'roomid','facilityid'];
 
 
+    //displays the relationships in json format
+    protected $with = array('facility','room');
 
-    public function building()
+
+    public function facility()
     {
-        return $this->belongsTo('App\buildingModel' , 'buildingID');
+        return $this->belongsTo('App\facilityModel' , 'facilityid');
     }
 
-    public function category()
+    public function room()
     {
-        return $this->belongsTo('App\RoomCategory' , 'roomCatID');
-    }
-
-      public function roomFacilities()
-    {
-        return $this->hasMany('App\roomFacilityModel', 'roomid');
+        return $this->belongsTo('App\roomModel' , 'roomid');
     }
 
 }

@@ -16,7 +16,8 @@ use Input ;
 use Session;
 use DB;
 use Redirect;
-
+use App\roomFacilityModel as roomFacilityModel;
+use App\facilityModel as facilityModel;
 
 
  class RoomController extends BaseController
@@ -58,9 +59,20 @@ use Redirect;
 		if ((isset($request['price'])) && (!empty($request['price'])) ){
 				$price = $request['price'];
 		}
+
+		if ((isset($request['facilityCheckboxes'])) && (!empty($request['facilityCheckboxes'])) ){
+				$facilityCheckboxes = $request['facilityCheckboxes'];
+
+
+
+
 		
+		}
+
 
 		$uploadMsg = "";
+
+	
 
 
 		/*$fileName = '';
@@ -73,9 +85,10 @@ use Redirect;
 		   RequestStatic::file('image')->move($name,  $fileName );
 		}*/
 
-		
+	
 
 		// Retrieve use session
+
 		$user = $request->session()->get('user');
 
 		//Save room for user
@@ -91,6 +104,22 @@ use Redirect;
 
 		$room->save();
 		Session::flash('success', 'Room successfully registered'); 
+//var_dump($room->id);die;
+
+
+
+	foreach($facilityCheckboxes as $facilityCheckbox){
+
+			$facility = new roomFacilityModel;
+			$facility-> facilityid = $facilityCheckbox;
+			$facility-> roomid = $room->id;
+			$facility->save();
+
+			//var_dump($facilityCheckboxes[0]);
+
+		}
+
+
 
 		return Redirect::to('addRoom');
 	}
@@ -102,6 +131,8 @@ use Redirect;
 		}
 		print json_encode(array(1));
 	}	
+
+
 
 
 	// update room
@@ -134,6 +165,98 @@ use Redirect;
 		$room->save();
 		Session::flash('success', 'Room successfully updated'); 
 		print json_encode(array(1));
+	}
+
+
+
+	
+	function addRoomFacility(Request $request){
+
+
+			$error=1;
+			$messge  = array(
+			   
+			);
+
+
+			if ((isset($_REQUEST['ddlAddRoomFacility'])) && (!empty($_REQUEST['ddlAddRoomFacility'])) ){
+					$ddlAddRoomFacility = $_REQUEST['ddlAddRoomFacility'];
+
+				}
+
+			if ((isset($_REQUEST['AddfacilityCheckboxes'])) && (!empty($_REQUEST['AddfacilityCheckboxes'])) ){
+					$AddfacilityCheckboxes = $_REQUEST['AddfacilityCheckboxes'];
+
+				}
+
+
+			$roomFacilities = roomFacilityModel::where('roomid', '=',$ddlAddRoomFacility)
+	                    ->get();
+	                    
+
+			foreach($AddfacilityCheckboxes as $facilityCheckbox){
+					$messgeTmp  = array(
+			   
+						);
+
+					 $facilityExists = $this->checkFacilityExists($roomFacilities, $facilityCheckbox);
+					 if(!empty($roomFacilities) && $facilityExists[0]) {
+
+
+
+					 	$messgeTmp['status'] = -1;
+					 	$messgeTmp['msg'] = $facilityExists[1] ." facility Already exists";
+					 	
+
+					 }
+				
+
+					 else{
+
+
+						$facility = new roomFacilityModel;
+						$facility-> facilityid = $facilityCheckbox;
+						$facility-> roomid = $ddlAddRoomFacility;
+						$facility->save();
+
+						$messgeTmp['status'] = 1;
+					 	$messgeTmp['msg'] = "Facility Successfully added";
+						//return redirect()->action('LandlordController@addRoom');
+
+				}
+					
+
+				array_push($messge, $messgeTmp);
+					
+				
+			}
+
+
+			echo json_encode($messge);
+
+	}
+
+
+
+	private function checkFacilityExists($roomFacilities, $idFacility){
+		foreach ($roomFacilities as $roomFacility ) {
+			if ( $idFacility == $roomFacility->facilityid ){
+				
+				return array(true, $roomFacility->facility->name);
+			}
+		}
+		return array(false,"");
+	}
+
+	function deleteRoomFacility(Request $request){
+		
+
+			if ($request['id'] != null){
+			$deleteRoomFacility = roomFacilityModel::where('id', '=', $request['id'])->delete();
+			return redirect()->action('LandlordController@addBuilding');
+		}
+			print json_encode(array(1));
+
 	}
 
 	

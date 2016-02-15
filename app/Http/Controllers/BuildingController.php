@@ -20,6 +20,7 @@ use Input ;
 use Session;
 use DB;
 use Redirect;
+use App\buildingFacilityModel as buildingFacilityModel;
 
 
 
@@ -55,6 +56,11 @@ use Redirect;
 				$desc = $request['desc'];
 		}
 
+		if ((isset($request['facilityCheckboxes'])) && (!empty($request['facilityCheckboxes'])) ){
+				$facilityCheckboxes = $request['facilityCheckboxes'];
+		}
+
+
 		$uploadMsg = "";
 
 
@@ -67,8 +73,6 @@ use Redirect;
 		   
 		   RequestStatic::file('image')->move($name,  $fileName );
 		}
-
-		
 
 		
 		// Retrieve user session
@@ -87,6 +91,18 @@ use Redirect;
 
 		$building->save();
 		Session::flash('success', 'Building successfully registered'); 
+
+
+		foreach($facilityCheckboxes as $facilityCheckbox){
+
+			$facility = new buildingFacilityModel;
+			$facility-> facilityid = $facilityCheckbox;
+			$facility-> buildingid = $building->id;
+			$facility->save();
+
+			//var_dump($facilityCheckboxes[0]);
+
+		}
 
 		return Redirect::to('addBuilding');
 	}
@@ -143,5 +159,99 @@ use Redirect;
 		print json_encode(array(1));
 	}
 
+
+	function addBuildingFacility(Request $request){
+
+		$error=1;
+			$messge  = array(
+			   
+			);
+
+
+			if ((isset($_REQUEST['ddlAddBuildingFacility'])) && (!empty($_REQUEST['ddlAddBuildingFacility'])) ){
+					$ddlAddBuildingFacility = $_REQUEST['ddlAddBuildingFacility'];
+
+				}
+
+			if ((isset($_REQUEST['addBuildingFacilityCheckboxes'])) && (!empty($_REQUEST['addBuildingFacilityCheckboxes'])) ){
+					$addBuildingFacilityCheckboxes = $_REQUEST['addBuildingFacilityCheckboxes'];
+
+				}
+
+
+			$buildingFacilities = buildingFacilityModel::where('buildingid', '=',$ddlAddBuildingFacility)->get();
+	                    
+
+			foreach($addBuildingFacilityCheckboxes as $addBuildingFacilityCheckbox){
+					$messgeTmp  = array(
+			   
+						);
+
+					 $facilityExists = $this->checkBuildingFacilityExists($buildingFacilities, $addBuildingFacilityCheckbox);
+
+					 if(!empty($buildingFacilities) && $facilityExists[0]) {
+
+
+
+					 	$messgeTmp['status'] = -1;
+					 	$messgeTmp['msg'] = $facilityExists[1] ." facility Already exists";
+					 	
+
+					 }
+				
+
+					 else{
+
+
+						$facility = new buildingFacilityModel;
+						$facility-> facilityid = $addBuildingFacilityCheckbox;
+						$facility-> buildingid = $ddlAddBuildingFacility;
+
+						
+						$facility->save();
+
+						$messgeTmp['status'] = 1;
+					 	$messgeTmp['msg'] = "Facility Successfully added";
+						//return redirect()->action('LandlordController@addRoom');
+
+				}
+					
+
+				array_push($messge, $messgeTmp);
+					
+				
+			}
+
+
+			echo json_encode($messge);
+
+	}
+
+
+
+	private function checkBuildingFacilityExists($buildingFacilities, $idFacility){
+		foreach ($buildingFacilities as $buildingFacility ) {
+			if ( $idFacility == $buildingFacility->facilityid ){
+				
+				return array(true, $buildingFacility->facility->name);
+			}
+		}
+		return array(false,"");
+	}
+
+
+
+	function deleteBuildingFacility(Request $request){
+		
+
+			if ($request['id'] != null){
+			$deleteBuildingFacility = buildingFacilityModel::where('id', '=', $request['id'])->delete();
+			return redirect()->action('LandlordController@addBuilding');
+		}
+			print json_encode(array(1));
+
+	}
+
 	
 }
+

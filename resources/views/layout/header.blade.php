@@ -1,4 +1,5 @@
 <div class="header">	
+	<input type="hidden" id="token" name="_token" value="{{{ csrf_token() }}}" />
       <div class="wrap"> 
 	         <div class="logo">
 				<a href="index"><img src="{{ URL::asset('images/logo.png') }}" alt=""/></a>
