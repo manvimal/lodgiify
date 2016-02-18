@@ -1176,7 +1176,7 @@ $(document).ready(function(){
 
 
 	 //Get selected package while booking
-	 $("#package").change(function(){
+	 /*$("#package").change(function(){
 
 	 	$("#adults").removeClass("noValidate");
 	 	$("#children").removeClass("noValidate");
@@ -1193,7 +1193,6 @@ $(document).ready(function(){
 			})
 			  .success(function( data ) {
 			  	 if (data){
-			  	 	console.log(data);
 			  	 	$(".no_package ").hide();
 
 	 				$(".got_package ").show();
@@ -1248,7 +1247,7 @@ $(document).ready(function(){
 
 	 	
 	 })
-
+*/
 
 
 
@@ -1272,7 +1271,7 @@ $(document).ready(function(){
  		var $data =  { 'numChild': numChild, 'numAdult': numAdult ,'package': package, 'start': start, 'end': end , "_token": token};
 
  		var baseform = document.forms['registerBooking'];
- 		var packageObj = baseform['package'];
+ 		
  		var adultsObj = baseform['adults'];
  		var childrenObj = baseform['children'];
  		var date10Obj = baseform['date10'];
@@ -1283,9 +1282,7 @@ $(document).ready(function(){
 // alert(1)
  		var hasError = false;
 
- 		if (!checkError(packageObj))  clearError(packageObj);
- 		else hasError = true;
- 			// alert(2)
+ 		
  		
  		if (!checkError(adultsObj))  clearError(adultsObj);
  		else hasError = true;

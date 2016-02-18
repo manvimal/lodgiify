@@ -16,7 +16,7 @@ use App\UserAdmin as UserAdmin;
 
 use App\packageModel as packageModel;
 use App\bookingModel as bookingModel;
-
+use App\buildingModel as buildingModel;
 
 
 
@@ -33,8 +33,10 @@ use App\bookingModel as bookingModel;
 
 		$packages = packageModel::where('buildingid', '=', $id)->get();
 
+		$building = buildingModel::where("id",'=',  $id)->first();
+
 		
-		return view('pages.tenantDealPackage',  array('user' => $user,'packages' => $packages));
+		return view('pages.tenantDealPackage',  array('user' => $user,'packages' => $packages, 'building' => $building ));
 	}
 
 

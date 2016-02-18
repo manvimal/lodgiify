@@ -3818,18 +3818,55 @@ input.error, select.error{
   .tenantDealPackage .package_wrapper  #package_desc{
 	width: 41%;
     color: black;
-    padding: 2%;
-    background-color: white;
+    padding: 10px;
+    
     float: left;
+     font-weight:bold;
 }
 
  .tenantDealPackage .package_wrapper   .promotion{
-	width: 49%;
+	width: 21%;
     color: black;
-    padding: 2.9%;
-    background-color: white;
-    border-left: 2px solid black;
+    padding: 10px;
+    
     float: left;
+     font-weight:bold;
+      
+}
+
+#package_number{
+	width: 10%;
+    color: black;
+    padding: 10px;
+    
+    float: left;
+     font-weight:bold;
+}
+
+.no_package figure p{
+	    background-color: snow;
+	       font-weight:bold;font-size:14px;
+
+}
+
+.pack_label.odd{
+
+	background-color:#F9F9D8 !important;
+}
+
+.pack_label.even{
+
+	background-color:#F9F9E8 !important;
+}
+
+
+#package_chk {
+    width: 5%;
+    color: black;
+    padding: 2%;
+    
+    float: left;
+     font-weight:bold;
 }
 
 .deals-list form p {

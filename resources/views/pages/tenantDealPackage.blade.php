@@ -27,24 +27,8 @@
         <div class="deals-list content">
 
         <form method="" name="registerBooking">
-          <p><label class="whiteText">Package: </label>
-          <select name = "package" id = "package" class="required"/>
-             <option value="">--- PACKAGE ---</option>
-             <?php if (isset($packages)){
-                  foreach($packages as $package){
-                     ?>
-                          <option value="<?php echo $package->id ; ?>"> <?php echo $package->packageName ; ?></option>
-                     <?php 
-                    }
-                  }
-               ?>
-          </select> <span class="errorMsg"></span>
-
-         </P>
-         <p><label class="whiteText">Number Of adults: </label>
-         <input type = "text" name = "adults" id = "adults"   class="required numeric"/> <span class="errorMsg"></span></P>
-         <p> <label class="whiteText">Number Of children: </label>
-         <input type = "text" name = "children" id = "children" class="numeric" /> <span class="errorMsg"></span></P>
+        
+         
           <p><label class="whiteText">Check In: </label>
          <input type="text" name="date10" value="" class="required datetime"> <span class="errorMsg"></span></p>
           <p><label class="whiteText">Check Out: </label>
@@ -78,36 +62,94 @@
      
    </div>
     <div class="package_wrapper ">
-          <div class="no_package whiteText">Please select a package</div>
-          <div class="got_package">
+          <div class="got_package whiteText">Please select a package</div>
+          <div class="no_package">
              <figure >
-              <h2 class="whiteText"></h2>
-             <img src="" width="100%" height="200" alt="package" /> 
-              <p></p>
-              <h3></h3>
+
+
+              <h2 class="whiteText"><?php echo (isset($building->buildingName) ? $building->buildingName : ''); ?></h2>
+
+              <div style="height:200px;background-repeat: no-repeat;background-size:contain;background-position:50%;background-color:#DAD6E2; background-image:url({{ URL::asset('/') }}upload/<?php  echo isset($building->image)? $building->image : ''; ?>)" ></div>
+             
+              <p><?php echo isset($building->desc)?  $building->desc : ''; ?></p>
+              <!-- <h3><?php echo isset($building->rooms)?  count($building->rooms) : 0; ?></h3> -->
              </figure> 
 
-            <div class="pack_label">
-               <div id="package_desc">
-                  <h2 class="packageName "></h2>
-                  Description: <span class="packageDesc"></span><br />
-                  Children : <span class="capacityChildren"></span><br />
-                  Adults : <span class="capacityAdult"></span><br />
-                  category : <span class="roomCatName"></span><br />
-               </div>
 
-                <div class="promotion">
-                  Promotion Description: <span class="promotionDescription"></span><br />
-                  promotionExpiryDate : <span class="promotionExpiryDate"></span><br />
-                  
-               </div>
-           </div>
+
+          <?php if (isset($packages)){
+                   $index = "odd";
+                  foreach($packages as $package){
+
+                     ?>
+                         
+                          <div class="pack_label <?php echo  $index ; ?>">
+                            <div id="package_chk">
+                                <h2 class="packageName "><?php echo $package->packageName ; ?></h2>
+                                <input type="checkbox" name="packages[]" value="<?php echo $package->id ; ?>" />
+                             </div>
+
+                              <div id="package_number">
+                               
+                                
+                                 <p> Adults: <select name="adults" class="required numeric">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                 </select> <span class="errorMsg"></span></P> 
+                               <p>Children: <select name="children" class="numeric" ><option value="0">0</option>
+                                   <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option></select>  <span class="errorMsg"></span></P> 
+                             </div>
+
+                             <div id="package_desc">
+                               
+                                Description: <span class="packageDesc"><?php echo $package->packageDesc ; ?></span><br />
+                                Children : <span class="capacityChildren"><?php echo $package->capacityChildren ; ?></span><br />
+                                Adults : <span class="capacityAdult"><?php echo $package->capacityAdult ; ?></span><br />
+                                category : <span class="roomCatName"><?php echo $package->roomCatName ; ?></span><br />
+                             </div>
+
+                              <div class="promotion">
+                                Promotion Description: <span class="promotionDescription"><?php echo $package->promotionDescription ; ?></span><br />
+                                promotionExpiryDate : <span class="promotionExpiryDate"><?php echo $package->promotionExpiryDate ; ?></span><br />
+                                
+                             </div>
+                     </div>
+                     <?php 
+
+                      if ( $index == 'odd'){
+                         $index = "even";
+                      }
+                      else if( $index =="even") {
+                         $index = "odd";
+                      }
+                    }
+                  }
+               ?>
+            
          </div>
     </div>
    
 
 
- 
 
    <div class="clear"></div>
   </div>
