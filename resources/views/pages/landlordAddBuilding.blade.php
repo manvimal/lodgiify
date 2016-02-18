@@ -5,6 +5,7 @@
   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript">
         window.onload = function () {
+          var $html="";
             var mapOptions = {
                 center: new google.maps.LatLng(-20.2429415, 57.6425072),
                 zoom: 10,
@@ -16,8 +17,17 @@
             google.maps.event.addListener(map, 'click', function (e) {
            // alert("Latitude: " + e.latLng.lat() + "\r\nLongitude: " + e.latLng.lng());
       
-      window.location='addBuilding?lat='+e.latLng.lat()+'&long='+e.latLng.lng();
-        
+     // window.location='addBuilding?lat='+e.latLng.lat()+'&long='+e.latLng.lng();
+
+  //Post Latitude and longitude to texboxes
+
+            var lattitude = document.getElementById('lattitude');
+            lattitude.value=e.latLng.lat();
+
+            var longitude = document.getElementById('longitude');
+            longitude.value=e.latLng.lng()
+
+  
             });
         }
     </script>
@@ -73,7 +83,7 @@
 			<div class="blog-img">
 
     <form method="post"  action="/building/register"  id="registerBuildingFrm" onsubmit="return validateAddBuilding(this)" enctype='multipart/form-data'>
-    
+        <input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
     <table class="alignLeft container ">
 
       <tr>
@@ -85,14 +95,13 @@
 
       <tr>
           <td><label>Latitude:</label></td>
-            <td> <input type="text" class="required" name = "lattitude" 
-                  value="<?php if(isset($_GET['lat'])){ echo($_GET['lat']); }?>" readonly/> <span class="errorMsg"></span></td>
+            <td id="test"> <input type="text" class="required" id="lattitude" name = "lattitude" 
+                  readonly/> <span class="errorMsg"></span></td>
         </tr>
 
       <tr>
           <td><label>Longitude:</label></td>
-            <td> <input type="text" class="required" name = "longitude" 
-                  value="<?php if(isset($_GET['long'])){ echo($_GET['long']); }?>" readonly/> <span class="errorMsg"></span></td>
+            <td> <input type="text" class="required" name = "longitude" id="longitude"  readonly/> <span class="errorMsg"></span></td>
         </tr>
 
 
@@ -108,8 +117,7 @@
 
               <td>
                    <?php $i = 1;
-                      foreach($facilities as $facility){ 
-                       
+                      foreach($facilities as $facility){   
                     ?>
                             
                       <?php echo " $facility->name:<input type=Checkbox name='facilityCheckboxes[]' value=$facility->id> &nbsp" ?>
@@ -120,8 +128,6 @@
 
                     ?>
              </td>
-
-
 
         </tr>
         
@@ -154,7 +160,7 @@
 
         <tr>
             <td><label>Image: </label></td>
-            <td><input type = "file"  name="image"  accept="image/*" id = "image" /> <span class="errorMsg"></span></td>
+            <td><input type = "file"  name="image" class="required" accept="image/*" id = "image" /> <span class="errorMsg"></span></td>
          </tr> 
 
      <tr>

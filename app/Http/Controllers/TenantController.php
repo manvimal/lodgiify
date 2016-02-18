@@ -120,5 +120,54 @@ use App\bookingModel as bookingModel;
 	
 	}
 
+	public function advancedSearchPage(Request $request){
+
+		$user = $request->session()->get('user');
+
+		return view('pages.tanantAdvancedSearch',  array('user' => $user));
+	}
+
+
+	public function test(Request $request){
+
+		$user = $request->session()->get('user');
+
+		if(isset($request['term'])){
+		$searchTerm = $request['term'];
+		}
+	
+		$buildings = buildingModel::where('buildingName','LIKE', $searchTerm.'%')->get();
+	
+
+		foreach($buildings as $building){
+
+		 $buildingName[] = $building['buildingName'];
+
+		}
+
+		echo json_encode($buildingName);
+
+	}
+	public function test2(Request $request){
+
+		$user = $request->session()->get('user');
+
+		if(isset($request['term'])){
+		$searchTerm = $request['term'];
+		}
+	
+		$buildings = buildingModel::where('buildingLocation','LIKE', $searchTerm.'%')->get();
+	
+
+		foreach($buildings as $building){
+
+		 $buildingLocation[] = $building['buildingLocation'];
+
+		}
+
+		echo json_encode($buildingLocation);
+
+	}
+
 	
 }

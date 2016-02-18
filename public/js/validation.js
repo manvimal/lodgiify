@@ -1347,38 +1347,27 @@ $(document).ready(function(){
 			if (!checkError(buildingName)) clearError(buildingName);
 			else hasError = true;
 
-			var latitude = form['latitude'];
-			if (!checkError(latitude)) clearError(latitude);
-			else hasError = true;
-
 			var longitude = form['longitude'];
 			if (!checkError(longitude)) clearError(longitude);
 			else hasError = true;
 
-		/*if (!hasError) {
-			url = "user/login";
-			data =  $(form).serialize();
-			$.ajax({
-			  type: "GET",
-			  url: url,
-			  data: data,
-			  success: function(response){
-			  	  var obj = $.parseJSON( response );
-			  	  if (obj.status == -1){
-			  	  	//user eists
-			  	  	alert(obj.msg);
-			  	  }
-			  	  else if(obj.status == 1){
-			  	  		alert(obj.msg);
-			  	  		//location.reload();
-			  	  		//redirect 
-			  	  }
-				
-			  }
-			});
-		}*/
+			var lattitude = form['lattitude'];
+			if (!checkError(lattitude)) clearError(lattitude);
+			else hasError = true;
+
+			var location = form['location'];
+			if (!checkError(location)) clearError(location);
+			else hasError = true;
+
+			var image = form['image'];
+			if (!checkError(image)) clearError(image);
+			else hasError = true;
+
+
 		return !hasError;
-}
+		}
+		
+
 
  function validateAddRoom(form){
 		removeAllErrors($(form));

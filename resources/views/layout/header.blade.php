@@ -42,7 +42,7 @@
 						?>
 
 
-						<a href="userAccount">
+						<a href="{{ URL::asset('userAccount') }}">
 						<?php
 						}
 						?>

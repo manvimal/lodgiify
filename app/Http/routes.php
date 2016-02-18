@@ -108,3 +108,7 @@ Route::post('/landlord/addBuildingFacility', 'BuildingController@addBuildingFaci
 Route::get('/buildingFacility/delete', 'BuildingController@deleteBuildingFacility');
 
 Route::get('/RoomFacility/delete', 'RoomController@deleteRoomFacility');
+
+Route::get('/tenant/advancedSearchPage','tenantController@advancedSearchPage');
+
+Route::get('/test','tenantController@test');
