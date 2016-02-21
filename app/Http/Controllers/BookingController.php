@@ -17,6 +17,7 @@ use App\UserAdmin as UserAdmin;
 use App\packageModel as packageModel;
 use App\bookingModel as bookingModel;
 use App\buildingModel as buildingModel;
+use App\bookingPackageModel as bookingPackageModel;
 
 
 
@@ -50,10 +51,18 @@ use App\buildingModel as buildingModel;
 		
 
 		$user = $request->session()->get('user');
-		if ((isset($request['package'])) && (!empty($request['package'])) ){
-			$packageObj = $request['package'];
-			$package = packageModel::find ($request['package']);
-			
+
+
+		if ((isset($request['date10'])) && (!empty($request['date10'])) ){
+				$date10Obj = $request['date10'];
+		}
+		else{
+
+			$error  = true;
+		}
+
+		if ((isset($request['date11'])) && (!empty($request['date11'])) ){
+				$date11Obj = $request['date11'];
 		}
 		else{
 			$error  = true;
@@ -61,87 +70,82 @@ use App\buildingModel as buildingModel;
 
 
 
-		if ((isset($request['numAdult'])) && (!empty($request['numAdult']) ) ){
-				$adultsObj = $request['numAdult'];
-		}
-		else if ( ($package -> building -> category -> buildingCatName == 'House' || $package -> building -> category -> buildingCatName == 'Bungalow')){
+		if ((isset($request['packages'])) && (!empty($request['packages'])) ){
+			//$packageObj = $request['package'];
+			//$package = packageModel::find ($request['package']);
 
-		}
-		else{
-				$error  = true;
-		}
-		
-		if ((isset($request['numChild'])) && (!empty($request['numChild'])) ){
-				$childrenObj = $request['numChild'];
-		}
-		
-
-		if ((isset($request['start'])) && (!empty($request['start'])) ){
-				$date10Obj = $request['start'];
-		}
-		else{
-
-			$error  = true;
-		}
-
-
-		if ((isset($request['end'])) && (!empty($request['end'])) ){
-				$date11Obj = $request['end'];
-		}
-		else{
-			$error  = true;
-		}
-
-
-		$bookings = bookingModel::where('tenantID', "=", $user[0]->ID)
+			$bookings = bookingModel::where('tenantID', "=", $user[0]->ID)
 					->where('checkin' ,'>=' ,$date10Obj)
 					->where('checkout' ,'<=' ,$date11Obj)
 					->get();
 
-		//Save booking for user
-		if (!$error ){
-			if (sizeof($bookings) > 0){
-				$status['msg'] = "Booking conflict has been detected for the period ".$date10Obj  . " - ". $date11Obj ;
+
+			if (!$error){
+				if (sizeof($bookings) > 0){
+						$status['msg'] = "Booking conflict has been detected for the period ".$date10Obj  . " - ". $date11Obj ;
+					}
+					else{
+						$booking = new bookingModel;
+						$booking-> checkin = $date10Obj;
+						$booking-> checkOut = $date11Obj ;
+						$booking-> tenantID = $user[0]->ID; 
+						$booking->save();
+
+
+						 $price = 0;
+						 foreach ($request['packages'] as $packaged) {
+						 	
+							
+							if ( isset($packaged['package']  )){
+									$idpackage = $packaged['package'] ;
+									$child = $packaged['child'] ;
+									$adult = $packaged['adult'] ;
+
+									$package = packageModel::find ( $idpackage );
+
+									//Get package
+									
+									$buildingtype = $package->building->category;
+
+									
+									if (!is_null($buildingtype->buildingCatName) && ($buildingtype->buildingCatName == 'Hotel' 
+												|| $buildingtype->buildingCatName == 'Appartment'  )) {
+												$price += $booking->getPrice($package, $booking);
+									}
+									else if(!is_null($buildingtype->buildingCatName) && ($buildingtype->buildingCatName == 'Bungalow' 
+												|| $buildingtype->buildingCatName == 'Villa'  || $buildingtype->buildingCatName == 'Penthouse' 
+												|| $buildingtype->buildingCatName == 'House'    )){
+
+												$price += $booking->getPrice($package, $booking);
+											
+									}
+
+									//Add to booking
+
+									$bookingpackage = new bookingPackageModel;
+									$bookingpackage-> booking_id = $booking->id;
+									$bookingpackage-> package_id = $idpackage;
+									$bookingpackage->save();
+							}
+									
+						}
+						$booking-> price = $price ; 
+						$booking->save();
+						$status['success'] = 1;
+						$status['msg'] = "Booking successfully registered";
+				 }
+
+				
+
 			}
-			else{
-				$booking = new bookingModel;
-				$booking-> checkin = $date10Obj;
-				$booking-> checkOut = $date11Obj ;
-				$booking-> tenantID = $user[0]->ID; 
-				$booking-> packageId = $packageObj ; 
-				
-
-				//Get package
-				$price = 0;
-				$buildingtype = $package->building->category;
-				if (!is_null($buildingtype->buildingCatName) && ($buildingtype->buildingCatName == 'Hotel' 
-					|| $buildingtype->buildingCatName == 'Appartment'  )) {
-					$price = $booking->getPrice($package, $booking);
-				}
-				else if(!is_null($buildingtype->buildingCatName) && ($buildingtype->buildingCatName == 'Bungalow' 
-					|| $buildingtype->buildingCatName == 'Villa'  || $buildingtype->buildingCatName == 'Penthouse' 
-					|| $buildingtype->buildingCatName == 'House'    )){
-
-					$price = $booking->getPrice($package, $booking);
-				}
-				
-
-				
-				$booking-> price = $price ; 
-				$booking->save();
-
 
 			
-				$status['success'] = 1;
-				$status['msg'] = "Booking successfully registered";
-			}
+					
+				
 			
-		}else{
-
-			$status['msg'] = "Error in field validation";
-
 		}
 		
+
 		return $status;
 	}
 

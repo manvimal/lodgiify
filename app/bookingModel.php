@@ -68,6 +68,8 @@ class bookingModel extends Model implements AuthenticatableContract,
                     $perprice = $this->getPromotionalPrice($package, 1);
                     $price = $noDays *  $perprice;
 
+                 
+
                 }
                
             return $price ;

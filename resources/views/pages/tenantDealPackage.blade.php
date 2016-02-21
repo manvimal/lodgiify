@@ -87,13 +87,13 @@
                           <div class="pack_label <?php echo  $index ; ?>">
                             <div id="package_chk">
                                 <h2 class="packageName "><?php echo $package->packageName ; ?></h2>
-                                <input type="checkbox" name="packages[<?php echo $i; ?>]['package']" value="<?php echo $package->id ; ?>" />
+                                <input type="checkbox" name="packages[<?php echo $i; ?>][package]" value="<?php echo $package->id ; ?>" />
                              </div>
 
                               <div id="package_number">
                                
                                 
-                                 <p> Adults: <select name="packages[<?php echo $i; ?>]['adult']" class="required numeric">
+                                 <p> Adults: <select name="packages[<?php echo $i; ?>][adult]" class="required numeric">
                                     <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -106,7 +106,7 @@
                                     <option value="9">9</option>
                                     <option value="10">10</option>
                                  </select> <span class="errorMsg"></span></P> 
-                               <p>Children: <select name="packages[<?php echo $i; ?>]['child']" class="numeric" ><option value="0">0</option>
+                               <p>Children: <select name="packages[<?php echo $i; ?>][child]" class="numeric" ><option value="0">0</option>
                                    <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
