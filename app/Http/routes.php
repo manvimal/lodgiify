@@ -109,6 +109,7 @@ Route::get('/buildingFacility/delete', 'BuildingController@deleteBuildingFacilit
 
 Route::get('/RoomFacility/delete', 'RoomController@deleteRoomFacility');
 
-Route::get('/tenant/advancedSearchPage','tenantController@advancedSearchPage');
 
-Route::get('/test','tenantController@test');
+Route::get('/buildingSuggestion','searchController@buildingSuggestion');
+
+Route::post('/getAdvancedSearch','searchController@getAdvancedSearch');

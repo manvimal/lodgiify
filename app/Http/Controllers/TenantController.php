@@ -21,6 +21,9 @@ use App\buildingModel as buildingModel;
 use App\roomModel as roomModel;
 use App\tenantModel as tenantModel;
 use App\bookingModel as bookingModel;
+use App\buildingFacilityModel as buildingFacilityModel;
+
+
 
 
 
@@ -38,7 +41,7 @@ use App\bookingModel as bookingModel;
 		$user = $request->session()->get('user');
 
 		//Gets building categories
-	//	$categories = buildingCategory::all();
+		$buildingCategories = buildingCategory::all();
 	//	$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
 
 		//return view('pages.landlordAddBuilding',  array('categories' => $categories,'user' => $user, 'buildings' => $buildings));
@@ -47,10 +50,20 @@ use App\bookingModel as bookingModel;
 		$buildings = buildingModel::where('created_at', '!=', '')->orderBy('created_at', 'DESC')->get();
 
 		
+		$buildingFacAr = array();
+		foreach($buildings as $building){
+
+			$buildingFacilities = buildingFacilityModel::where('buildingid', '=', $building->id)->get();
+//
+			array_push($buildingFacAr , $buildingFacilities );
+
+		}
+
+		
 
 		//return view('pages.landlordbuildings',  array('user' => $user, 'buildings' => $buildings));
 
-		return view('pages.bestDeals',  array('user' => $user, 'buildings' => $buildings));
+		return view('pages.bestDeals',  array('user' => $user, 'buildings' => $buildings,'buildingCategories'=>$buildingCategories,'buildingFacilities'=>$buildingFacAr));
 
 
 	}
@@ -120,54 +133,9 @@ use App\bookingModel as bookingModel;
 	
 	}
 
-	public function advancedSearchPage(Request $request){
 
-		$user = $request->session()->get('user');
-
-		return view('pages.tanantAdvancedSearch',  array('user' => $user));
-	}
-
-
-	public function test(Request $request){
-
-		$user = $request->session()->get('user');
-
-		if(isset($request['term'])){
-		$searchTerm = $request['term'];
-		}
 	
-		$buildings = buildingModel::where('buildingName','LIKE', $searchTerm.'%')->get();
 	
-
-		foreach($buildings as $building){
-
-		 $buildingName[] = $building['buildingName'];
-
-		}
-
-		echo json_encode($buildingName);
-
-	}
-	public function test2(Request $request){
-
-		$user = $request->session()->get('user');
-
-		if(isset($request['term'])){
-		$searchTerm = $request['term'];
-		}
-	
-		$buildings = buildingModel::where('buildingLocation','LIKE', $searchTerm.'%')->get();
-	
-
-		foreach($buildings as $building){
-
-		 $buildingLocation[] = $building['buildingLocation'];
-
-		}
-
-		echo json_encode($buildingLocation);
-
-	}
 
 	
 }

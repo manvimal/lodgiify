@@ -2,13 +2,47 @@
  @extends('layout.default')
 
  @section('content')
- 
+<script>
+$(document).ready(function () {
+      $('#flexibleDate').change(function(){
+        if ($('#flexibleDate').prop('checked')) {
+            $('.HideIfChecked').hide();
+            
+        }
+        else {
+            $('.HideIfChecked').show();
+        }
+    });
+
+
+
+});
+
+
+
+</script>
+
+ <script type="text/javascript" src="{{ URL::asset('js/jquery.simple-dtpicker.js') }}"></script>
+  <link type="text/css" href="{{ URL::asset('css/jquery.simple-dtpicker.css') }}" rel="stylesheet" />
+
+  <script>
+  $(function() {
+    $( "#buildingName" ).autocomplete({
+      source: "{{ URL::asset('/buildingSuggestion') }}"
+    });
+  });
+
+    
+  
+  </script>
+
+
    <div class="banner">
         <div class="wrap">
              <h2>Deals</h2><div class="clear"></div>
         </div>
     </div>
-  <div class="main">  
+  <div class="main" id="bestDeals">  
     <input type="hidden" id="token" value="{{ csrf_token() }}" />    
    <div class="project-wrapper">
     <div class="project-sidebar">
@@ -50,7 +84,111 @@
      
      
    </div>
-    <div class="building_wrapper"></div>
+    <h1>Advanced Search</h1>
+    <div class="building_wrapper">
+
+
+
+        <div class="contentHolder"  id="contentHolder">
+
+<form method="post" action="{{ URL::asset('/getAdvancedSearch') }}"/>
+
+<input type="hidden" name="_token" value="{{{ csrf_token() }}}" /> 
+<div>
+      <input id="buildingName" value="" placeholder="Building Name" name="buildingName"/>
+
+
+      <input id="buildingLocation" placeholder="Building Location" name="buildingLocation"/>
+
+
+      <select type="text" class="required onlyLetters" name = "buildingCat" id ="buildingCat" > 
+
+           <option value="-1">-- Building Categories --</option>
+                    <?php 
+                        if (isset($buildingCategories)){
+
+                            foreach($buildingCategories as $buildingCategory){
+                                ?>
+                                    <option value="<?php echo $buildingCategory->id ?>"> <?php echo  $buildingCategory->buildingCatName  ?></option>
+                                <?php 
+                            }
+                        }
+                    ?>
+      </select>
+
+
+      <select type="text"  name = "buildingFacility" id ="buildingFacility" > 
+        <option value="">-- Building Facilities --</option>
+                    <?php 
+                        if (isset($buildingFacilities)){
+                            foreach($buildingFacilities as $facilityind){
+
+                            foreach( $facilityind as $buildingFacility){ 
+                                ?>
+                                    <option value="<?php echo $buildingFacility->facility->id ?>"> <?php echo  $buildingFacility->facility->name  ?></option>
+                                <?php 
+                            }
+                          }
+
+                        }
+                    ?>
+      </select>
+
+
+      <input type="text" name="numOfPeople" placeholder="Number of people" />
+
+
+
+      <div class="HideIfChecked">
+          <div><label>Check In:</label>
+              <input type="text" id="checkIn" name="checkIn" />
+              <label>Check Out:</label>
+              <input type="text" id="checkOut" name="checkOut"/> 
+          </div>
+
+      </div>
+
+
+   <input type="checkbox" name="flexibleDate" id="flexibleDate" value="flexibleDate"/>My dates are flexible</input>
+
+    </div>
+
+      
+<div>
+  Rooms: 
+  <input type="radio" name="numOfRooms" value="oneRoom" checked/>1
+  <input type="radio" name="numOfRooms" value="twoRoom"/>2
+  <input type="radio" name="numOfRooms" value="threeRoom"/>3
+  <input type="radio" name="numOfRooms" value="fourRoom"/>4
+  <input type="radio" name="numOfRooms" value="moreRooms"/>More
+</div>
+
+<div>
+<input type="submit" name="submit" id="advancedSearch" value="Search"/>
+  </div>
+</form>
+
+          <script type="text/javascript">
+        $(function(){
+          $('*[name=checkIn]').appendDtpicker({
+            "closeOnSelected": true
+          });
+        });
+        $(function(){
+          $('*[name=checkOut]').appendDtpicker({
+            "closeOnSelected": true
+          });
+        });
+      </script>
+   
+   <div class="clear"></div>
+  </div>
+
+<div id="AdvSearchResult">
+
+    <div class="clear"></div>
+</div>
+    </div>
    
 
 

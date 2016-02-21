@@ -58,5 +58,6 @@ class buildingModel extends Model implements AuthenticatableContract,
     {
         return $this->hasMany('App\packageModel', 'buildingid');
     }
+  
 }
 

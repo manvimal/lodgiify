@@ -18,6 +18,7 @@ use Input ;
 use Session;
 use DB;
 use Redirect;
+use App\buildingFacilityModel as buildingFacilityModel;
 
 
 
@@ -192,5 +193,169 @@ use Redirect;
 
 	}
 
+	public function buildingSuggestion(Request $request){
+
+		$user = $request->session()->get('user');
+
+		if(isset($request['term'])){
+		$searchTerm = $request['term'];
+		}
+	
+		$buildings = buildingModel::where('buildingName','LIKE', $searchTerm.'%')->get();
+	
+
+		foreach($buildings as $building){
+
+		 $buildingName[] = $building['buildingName'];
+
+		}
+
+		echo json_encode($buildingName);
+
+	}
+
+	public function getAdvancedSearch(Request $request){
+
+		$error=False;
+
+		
+		if(isset($request['buildingName'])){
+			$buildingName = $request['buildingName'];
+
+		}
+		else{
+			$buildingName = False;
+			$error=True;
+
+
+		}
+
+		if($error==False){
+
+
+						if(isset($request['buildingLocation'])){
+								
+						$buildingLocation = $request['buildingLocation'];
+
+
+						}
+
+						else{
+							$buildingLocation = False;
+
+						}
+
+
+						if((isset($request['buildingCat'])) && ($request['buildingCat'])!= -1){
+					
+							$buildingCat = $request['buildingCat'];
+						
+
+						}
+
+						else{
+							$buildingCat = False;
+
+
+						}
+
+						if((isset($request['buildingFacility'])) && ($request['buildingFacility'])!= -1){
+					
+							$buildingFacility = $request['buildingFacility'];
+						//	var_dump($request['buildingFacility']);
+
+
+						}
+
+						else{
+
+							$buildingFacility = False;
+
+
+						}
+
+
+
+
+								
+
+
+						//foreach($buildingFacilities as $x){
+
+						//	$a[]=$x->buildingid;
+							
+					//	}
+
+
+
+
+						//var_dump($buildingFacility);
+						//var_dump($buildingFacilities[0]);
+					// /	var_dump($a);
+
+						
+			$buildings = buildingModel::where('buildingName','Like', $buildingName.'%')
+
+
+							  ->Where(function($query) use ($buildingLocation, $buildingCat, $buildingFacility){
+
+								if($buildingLocation){
+							
+
+									$query->where('buildingLocation', '=', $buildingLocation);
+
+								}
+
+								if($buildingCat) {
+								
+
+									$query->where('buildingCatID', '=', $buildingCat);
+
+								}
+
+								if($buildingFacility){
+
+/**
+
+									$buildingFacilities = buildingFacilityModel::where('facilityid', '=', $buildingFacility)
+
+																		->get();
+
+
+											foreach($buildingFacilities as $buildingFacility){
+
+										//$a[]=$buildingFacility->buildingid;
+
+
+										
+										
+										var_dump('<br />'.$buildingFacility->building->buildingName);
+									}
+
+		
+										//$query->where('buildingName','Like', $buildingName.'%')
+										//->where('facilityid', '=', $buildingFacility)
+
+
+							
+
+               				**/
+               			}
+                     
+            				})
+  						  ->get();	
+
+
+//var_dump($buildings);
+
+//var_dump($request['buildingCat']);
+
+
+//var_dump($buildings);
+	}
+
+		return json_encode($buildings);
+	
+	}
 	
 }

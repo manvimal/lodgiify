@@ -1906,5 +1906,115 @@ $(document).ready(function(){
 
 
 
+
+
+
+
 });
 
+
+
+
+$(document).ready(function(){
+
+
+
+$('#advancedSearch').click(function(e) {
+
+
+	advSearch($(this));
+		return false;
+
+
+
+
+
+})
+
+
+
+$('#bestDeals #buildingName').keyup(function(e) {
+
+advSearch($(this));
+	
+
+
+		return true;
+
+
+
+
+
+})
+
+
+ $("#advancedSearch").click();
+
+
+
+
+
+});
+
+
+
+var loadingAdv = false;
+
+ function advSearch($curr){
+ 	
+ 	loadingAdv = true;
+ 	$url = $($curr).parents("form").attr("action");
+	//alert($url);
+			$data =  $($curr).parents("form").serialize();
+			//alert($data);
+			var $html = "";
+			 $("#AdvSearchResult").html($html);
+			$.ajax({
+			  type: "POST",
+			  url: $url,
+			  data: $data,
+			  success: function(response){
+			  	//alert('dasasd');
+
+			  	if (loadingAdv){
+			  		 var obj = $.parseJSON( response );
+			  	  $html = "";
+
+			  	  if (obj.length == 0){
+			  	  	$html  ="No result found";
+			  	  }
+			  	  for (i=0;i<obj.length;i++){
+
+			  	  	$html += '<div class="recently-posted-building">';
+			  	  	$html += '<img src="/upload/'+obj[i].image+'" alt="" width="50" height="50">';
+			  	  	$html += '<p>';
+			  	  	$html += '<label>Name: </label>';
+			  	  	$html += '<span class="buildingName">'+obj[i].buildingName+'</span><br/>';
+			  	  	$html += '<label>Location: </label>';
+			  	  	$html += '<span class="location"> '+obj[i].buildingLocation+'</span><br/>';
+			  	  	$html += '<label>Type: </label>';
+			  	  	$html += '<span class="location"> '+obj[i].category.buildingCatName+'</span><br/>';
+			  	  	$html += '<label>Description: </label>';
+			  	  	$html += '<span class="desription"> '+obj[i].desc+'</span>';
+			  	  	
+			  	  	$html += '</p>';
+
+			  	  	$html += ' <a href="/package/'+obj[i].id+'" data-buildingid="'+obj[i].id+'" data-buildingname="'+obj[i].buildingName+'">Book now</a>';
+			  	  	$html += '<div class="clear"></div></div>';
+			  	  }
+
+
+			  	  $("#AdvSearchResult").append($html+'<div class="clear"></div>');
+			  	  loadingAdv = false;
+			  	}
+			  	 
+				
+			 
+			  }
+			});
+
+
+
+
+
+ }

@@ -32,7 +32,6 @@
 					?>
 						<li><a href="{{ URL::asset('/booking') }}">Bookings</a></li>
 						<li><a href="{{ URL::asset('/mybooking') }}">My Bookings</a></li>
-						<li><a href="{{ URL::asset('/tenant/advancedSearchPage') }}">Advanced Search</a></li>
 						<li><a href="{{ URL::asset('/aboutus') }}">About Us</a></li> 
 						<li><a href="{{ URL::asset('/contactus') }}">Contact Us</a></li>
 					<?php

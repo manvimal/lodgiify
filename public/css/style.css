@@ -3735,6 +3735,58 @@ input.error, select.error{
 	margin-bottom: 1.2em;
 }
 
+
+#AdvSearchResult .recently-posted-building{
+	
+    float: left;
+    margin-right: 30px;
+    height: 240px;
+    text-align: center;
+
+}
+
+#AdvSearchResult p{
+text-align: left;
+
+
+}
+
+#AdvSearchResult .recently-posted-building img{
+
+width: 95%;
+    height: 50%;
+    margin: 6px;
+
+}
+
+#AdvSearchResult .recently-posted-building {
+	width:162px;
+	background-color: white;
+    color: black;
+}
+
+
+#AdvSearchResult .recently-posted-building a{
+
+    color: blue;
+}
+
+
+#AdvSearchResult{
+	    padding: 20px;
+}
+
+#AdvSearchResult .recently-posted-building p{
+	padding-left:0.5em;
+}
+
+#AdvSearchResult .recently-posted-building span{
+	word-break: break-word;
+    
+
+}
+
+
 .recently-posted-building a{
 	float:right;
 	   margin-right: 2em;
@@ -3818,56 +3870,55 @@ input.error, select.error{
   .tenantDealPackage .package_wrapper  #package_desc{
 	width: 41%;
     color: black;
-    padding: 10px;
-    
+    padding: 2%;
+    background-color: white;
     float: left;
-     font-weight:bold;
 }
 
  .tenantDealPackage .package_wrapper   .promotion{
-	width: 21%;
-    color: black;
-    padding: 10px;
-    
-    float: left;
+  padding: 10px;
+    width: 21%;
+      color: black;
+     float: left;
      font-weight:bold;
-      
 }
+
+
 
 #package_number{
-	width: 10%;
+ 	width: 10%;
     color: black;
-    padding: 10px;
-    
-    float: left;
-     font-weight:bold;
-}
+     padding: 10px;
+     
+     float: left;
+      font-weight:bold;
+ }
+ 
+ .no_package figure p{
+ 	    background-color: snow;
+ 	       font-weight:bold;font-size:14px;
+ 
+ }
+ 
+ .pack_label.odd{
+ 
+ 	background-color:#F9F9D8 !important;
+ }
+ 
+ .pack_label.even{
+ 
+ 	background-color:#F9F9E8 !important;
+ }
 
-.no_package figure p{
-	    background-color: snow;
-	       font-weight:bold;font-size:14px;
+ #package_chk {
+     width: 5%;
+     color: black;
+     padding: 2%;
+     
+      float: left;
+      font-weight:bold;
+ }
 
-}
-
-.pack_label.odd{
-
-	background-color:#F9F9D8 !important;
-}
-
-.pack_label.even{
-
-	background-color:#F9F9E8 !important;
-}
-
-
-#package_chk {
-    width: 5%;
-    color: black;
-    padding: 2%;
-    
-    float: left;
-     font-weight:bold;
-}
 
 .deals-list form p {
 	margin-bottom:5px;
@@ -3995,4 +4046,8 @@ table.main-list2 {
 
 #roomFacilityTableHide{
 	font-size:0.57em;
+}
+
+.ui-menu-item{
+	font-size:14px;
 }
