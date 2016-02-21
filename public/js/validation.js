@@ -1268,12 +1268,13 @@ $(document).ready(function(){
 
  		var token = $("#token").val();
  		
- 		var $data =  { 'numChild': numChild, 'numAdult': numAdult ,'package': package, 'start': start, 'end': end , "_token": token};
+ 		//var $data =  { 'numChild': numChild, 'numAdult': numAdult ,'package': package, 'start': start, 'end': end , "_token": token};
 
+ 		var $data =  $(this).parents("form").serialize();
  		var baseform = document.forms['registerBooking'];
  		
- 		var adultsObj = baseform['adults'];
- 		var childrenObj = baseform['children'];
+ 		//var adultsObj = baseform['adults'];
+ 		//var childrenObj = baseform['children'];
  		var date10Obj = baseform['date10'];
  		var date11Obj = baseform['date11'];
 
@@ -1284,12 +1285,12 @@ $(document).ready(function(){
 
  		
  		
- 		if (!checkError(adultsObj))  clearError(adultsObj);
- 		else hasError = true;
+ 		//if (!checkError(adultsObj))  clearError(adultsObj);
+ 		//else hasError = true;
 
 // alert(3)
- 		if (!checkError(childrenObj))  clearError(childrenObj);
- 		else hasError = true;
+ 		//if (!checkError(childrenObj))  clearError(childrenObj);
+ 		//else hasError = true;
 
  		// alert(4)
 
@@ -1946,6 +1947,49 @@ advSearch($(this));
 
 
 })
+
+
+$('#bestDeals #buildingCat').change(function(e) {
+
+advSearch($(this));
+	
+
+
+		return true;
+
+
+
+
+
+})
+
+
+$('#bestDeals #buildingLocation').keyup(function(e) {
+
+advSearch($(this));
+	
+
+
+		return true;
+
+
+})
+
+
+$('#bestDeals #buildingFacility').change(function(e) {
+
+advSearch($(this));
+	
+
+
+		return true;
+
+
+})
+
+
+
+
 
 
  $("#advancedSearch").click();
