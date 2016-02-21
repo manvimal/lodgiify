@@ -13,6 +13,7 @@ use App\User as User;
 use App\vehicleOwnerModel as vehicleOwnerModel;
 use App\userLandlord as userLandlord;
 use App\UserAdmin as UserAdmin;
+use App\buildingModel as buildingModel;
 
 
 
@@ -24,7 +25,16 @@ use App\UserAdmin as UserAdmin;
 
 	public function index(Request $request){
 		$user = $request->session()->get('user');
-		return view('pages.index',  array('user' => $user));
+
+	
+
+		$buildings = buildingModel::all();
+
+		$building = buildingModel::orderBy('created_at', 'DESC')->paginate(3);
+
+
+		return view('pages.index',  array('user' => $user, 'buildings'=>$buildings,'building'=>$building));
+
 	
 	}
 

@@ -120,14 +120,14 @@ $(document).ready(function () {
       <select type="text"  name = "buildingFacility" id ="buildingFacility" > 
         <option value="">-- Building Facilities --</option>
                     <?php 
-                        if (isset($buildingFacilities)){
-                            foreach($buildingFacilities as $facilityind){
+                        if (isset($Facilities)){
+                            foreach($Facilities as $facilityind){
 
-                            foreach( $facilityind as $buildingFacility){ 
+                       
                                 ?>
-                                    <option value="<?php echo $buildingFacility->facility->id ?>"> <?php echo  $buildingFacility->facility->name  ?></option>
+                                    <option value="<?php echo $facilityind->id ?>"> <?php echo  $facilityind->name  ?></option>
                                 <?php 
-                            }
+                            
                           }
 
                         }

@@ -302,44 +302,47 @@ use App\buildingFacilityModel as buildingFacilityModel;
 								if($buildingLocation){
 							
 
-									$query->where('buildingLocation', '=', $buildingLocation);
+									$query->where('buildingLocation', 'like', $buildingLocation .'%');
 
 								}
 
 								if($buildingCat) {
 								
 
-									$query->where('buildingCatID', '=', $buildingCat);
+									$query->where('buildingCatID', 'like', $buildingCat .'%');
 
 								}
 
 								if($buildingFacility){
 
-/**
+
 
 									$buildingFacilities = buildingFacilityModel::where('facilityid', '=', $buildingFacility)
 
 																		->get();
 
 
-											foreach($buildingFacilities as $buildingFacility){
+										foreach($buildingFacilities as $buildingFacility){
 
-										//$a[]=$buildingFacility->buildingid;
-
-
+										//$a[]=$buildingFacility->building->buildingName;
+											$buildingFacilitiesArray[]=$buildingFacility->buildingid;
+												//$query->where('id', '=', $buildingFacility->buildingid);
 										
 										
-										var_dump('<br />'.$buildingFacility->building->buildingName);
+										//var_dump('<br />'.$buildingFacility->building->buildingName);
 									}
 
-		
-										//$query->where('buildingName','Like', $buildingName.'%')
-										//->where('facilityid', '=', $buildingFacility)
 
+									foreach($buildingFacilitiesArray as $buildingFacilityArray){
+									
+
+											$query->orwhere('id', '=', $buildingFacilityArray);
+
+										
+									}
 
 							
-
-               				**/
+               			
                			}
                      
             				})

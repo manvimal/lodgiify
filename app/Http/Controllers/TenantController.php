@@ -22,7 +22,8 @@ use App\roomModel as roomModel;
 use App\tenantModel as tenantModel;
 use App\bookingModel as bookingModel;
 use App\buildingFacilityModel as buildingFacilityModel;
-
+use App\facilityModel as facilityModel;
+ 
 
 
 
@@ -53,17 +54,18 @@ use App\buildingFacilityModel as buildingFacilityModel;
 		$buildingFacAr = array();
 		foreach($buildings as $building){
 
+			//$buildingFacilities = buildingFacilityModel::where('buildingid', '=', $building->id)->get();
 			$buildingFacilities = buildingFacilityModel::where('buildingid', '=', $building->id)->get();
 //
 			array_push($buildingFacAr , $buildingFacilities );
 
 		}
 
-		
+		$Facilities = facilityModel::all();
 
 		//return view('pages.landlordbuildings',  array('user' => $user, 'buildings' => $buildings));
 
-		return view('pages.bestDeals',  array('user' => $user, 'buildings' => $buildings,'buildingCategories'=>$buildingCategories,'buildingFacilities'=>$buildingFacAr));
+		return view('pages.bestDeals',  array('user' => $user, 'Facilities'=>$Facilities, 'buildings' => $buildings,'buildingCategories'=>$buildingCategories,'buildingFacilities'=>$buildingFacAr));
 
 
 	}

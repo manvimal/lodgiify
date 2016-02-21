@@ -168,8 +168,8 @@
   <div class="main">
 	 <div class="content-top">
 		 <div class="wrap">
-			<h3>We Creative Quality Designs.</h3>
-			<h5>We Specialize in Web Design / Development and Graphic Design</h5> 
+			<h3>Recently Posted Buildings</h3>
+			<h5>We remain updated 24/7</h5> 
 			<div class="section group">
 				<div class="col_1_of_4 span_1_of_first">
 					<img src="images/pic.jpg" alt=""/>
@@ -177,33 +177,26 @@
 					   <h4>Redesigning<br> with personality<br><span>in<span class="small">&nbsp;web design</span></span><div class="clear"></div></h4>
 					</div> 
 				</div>
+
+				<?php
+					foreach($building as $build){
+
+
+
+					?>
 				<div class="col_1_of_4 span_1_of_4">
 					<div class="grid1">
-						<img src="images/icon1.png" alt=""/>
-						<h4>Web development</h4>
+						<img src="<?php echo 'upload/'.$build->image; ?>" alt=""/>
+						<h4><?php echo($build->buildingName);?></h4>
 					</div>
 					<div class="desc">
-					   <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod</p>
+					   <p><?php echo($build->desc);?></p>
 					</div> 
 				</div>
-				<div class="col_1_of_4 span_1_of_4">
-					<div class="grid1">
-						<img src="images/icon2.png" alt=""/>
-						<h4>Web design</h4>
-					</div>
-					<div class="desc">
-					   <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod</p>
-					</div> 
-				</div>
-				<div class="col_1_of_4 span_1_of_4">
-					<div class="grid1">
-						<img src="images/icon3.png" alt=""/>
-						<h4>Graphic design</h4>
-					</div>
-					<div class="desc">
-					   <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod</p>
-					</div> 
-				</div>
+				<?php
+			}
+				?>
+				
 				<div class="clear"></div>
 			</div>
 		</div>
@@ -212,116 +205,37 @@
 		<h2><span>Our work</span></h2>
 		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod</p>
       <div id="container">
+
+
+
         <div id="main1">
+
+
        <ul id="tiles">
-  
+       	<?php
+       	foreach($buildings as $building){
+  	?>
         <li>
-          <a href="images/t-pic1.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic1.jpg" width="200" height="283">
+          <a href="<?php if($user['type']!=""){ echo('/package/' .$building->id );}else{ echo('/registrationPage');  } ?>" rel="lightbox" class="cboxElement">
+            <img src="upload/<?php echo($building->image) ?>" width="200" height="283">
           </a>
         </li>
-        <li>
-          <a href="images/t-pic2.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic2.jpg" width="200" height="300">
-          </a>
-       </li>
-        <li>
-          <a href="images/t-pic3.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic3.jpg" width="200" height="252">
-          </a>
-       </li>
-        <li>
-          <a href="images/t-pic4.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic4.jpg" width="200" height="158">
-          </a>
-        </li>
-        <li>
-          <a href="images/t-pic5.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic5.jpg" width="200" height="265">
-          </a>
-       </li>
-        <li>
-          <a href="images/pic6.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic6.jpg" width="200" height="158">
-          </a>
-        </li>
-        <li>
-          <a href="images/pic7.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic7.jpg" width="200" height="200">
-          </a>
-        </li>
-        <li>
-          <a href="images/pic8.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic8.jpg" width="200" height="200">
-          </a>
-        </li>
-        <li>
-          <a href="images/pic9.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic9.jpg" width="200" height="133">
-          </a>
-        </li>
-        <li>
-          <a href="images/pic10.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic10.jpg" width="200" height="193">
-          </a>
-        </li>
-        <li>
-          <a href="images/pic11.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic11.jpg" width="200" height="283">
-          </a>
-       </li>
-        <li>
-          <a href="images/t-pic1.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic1.jpg" width="200" height="283">
-          </a>
-        </li>
-        <li>
-          <a href="images/t-pic2.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic2.jpg" width="200" height="300">
-          </a>
-       </li>
-        <li>
-          <a href="images/t-pic3.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic3.jpg" width="200" height="252">
-          </a>
-       </li>
-        <li>
-          <a href="images/t-pic4.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic4.jpg" width="200" height="158">
-          </a>
-        </li>
-        <li>
-          <a href="images/t-pic5.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic5.jpg" width="200" height="265">
-          </a>
-       </li>
-        <li>
-          <a href="images/pic6.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic6.jpg" width="200" height="158">
-          </a>
-        </li>
-        <li>
-          <a href="images/pic7.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic7.jpg" width="200" height="200">
-          </a>
-        </li>
-        <li>
-          <a href="images/pic8.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic8.jpg" width="200" height="200">
-          </a>
-        </li>
-        <li>
-          <a href="images/pic9.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic9.jpg" width="200" height="133">
-          </a>
-        </li>
-        <li>
-          <a href="images/pic10.jpg" rel="lightbox" class="cboxElement">
-            <img src="images/pic10.jpg" width="200" height="193">
-          </a>
-        </li>
+
+        <?php
+    }
+    ?>
+        
      </ul>
+
+
+
+
    </div> 
+
+
+
+
+
   </div>
    <link rel="stylesheet" href="css/colorbox.css">
   <!-- Include the imagesLoaded plug-in -->
