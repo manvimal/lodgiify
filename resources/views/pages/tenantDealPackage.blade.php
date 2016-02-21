@@ -7,8 +7,7 @@
   <!--Load Script and Stylesheet for datetimepicker-->
   <script type="text/javascript" src="{{ URL::asset('js/jquery.simple-dtpicker.js') }}"></script>
   <link type="text/css" href="{{ URL::asset('css/jquery.simple-dtpicker.css') }}" rel="stylesheet" />
-  <script src="{{ URL::asset('js/googleMap.js') }}" type="text/javascript"></script>
-
+ 
 
    <div class="banner">
         <div class="wrap">
@@ -16,7 +15,9 @@
         </div>
     </div>
   <div class="main tenantDealPackage">  
-    <input type="hidden" id="token" value="{{ csrf_token() }}" />    
+      <form method="" name="registerBooking">
+
+    <input type="hidden" name="_token" value="{{ csrf_token() }}" />    
    <div class="project-wrapper">
     <div class="project-sidebar">
 
@@ -26,7 +27,7 @@
        <div class="contentHolder"  id="contentHolder">
         <div class="deals-list content">
 
-        <form method="" name="registerBooking">
+      
         
          
           <p><label class="whiteText">Check In: </label>
@@ -37,7 +38,6 @@
            <p class="successMsg"></p>
          <p><input type = "submit" name = "submit" Value="Submit" class="btnAll bookPckNow"/></p>
 
-         <form>
           
       <!--DateTimePicker -->
       <script type="text/javascript">
@@ -79,6 +79,7 @@
 
           <?php if (isset($packages)){
                    $index = "odd";
+                   $i =0;
                   foreach($packages as $package){
 
                      ?>
@@ -86,13 +87,13 @@
                           <div class="pack_label <?php echo  $index ; ?>">
                             <div id="package_chk">
                                 <h2 class="packageName "><?php echo $package->packageName ; ?></h2>
-                                <input type="checkbox" name="packages[]" value="<?php echo $package->id ; ?>" />
+                                <input type="checkbox" name="packages[<?php echo $i; ?>]['package']" value="<?php echo $package->id ; ?>" />
                              </div>
 
                               <div id="package_number">
                                
                                 
-                                 <p> Adults: <select name="adults" class="required numeric">
+                                 <p> Adults: <select name="packages[<?php echo $i; ?>]['adult']" class="required numeric">
                                     <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -105,7 +106,7 @@
                                     <option value="9">9</option>
                                     <option value="10">10</option>
                                  </select> <span class="errorMsg"></span></P> 
-                               <p>Children: <select name="children" class="numeric" ><option value="0">0</option>
+                               <p>Children: <select name="packages[<?php echo $i; ?>]['child']" class="numeric" ><option value="0">0</option>
                                    <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -134,7 +135,7 @@
                              </div>
                      </div>
                      <?php 
-
+                      $i++;
                       if ( $index == 'odd'){
                          $index = "even";
                       }
@@ -152,6 +153,9 @@
 
 
    <div class="clear"></div>
+
+
+         </form>
   </div>
       
                                                                                                           

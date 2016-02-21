@@ -1271,6 +1271,7 @@ $(document).ready(function(){
  		//var $data =  { 'numChild': numChild, 'numAdult': numAdult ,'package': package, 'start': start, 'end': end , "_token": token};
 
  		var $data =  $(this).parents("form").serialize();
+
  		var baseform = document.forms['registerBooking'];
  		
  		//var adultsObj = baseform['adults'];
@@ -1302,9 +1303,10 @@ $(document).ready(function(){
  		if (!checkError(date11Obj))  clearError(date11Obj);
  		else hasError = true;
 
-
-
+ 	
  		if (!hasError ){
+ 		
+
  			$.ajax({
 			  method: "post",
 			  url:  "/booking/register" ,
