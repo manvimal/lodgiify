@@ -24,11 +24,7 @@ class bookingModel extends Model implements AuthenticatableContract,
      */
     protected $table = 'tblbooking';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
 
      protected $fillable = ['id',
                             'tenantID', 'travelID', 'checkin', 'checkOut','price'];

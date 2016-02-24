@@ -4,6 +4,33 @@
  @section('content')
 
 
+<script>
+
+$(document).ready(function() {
+    
+    function callAjax(){
+      //alert("alert2");
+            $.ajax({
+
+                type: "POST",
+                url: "js/getDirection.js",
+                success: function(msg){
+                 alert("das");
+          
+          
+                }
+
+            });
+    }
+    //3sec
+    setInterval(callAjax, 3000);
+    }); 
+
+
+</script>
+
+
+
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6v5-2uaq_wusHDktM9ILcqIrlPtnZgEk&sensor=false">
     </script>
 

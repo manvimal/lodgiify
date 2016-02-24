@@ -1908,6 +1908,26 @@ $(document).ready(function(){
 
 
 
+$('a.deleteBooking').click(function(e) {
+
+		var r = confirm("Are you sure you want to delete the building!");
+		if (r == true) {
+
+			var obj = $(this);
+			$.ajax({
+			  type: "GET",
+			  url: $(this).attr("href"),
+			  data: {"_token": $("#token").val()},
+			  success: function(response){
+			  	  //var obj = $.parseJSON( response );
+			  	  $(obj).parents("tr.booking").remove();
+	    			
+    				
+			  }
+			});
+		}
+		return false;
+		})
 
 
 

@@ -46,7 +46,7 @@
                               <td><?php echo $booking->checkOut  ?></td>
                               <td></td>
                               <td></td>
-                              <td> <?php if (count($booking->packages) > 0){  ?> <a href="<?php echo $getDirection; ?>" class="direction">Get directions</a>  <?php } ?> <a href="<?php echo $viewBookingLink; ?>" class="Order" target="_blank">View booking</a>  <a href="<?php echo $deleteLink; ?>" class="deleteBooking" >Delete</a></td>
+                              <td> <?php if (count($booking->packages) > 0){  ?> <a href="<?php echo $getDirection; ?>" target="_blank" class="direction btnLogin">Get directions</a>  <?php } ?> <a href="<?php echo $viewBookingLink; ?>" class="Order btnLogin" target="_blank">View booking</a>  <a href="<?php echo $deleteLink; ?>" class="deleteBooking btnLogin" >Delete</a></td>
                            
                             </tr> 
                            <?php 

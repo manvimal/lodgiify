@@ -186,7 +186,7 @@
 					?>
 				<div class="col_1_of_4 span_1_of_4">
 					<div class="grid1">
-						<img src="<?php echo 'upload/'.$build->image; ?>" alt=""/>
+						<img src="<?php echo '/upload/'.$build->image; ?>" alt=""/>
 						<h4><?php echo($build->buildingName);?></h4>
 					</div>
 					<div class="desc">
@@ -194,7 +194,10 @@
 					</div> 
 				</div>
 				<?php
+
 			}
+
+		echo $building->render();
 				?>
 				
 				<div class="clear"></div>
