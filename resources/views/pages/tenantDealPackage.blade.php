@@ -34,6 +34,10 @@
          <input type="text" name="date10" value="" class="required datetime"> <span class="errorMsg"></span></p>
           <p><label class="whiteText">Check Out: </label>
          <input type="text" name="date11" value="" class="required datetime"> <span class="errorMsg"></span></p>
+<br />
+         <p class="whiteText"><label class="whiteText">Book vehicle: </label>
+         <br /> Yes <input type="radio" name="bookvehicle" value="yes" > No<input checked="checked" type="radio" name="bookvehicle" value="no" > <span class="errorMsg"></span></p>
+
           <p class="errorMsg1"></p>
            <p class="successMsg"></p>
          <p><input type = "submit" name = "submit" Value="Submit" class="btnAll bookPckNow"/></p>
@@ -59,8 +63,33 @@
      </div>
      
      
-     
+     <!-- Add vehicle block here -->
+
+     <div class="block-vehicle hide-block-vehicle">
+          <h4>Book Vehicle</h4>
+
+          <p><label class="whiteText">Number of vehicles: </label>
+        <select name="numvehicles">
+          <option value="0">0</option>
+          <option value="1">1</option>
+            <option value="2">2</option>
+              <option value="3">3</option>
+                <option value="4">4</option>
+                  <option value="5">5</option>
+                    <option value="6">6</option>
+                      <option value="7">7</option>
+                        <option value="8">8</option>
+                          <option value="9">9</option>
+                            <option value="10">10</option>
+        </select> <span class="errorMsg"></span></p>
+
+<br />
+      <div class="block-vehicle-details"></div>
+     </div>
+
+
    </div>
+ 
     <div class="package_wrapper ">
           <div class="got_package whiteText">Please select a package</div>
           <div class="no_package">

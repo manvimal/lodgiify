@@ -635,9 +635,9 @@ $(document).ready(function(){
 		  data: $data
 		})
 		  .success(function( data ) {
-		  	console.log(data);
+		  
 		  	var obj = $.parseJSON( data );
-		  	console.log(obj);
+		  	
 
 		  	for (i = 0; i< obj.length; i++){
 		  		$optionsCatRoom += "<option value='"+obj[i].id+"''>"+obj[i].roomCatName+"</option>";
@@ -1751,7 +1751,7 @@ $(document).ready(function(){
 
 			$html += '</div>';
 			$html += '<div class="rooms">';
-	console.log(data.packages);
+
 			for (i=0 ; i< data.packages.length ; i++){
 				packages =  data.packages[i];
 				$html += '<div class="room">';
@@ -1800,7 +1800,7 @@ $(document).ready(function(){
 			  data: $data,
 			  success: function(response){
 			  	  var obj = $.parseJSON( response );
-			  	  console.log(obj);
+			  	
 			  	  //  $("#Message").html(obj);
 				
 			  	 for (i =0; i< obj.length; i++){
@@ -1838,7 +1838,7 @@ $(document).ready(function(){
 			  data: $data,
 			  success: function(response){
 			  	  var obj = $.parseJSON( response );
-			  	  console.log(obj);
+			  	  
 			  	  //  $("#Message").html(obj);
 				
 			  	 for (i =0; i< obj.length; i++){
@@ -2011,7 +2011,105 @@ advSearch($(this));
 
 
 
+//If user checks yes display vehicle block
+ $('input[name=bookvehicle]').change(function() {
+ 	 	
+        if (this.value == 'yes') {
+        	 $(".tenantDealPackage .block-vehicle").removeClass("hide-block-vehicle");
+            $(".tenantDealPackage .block-vehicle").show();
+        }
+        else{
+        	 $(".tenantDealPackage .block-vehicle").addClass("hide-block-vehicle");
+            $(".tenantDealPackage .block-vehicle").hide();
+        }
+       
+    });
 
+
+ //Creates vehicle selectboxes block based on numVehicle entered
+ $('.block-vehicle select[name=numvehicles]').change(function() {
+ 	 	
+       var numVehicles = this.value;
+       $html ="";
+       $obj = this;
+       $($obj ).parent().find("span").text("");
+       $options = "";
+
+       $("block-vehicle-details").html("");
+
+
+       $.getJSON( "/search?action=vehicles", function( data ) {
+    		if (numVehicles > data.length){
+    			$($obj ).parent().find("span").text("We do not have enough vehicles available at this moment.");
+    			return;
+    		}
+    		for (j=0;j<data.length;j++){
+    			$options += "<option value='"+data[j].id+"'>"+data[j].vehicleName+"</option>";
+    		}
+
+    	
+    		for (i=0;i< numVehicles; i++){
+	       		$html += "<div class='block-vehicle-detail'>";
+
+
+	       		$html += "<p><label class='whiteText'>Return : </label>";
+		         $html += '<input type="radio" name="block-vehicle['+i+'][dispatch]" value="true" > yes<input checked="checked" type="radio" name="block-vehicle['+i+'][dispatch]" value="false" >No  <span class="errorMsg"></span></p>';
+					$html += "<br />"
+
+					$html += "<p><label class='whiteText'>Choose vehicle : </label>";
+		         $html += '<select  class="selectAvailabilityVehicle" name="block-vehicle['+i+'][vehicle]"  >'+$options+'</select> <span class="errorMsg"></span></p>';
+					$html += "<br />"
+					$html += "<p>";
+		         $html += '<button class="availabilityVehicle"  value="Check availability" >Check availability</button><span class="errorMsg"></span></p>';
+					$html += "<br />"
+		       		$html += "</div>";
+	       } 
+
+	      
+	       $(".block-vehicle-details").html($html);
+    		
+		});
+
+
+	
+       
+    });
+
+
+ 
+
+
+ $("body").on("change",".selectAvailabilityVehicle",function(){
+	 	$(this).parents(".block-vehicle-detail").find(".availabilityVehicle").click();
+		return false;
+ })
+ 
+
+ $("body").on("click",".availabilityVehicle",function(){
+	 	$(".block-vehicle-detail").removeClass("block-vehicle-detail-error");
+	 	$(obj).parents("p").find(".errorMsg").text("");
+	 	var obj = $(this);
+			$.ajax({
+			  type: "GET",
+			  url: "/search?action=availabilityVehicle",
+			  data: {"_token": $("#token").val(),"vehicleid":$(obj).parents(".block-vehicle-detail").find("select").val(),"checkin": $("input[name=date10]").val(),"checkout": $("input[name=date11]").val(),"dispatch":$(obj).parents(".block-vehicle-detail").find("input[type=radio]:checked").val()},
+			  success: function(response){
+			  	  var objs = $.parseJSON( response );
+			  	  
+		    		if (objs.status){
+		    			$(obj).parents("p").find(".errorMsg").text(objs.msg);
+		    			$(obj).parents(".block-vehicle-detail").addClass("block-vehicle-detail-error");
+		    		}
+		    		else{
+		    			$(obj).parents("p").find(".errorMsg").text("No conflict detected");
+		    			$(obj).parents(".block-vehicle-detail").removeClass("block-vehicle-detail-error");
+		    			$(obj).parents("p").find(".errorMsg").css("color","green");
+		    		}
+    				
+			  }
+			});
+			return false;
+	 })
 
 
  $("#advancedSearch").click();
@@ -2021,6 +2119,7 @@ advSearch($(this));
 
 
 });
+
 
 
 
@@ -2080,6 +2179,7 @@ var loadingAdv = false;
 			});
 
 
+ 	
 
 
 
