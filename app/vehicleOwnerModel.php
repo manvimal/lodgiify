@@ -32,6 +32,7 @@ class vehicleOwnerModel extends Model implements AuthenticatableContract,
      */
 
     protected $fillable = [ 'ID',
+                            'userStatus',
                             'UserName',
                             'FirstName', 
                             'LastName', 

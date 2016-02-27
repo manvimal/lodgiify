@@ -100,7 +100,7 @@ use App\facilityModel as facilityModel;
 		$room-> price = $price;
 		$room-> roomName = $roomName;
 		$room-> roomName = $roomName;
-		$room-> landlordID = $user[0]->ID; 
+		$room-> landlordID = $user[0]->id; 
 
 		$room->save();
 		Session::flash('success', 'Room successfully registered'); 

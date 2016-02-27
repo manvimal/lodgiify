@@ -32,6 +32,7 @@ class User extends Model implements AuthenticatableContract,
      */
 
      protected $fillable = ['UserName',
+                            'userStatus',
                             'FirstName', 
                             'LastName', 
                             'Password',

@@ -41,6 +41,8 @@ use App\facilityModel as facilityModel;
 	}
 
 
+
+
 	public function deleteTenant(Request $request){
 			
 
@@ -60,9 +62,6 @@ use App\facilityModel as facilityModel;
 
 
 	}
-
-
-	
 
 
 	public function deleteLandlord(Request $request){
@@ -520,5 +519,131 @@ use App\facilityModel as facilityModel;
 
 
 	}
+
+	function blockUsers(Request $request){
+		if((isset($_REQUEST['id'])) && isset($_REQUEST['type'])){
+			$id = $_REQUEST['id'];
+			$type = $_REQUEST['type'];
+
+
+		
+		}
+
+
+
+
+		if($type=="Landlord"){
+
+			$checkBlockedStatus = userLandlord::where('id','=', $id)->get();
+
+
+
+			if($checkBlockedStatus[0]->userStatus == 0 ){
+
+
+
+				$landlord = userLandLord::find($id);
+
+				$landlord-> userStatus = '1' ;
+
+				$landlord->save();
+
+
+			}
+			else{
+				$landlord = userLandLord::find($id);
+
+				$landlord-> userStatus = '0' ;
+
+				$landlord->save();
+
+
+			}
+
+
+			}
+
+		
+
+
+		
+		elseif($type=="tenant"){
+
+
+			$checkBlockedStatus = User::where('id','=', $id)->get();
+
+
+
+			if($checkBlockedStatus[0]->userStatus == 0 ){
+
+
+
+				$tenant = User::find($id);
+
+				$tenant-> userStatus = '1' ;
+
+				$tenant->save();
+
+
+			}
+			else{
+				$tenant = User::find($id);
+
+				$tenant-> userStatus = '0' ;
+
+				$tenant->save();
+
+
+			}
+
+
+		}
+		elseif($type=="vehicleowner"){
+
+
+			$checkBlockedStatus = vehicleOwnerModel::where('id','=', $id)->get();
+
+
+
+			if($checkBlockedStatus[0]->userStatus == 0 ){
+
+
+
+				$vehicleowner = vehicleOwnerModel::find($id);
+
+				$vehicleowner-> userStatus = '1' ;
+
+				$vehicleowner->save();
+
+
+			}
+			else{
+				$vehicleowner = vehicleOwnerModel::find($id);
+
+				$vehicleowner-> userStatus = '0' ;
+
+				$vehicleowner->save();
+
+
+			}
+
+		}
+
+		return redirect()->action('adminController@viewUsers');
+
+	}
+
+	function manageBuilding(Request $request){
+
+		$user = $request->session()->get('user');
+		//Gets buildings
+		$buildings = buildingModel::all();
+
+		
+
+		return view('pages.adminManageBuildings',  array('user'=>$user, 'buildings' => $buildings));
+	}
+
+
 
 }

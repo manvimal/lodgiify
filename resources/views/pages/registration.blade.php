@@ -26,32 +26,32 @@
     <table class="alignLeft container ">
         <tr>
             <td><label>First Name:</label></td>
-            <td> <input type="text" class="required onlyLetters" name = "firstName" id = "firstName"/><span class="errorMsg"></span> </td>
+            <td> <input type="text" class="required onlyLetters clearAll" name = "firstName" id = "firstName"/><span class="errorMsg"></span> </td>
         </tr>
 
         <tr>
             <td><label>Last Name: </label></td>
-            <td><input type="text" class="required onlyLetters" name = "lastName" id ="lastName"?> <span class="errorMsg"></span></td>
+            <td><input type="text" class="required onlyLetters clearAll" name = "lastName" id ="lastName"?> <span class="errorMsg"></span></td>
         </tr>
 
         <tr>
         	<td><label>User Name:</label></td>
-            <td> <input type="text" class="required" name = "userName" id ="userName"?> <span class="errorMsg"></span></td>
+            <td> <input type="text" class="required clearAll" name = "userName" id ="userName"?> <span class="errorMsg"></span></td>
         </tr>
 
         <tr>
             <td><label>Password: </label></td>
-            <td><input type = "Password" class="required" name="Password" id = "Password" /> <span class="errorMsg"></span></td>
+            <td><input type = "Password" class="required clearAll" name="Password" id = "Password" /> <span class="errorMsg"></span></td>
          </tr> 
 
         <tr>  
             <td><label>Confirm Password: </label></td>
-            <td><input type = "Password" class="required password" name="confirmPassword" id = "confirmPassword" /><span class="errorMsg"></span> </td>
+            <td><input type = "Password" class="required password clearAll" name="confirmPassword" id = "confirmPassword" /><span class="errorMsg"></span> </td>
         </tr>
 
         <tr>
         	<td><label>DOB: </label></td>
-            <td><input type = "date" class="required" name = "DOB" id = "DOB" /><span class="errorMsg"></span></td>
+            <td><input type = "date" class="required clearAll" name = "DOB" id = "DOB" /><span class="errorMsg"></span></td>
         </tr>
 
         <tr>
@@ -66,7 +66,7 @@
           
             <tr>       
             <td><label>Phone: </label></td>
-            <td><input type = "tel" class="required validmobile" name="phone" id = "phone" />
+            <td><input type = "tel" class="required validmobile clearAll" name="phone" id = "phone" />
                 <span class="errorMsg"></span> </td>
             </tr>
 
@@ -79,13 +79,13 @@
 
             <tr>
             <td><label>Email: </label></td>
-            <td><input type = "Email" class="required email" name="Email" id="Email" />
+            <td><input type = "Email" class="required email clearAll" name="Email" id="Email" />
                 <span class="errorMsg"></span></td>
             </tr>
 
             <tr>
             <td><label>Address </label></td>
-            <td><input type="text" name="address" id="address" class="required"/><span class="errorMsg"></span> </td>
+            <td><input type="text" name="address" id="address" class="required clearAll"/><span class="errorMsg"></span> </td>
             </tr>
 
 
@@ -345,21 +345,31 @@
 
             <tr>
             <td><label>Postal Code:</label></td>
-            <td> <input type="text"  class="required" name="postalCode" id="postalCode"/>
+            <td> <input type="text"  class="required clearAll" name="postalCode" id="postalCode"/>
             <span class="errorMsg"></span></td>
             </tr>
 
             <tr>
             <td><label>Captcha: </label>   </td>
-            <td><input id="txtCaptcha" type="text" readonly="" class="input_img">
+            <td><input id="txtCaptcha" type="text" readonly="" class="input_img updateTextBoxes" onCopy="return false" >
                 <input type="button" id="btnrefresh" value="Refresh" onclick="drawCaptcha();" /><br>
-                <input type="text" id="txtInput" name="txtCaptchas" class="captcha required"/>
+                <input type="text" id="txtInput" name="txtCaptchas" class="captcha required clearAll"/>
                 <span class="errorMsg"></span></td>
             </tr>
 
             <tr>
-            <td colspan="3" align="center"><input type = "submit" id = "submit" value = "Submit"  class="btnAll" ></td>
+                <td></td>
+            <td align="center"><input type = "submit" id = "submit" value = "Submit"  class="btnLogin" ></td>
+            <td></td>
             </tr>
+
+             <tr>
+                <td></td>
+            <td align="center" id="regMessage"></td>
+            <td></td>
+            </tr>
+
+            
 
         </table>
           </form>

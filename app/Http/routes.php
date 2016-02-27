@@ -20,9 +20,9 @@ Route::get('/viewVehicleBookings','VehicleOwnerController@viewVehicleBookinga');
 
 
 /**** USER ***/
-Route::get('/user/registration', 'MainController@registerUser');
+Route::post('/user/registration', 'MainController@registerUser');
 Route::post('/user/update', 'MainController@updateAccount');
-Route::get('/user/login', 'MainController@loginUser');
+Route::post('/user/login', 'MainController@loginUser');
 Route::get('/user/logoff', 'MainController@logoff');
 Route::get('/user/sendMsg', 'MainController@sendMsg');
 
@@ -113,3 +113,8 @@ Route::get('/RoomFacility/delete', 'RoomController@deleteRoomFacility');
 Route::get('/buildingSuggestion','searchController@buildingSuggestion');
 
 Route::post('/getAdvancedSearch','searchController@getAdvancedSearch');
+
+
+Route::get('/user/block', 'adminController@blockUsers');
+Route::get('/manageBuilding', 'adminController@manageBuilding');
+Route::post('/searchUser', 'adminController@searchUser');

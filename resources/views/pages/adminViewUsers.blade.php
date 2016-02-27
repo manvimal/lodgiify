@@ -6,7 +6,11 @@
 
 <script type="text/javascript">
 function confirm_alert(node) {
-    return confirm("Please click on OK to delete tenant.");
+    return confirm("Please click on OK to delete User.");
+}
+
+function confirm_alert1(node) {
+    return confirm("Please click on OK to continue");
 }
 </script>
 
@@ -40,8 +44,9 @@ function confirm_alert(node) {
                    <?php $i = 1;
                       foreach($tenants as $tenant){ 
                        
-                                 $deleteLink =  "/tenant/delete?id=". $tenant->ID;
-                                 $updateLink =  "/tenant/update?id=". $tenant->ID;
+                                 $deleteLink =  "/tenant/delete?id=". $tenant->id;
+                                 $updateLink =  "/tenant/update?id=". $tenant->id;
+                                 $blockLink = "/user/block?id=". $tenant->id . "&&" . "type=" . $tenant->type;
                            // $viewBookingLink =  "/booking/viewBooking?id=". $booking->id;
                           ?>
 
@@ -53,7 +58,7 @@ function confirm_alert(node) {
                               <td><?php echo $tenant->FirstName  ?></td>
                               <td><?php echo $tenant->Email  ?></td>
                                 <td><?php echo "Tenant";  ?></td>
-                              <td> <?php if (count($tenant->ID) > 0){  ?> <a href="<?php echo $updateLink; ?>" class="btnLogin" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" onclick="return confirm_alert(this);" class="btnLogin" >Delete</a></td>
+                              <td> <?php if (count($tenant->id) > 0){  ?> <a href="<?php echo $updateLink; ?>" class="btnLogin" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" onclick="return confirm_alert(this);" class="btnLogin" >Delete</a> <a href="<?php echo $blockLink; ?>" onclick="return confirm_alert1(this);" class="btnLogin" > <?php if(($tenant->userStatus)==0) echo'Unblock'; else{ echo('block');} ?></a></td>
                            
                             
                             </tr> 
@@ -65,8 +70,9 @@ function confirm_alert(node) {
                      <?php 
                       foreach($landlords as $landlord){ 
                        
-                                $deleteLink =  "/landlord/delete?id=". $landlord->ID;
-                                $updateLink =  "/landlord/delete?id=". $landlord->ID;
+                                $deleteLink =  "/landlord/delete?id=". $landlord->id;
+                                $updateLink =  "/landlord/update?id=". $landlord->id;
+                                  $blockLink = "/user/block?id=". $landlord->id . "&&" ."type=" . $landlord->type;
                           ?>
 
                        
@@ -77,7 +83,7 @@ function confirm_alert(node) {
                               <td><?php echo $landlord->FirstName;  ?></td>
                               <td><?php echo $landlord->Email;  ?></td>
                               <td><?php echo "Landlord";  ?></td>
-                              <td> <?php if (count($landlord->ID) > 0){  ?> <a href="<?php echo $updateLink; ?>" class="btnLogin" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" onclick="return confirm_alert(this);" class="btnLogin" >Delete</a></td>
+                              <td> <?php if (count($landlord->id) > 0){  ?> <a href="<?php echo $updateLink; ?>" class="btnLogin" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" onclick="return confirm_alert(this);" class="btnLogin" >Delete</a> <a href="<?php echo $blockLink; ?>" onclick="return confirm_alert1(this);" class="btnLogin" > <?php if(($landlord->userStatus)==0) echo'Unblock'; else{ echo('block');} ?></a></td>
                            
                             
                             </tr> 
@@ -91,7 +97,8 @@ function confirm_alert(node) {
                       foreach($vehicleowners as $vehicleowner){ 
                        
                                 $deleteLink =  "/vehicleowner/delete?id=". $vehicleowner->id;
-                                $updateLink =  "/vehicleowner/delete?id=". $vehicleowner->id; 
+                                $updateLink =  "/vehicleowner/update?id=". $vehicleowner->id; 
+                                  $blockLink = "/user/block?id=". $vehicleowner->id . "&&" ."type=" . $vehicleowner->type;
                           ?>
 
                        
@@ -102,7 +109,7 @@ function confirm_alert(node) {
                               <td><?php echo $vehicleowner->FirstName;  ?></td>
                               <td><?php echo $vehicleowner->Email;  ?></td>
                               <td><?php echo "Vehicle Owner";  ?></td>
-                              <td> <?php if (count($vehicleowner->id) > 0){  ?> <a href="<?php echo $updateLink; ?>" class="btnLogin" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" onclick="return confirm_alert(this);" class="btnLogin" >Delete</a></td>
+                              <td> <?php if (count($vehicleowner->id) > 0){  ?> <a href="<?php echo $updateLink; ?>" class="btnLogin" >Update</a>  <?php } ?>  <a href="<?php echo $deleteLink; ?>" onclick="return confirm_alert(this);" class="btnLogin" >Delete</a> <a href="<?php echo $blockLink; ?>" onclick="return confirm_alert1(this);" class="btnLogin" > <?php if(($vehicleowner->userStatus)==0) echo'Unblock'; else{ echo('block');} ?></a></td>
                            
                             
                             </tr> 

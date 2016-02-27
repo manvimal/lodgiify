@@ -23,7 +23,7 @@
       <?php $active=0;
           if (isset($buildings)){
                 foreach($buildings as $building){
-                                $link = "search?action=buildings&id=".$building->id.'&landlord='.  $user[0]->ID ."&limit=1";
+                                $link = "search?action=buildings&id=".$building->id.'&landlord='.  $user[0]->id ."&limit=1";
                                 ?>
                                     <li class="<?php echo ($active == 0) ? 'active' : '' ;?>"><img src="{{ URL::asset('images/arrow.png') }}" alt=""><p><a href="<?php echo $link; ?>"> <?php echo $building->buildingName  ?></a></p><div class="clear"></div></li>
                                 <?php 

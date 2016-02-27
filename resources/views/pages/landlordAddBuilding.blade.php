@@ -160,7 +160,7 @@
 
         <tr>
             <td><label>Image: </label></td>
-            <td><input type = "file"  name="image" class="required" accept="image/*" id = "image" /> <span class="errorMsg"></span></td>
+            <td><input type = "file"  name="image" accept="image/*" id = "image" /> <span class="errorMsg"></span></td>
          </tr> 
 
      <tr>

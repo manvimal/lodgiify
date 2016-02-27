@@ -10,7 +10,9 @@
 
 				if (empty($user)){
 			 ?>
-				<form name="login" action="{{ URL::asset('/user/login') }}" onsubmit="return validateLogin(this)">
+				<form name="login" method="post" action="{{ URL::asset('/user/login') }}" onsubmit="return validateLogin(this)">
+					 <input type="hidden" name="_token" value="{{{ csrf_token() }}}" />      
+
 					<table class="login">
 							<tr>
 							<td>User Name:</td> 
@@ -21,6 +23,12 @@
 						
 							<td></td>
 							<td><input type="submit" value="Login" id = "btnLogin" class="btnLogin"/> </td> 
+							</tr>
+
+						<tr>
+							
+							<td colspan="3" id="logMsg"></td>
+							
 						</tr>
 					</table>
 				</form>

@@ -93,6 +93,7 @@ use App\buildingModel as buildingModel;
 			$users = DB::table('tbltenant')
                      ->select(DB::raw('*'))
                      ->where('UserName', '=', $userName)
+                     ->orWhere('Email','=', $Email)
                      ->get();
 
                      $user1 = DB::table('tbllandlord')
@@ -139,6 +140,7 @@ use App\buildingModel as buildingModel;
 			$users = DB::table('tbllandlord')
                      ->select(DB::raw('*'))
                      ->where('UserName', '=', $userName)
+                     ->orWhere('Email','=', $Email)
                      ->get();
 
                      	$user1 = DB::table('tbltenant')
@@ -187,9 +189,22 @@ use App\buildingModel as buildingModel;
 			$users = DB::table('tblvehicleowner')
                      ->select(DB::raw('*'))
                      ->where('UserName', '=', $userName)
+                     ->orWhere('Email','=', $Email)
                      ->get();
 
-           if(!empty($users)){
+            			 $user2 = DB::table('tbllandlord')
+                     ->select(DB::raw('*'))
+                     ->where('UserName', '=', $userName)
+                     ->get();
+
+                     	$user1 = DB::table('tbltenant')
+                     ->select(DB::raw('*'))
+                     ->where('UserName', '=', $userName)
+                     ->get();
+
+
+
+ 			if(!empty($users) OR !empty($user1) OR !empty($user2)){
 		 	$messge['status'] = -1;
 		 	$messge['msg'] = "Already exists";
 
@@ -237,56 +252,63 @@ use App\buildingModel as buildingModel;
 		
 
 
-			if (!empty($userName) && !empty($password)){
+		if (!empty($userName) && !empty($password)){
 			$users = DB::table('tbltenant')
-			                     ->select(DB::raw('*'))
-			                     ->where('UserName', '=', $userName)
-			                     ->where('Password', '=', $password)
-			                     ->get();
+			                    ->select(DB::raw('*'))
+			                    ->where('UserName', '=', $userName)
+			                    ->where('Password', '=', $password)
+			                    ->Where('userStatus', '=', '1' )
+			                    ->get();
 
-			 if(!empty($users)){
+			if(!empty($users)){
 				$messge['status'] = 1;
-				$messge['msg'] = "User logged in";
+				$messge['msg'] = "Tenant logged in. Please wait...";
 				$users['type'] = 'tenant';
 				$request->session()->put('user', $users);
 
 				}
 
-				else{
+
+			else 
+			{
 
 				$users = DB::table('tbllandlord')
 			                     ->select(DB::raw('*'))
 			                     ->where('UserName', '=', $userName)
 			                     ->where('Password', '=', $password)
+			                     ->Where('userStatus', '=', '1' )
 			                     ->get();
 
-								 if(!empty($users)){
-									$messge['status'] = 1;
-									$messge['msg'] = "User logged in";
-									$users['type'] = 'landlord';
-									$request->session()->put('user', $users);
+					if(!empty($users)){
+						$messge['status'] = 1;
+						$messge['msg'] = "Landlord logged in. Please wait...";
+						$users['type'] = 'landlord';
+						$request->session()->put('user', $users);
 
+						}
+
+
+					else
+					{
+
+						$users = DB::table('tblvehicleowner')
+							           		->select(DB::raw('*'))
+							                ->where('UserName', '=', $userName)
+							                ->where('Password', '=', $password)
+							                ->Where('userStatus', '=', '1' )
+							                ->get();
+
+						if(!empty($users)){
+							$messge['status'] = 1;
+							$messge['msg'] = "Vehicle Owner logged in. Please wait...";
+							$users['type'] = 'vehicleowner';
+							$request->session()->put('user', $users);
 																		}
-								else{
-
-										$users = DB::table('tblvehicleowner')
-							                     ->select(DB::raw('*'))
-							                     ->where('UserName', '=', $userName)
-							                     ->where('Password', '=', $password)
-							                     ->get();
-
-													if(!empty($users)){
-													$messge['status'] = 1;
-													$messge['msg'] = "User logged in";
-													$users['type'] = 'vehicleowner';
-													$request->session()->put('user', $users);
-																		}
 
 
-													else{
-															 //if(!empty($users)){
-														//$messge['status'] = 1;
-														//$messge['msg'] = "User logged in";
+						else
+						{
+													
 
 														$users = DB::table('tbladmin')
 							                     ->select(DB::raw('*'))
@@ -298,20 +320,20 @@ use App\buildingModel as buildingModel;
 
 													if(!empty($users)){
 													$messge['status'] = 1;
-													$messge['msg'] = "User logged in";
+													$messge['msg'] = "Admin logged in. Please wait...";
 													$users['type'] = 'admin';
 													$request->session()->put('user', $users);
 														
 													}
 
-													else{
+											else
+											{
 
-														if(!empty($users)){
-														$messge['status'] = 1;
-														$messge['msg'] = "User logged in";
-													}
+												if(empty($users)){
+													$messge['status'] = -1;
+												$messge['msg'] = "Wrong email/password or Account blocked";
 												}
-
+											}
 
 			}
 				
@@ -325,7 +347,7 @@ use App\buildingModel as buildingModel;
 		}
 
 		echo json_encode ($messge);
-		return redirect()->action('MainController@index');
+
 	}
 	
 
@@ -423,86 +445,177 @@ use App\buildingModel as buildingModel;
 		    "status" => 0,
 		);
 
+		$error=true;
+
 
 	if ((isset($_REQUEST['firstName'])) && (!empty($_REQUEST['firstName'])) ){
 			$firstName = $_REQUEST['firstName'];
-			
+			$messge['status'] = 1;
+			$error=false;
+	}
+	else{
+			$messge['status'] = -1;
+			$error=true;
+			$firstName=false;
+
 	}
 
 	if ((isset($_REQUEST['lastName'])) && (!empty($_REQUEST['lastName'])) ){
 			$lastName = $_REQUEST['lastName'];
+			$error=false;
+			$messge['status'] = 1;
 	}
-	if ((isset($_REQUEST['userName'])) && (!empty($_REQUEST['userName'])) ){
-			$userName = $_REQUEST['userName'];
+	else{
+		$messge['status'] = -1;
+			$error=true;
+			$lastName=false;
+
+
 	}
-	if ((isset($_REQUEST['Password'])) && (!empty($_REQUEST['Password'])) ){
-			$Password = md5($_REQUEST['Password']);
-	}
+
 	if ((isset($_REQUEST['DOB'])) && (!empty($_REQUEST['DOB'])) ){
 			$DOB = $_REQUEST['DOB'];
+			$error=false;
+			$messge['status'] = 1;
 	}
+	else{
+			$messge['status'] = -1;
+			$error=true;
+			$DOB=false;
+
+	}
+
 	if ((isset($_REQUEST['phone'])) && (!empty($_REQUEST['phone'])) ){
-			$Phone = $_REQUEST['phone'];
+				$error=false;
+				$Phone = $_REQUEST['phone'];
+				$messge['status'] = 1;
+	} 
+	
+	else{
+		$messge['status'] = -1;
+			$error=true;
+			$Phone=false;
+
 	}
 	if ((isset($_REQUEST['Email'])) && (!empty($_REQUEST['Email'])) ){
 			$Email = $_REQUEST['Email'];
+			$error=false;
+			$messge['status'] = 1;
+	}
+	else{
+		$messge['status'] = -1;
+			$error=true;
+			$Email=false;
+
 	}
 	if ((isset($_REQUEST['address'])) && (!empty($_REQUEST['address'])) ){
 			$Address = $_REQUEST['address'];
+			$messge['status'] = 1;
+			$error=false;
+	}
+	else{
+		$messge['status'] = -1;
+			$error=true;
+			$Address=false;
+
 	}
 	if ((isset($_REQUEST['postalCode'])) && (!empty($_REQUEST['postalCode'])) ){
 			$PostalCode = $_REQUEST['postalCode'];
+			$error=false;
+			$messge['status'] = 1;
+	}
+	else{
+		$messge['status'] = -1;
+			$error=true;
+			$PostalCode=false;
+
 	}
 
 		$Gender = $_REQUEST['rdbGender'];
 		$Country = $_REQUEST['country'];
-		//$memberType = $_REQUEST['userType'];
+
 
 	$user = $request->session()->get('user');
 
+
+	if($error==false){
+
 	
 
-if(($user[0]->type)=="tenant"){
+	if(($user[0]->type)=="tenant"){
 
 		//Save room for user
-		$tenant = User::find($user[0]->ID);
+		$tenant = User::find($user[0]->id);
 		$tenant-> FirstName = $firstName ;
 		$tenant-> LastName = $lastName ;
-		$tenant-> Password = md5($Password) ;
-
+		$tenant-> DOB = $DOB ;
+		$tenant-> Address = $Address ;
+		$tenant-> Country = $Country ;
+		$tenant-> PostalCode = $PostalCode ;
 		$tenant->save();
+
+
+					 	$messge['status'] = 1;
+			
+					 	$messge['msg'] = $user[0]->UserName . ",Tenant Successfully updated";
 		
 
 	}
 
-	elseif(($user[0]->type)== "landlord"){
-		$landlord = userLandlord::find($user[0]->ID);
+	elseif(($user[0]->type)== "Landlord"){
+
+
+
+		$landlord = userLandlord::find($user[0]->id);
+
 		$landlord-> FirstName = $firstName ;
 		$landlord-> LastName = $lastName ;
-		$landlord-> Password = md5($Password) ;
+		$landlord-> DOB = $DOB ;
+		$landlord-> phone = $Phone ;
+		$landlord-> Address = $Address ;
+		$landlord-> Country = $Country ;
+		$landlord-> PostalCode = $PostalCode ;
 
 		$landlord->save();
-		
+
+
+					 	$messge['status'] = 1;
+					 	$messge['msg'] = $user[0]->UserName . " Landlord Successfully updated";
+
 
 	}
 		else {
-			$vehicleowner = vehicleOwnerModel::find($user[0]->ID);
+			$vehicleowner = vehicleOwnerModel::find($user[0]->id);
 			$vehicleowner-> FirstName = $firstName ;
 			$vehicleowner-> LastName = $lastName ;
-			$vehicleowner-> Password = md5($Password) ;
+			$vehicleowner-> DOB = $DOB ;
+			$vehicleowner-> phone = $Phone ;
+			$vehicleowner-> Address = $Address ;
+			$vehicleowner-> Country = $Country ;
+			$vehicleowner-> PostalCode = $PostalCode ;
 
 			$vehicleowner->save();
 
-	}
 
-		
-		echo json_encode ($messge);
+					 	$messge['status'] = 1;
+
+					 	$messge['msg'] = $user[0]->UserName . ", Vehicle owner Successfully updated";
+
+	}
+}
+else{
+
+			$messge['status'] = -1;
+			$messge['msg'] = " Update Failed";
+}
+
+
+echo json_encode($messge);
 
 
 }
-	
-	
-	
+
+
 }
 ?>
 

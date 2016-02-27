@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
 function confirm_alert(node) {
-    return confirm("Please click on OK to delete tenant.");
+    return confirm("Please click on OK to delete facilities.");
 
     
 }

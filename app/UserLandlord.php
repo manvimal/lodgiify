@@ -31,7 +31,9 @@ class userLandlord extends Model implements AuthenticatableContract,
      * @var array
      */
 
-     protected $fillable = ['UserName',
+     protected $fillable = ['id',
+                            'UserName',
+                            'userStatus',
                             'FirstName', 
                             'LastName', 
                             'Password',

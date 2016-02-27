@@ -10,7 +10,7 @@
     </script> 
    <div class="banner">
       	<div class="wrap">
-      	     <h2>My buildings</h2><div class="clear"></div>
+      	     <h2>Manage Buildings and rooms</h2><div class="clear"></div>
       	</div>
     </div>
 	<div class="main">	
@@ -18,11 +18,11 @@
 	 <div class="project-wrapper">
     <div class="project-sidebar">
     <div class="project-list">
-        <h4>My Buildings</h4>
+        <h4>All Buildings</h4>
       <ul class="buildings-list">
       <?php if (isset($buildings)){
                 foreach($buildings as $building){
-                                $link = "search?action=buildings&id=".$building->id.'&landlord='.  $user[0]->id."&limit=1";
+                                $link = "search?action=buildings&id=".$building->id ."&limit=1";
                                 ?>
                                     <li><img src="{{ URL::asset('images/arrow.png') }}" alt=""><p><a href="<?php echo $link; ?>"> <?php echo $building->buildingName  ?></a></p><div class="clear"></div></li>
                                 <?php 

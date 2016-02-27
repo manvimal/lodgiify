@@ -12,12 +12,15 @@
 
              $('td:nth-child(1)').hide();
              $('td:nth-child(2)').hide();
+              $('#back').hide();
              
             $('#edit').click(function() {
                 $('td:nth-child(3)').hide();
                 $('td:nth-child(4)').hide();
                  $('td:nth-child(1)').show();
                  $('td:nth-child(2)').show();
+                 $('#back').show();
+                 $('#edit').hide();
             });
         });
         
@@ -27,7 +30,8 @@
                 $('td:nth-child(2)').hide();
                  $('td:nth-child(3)').show();
                  $('td:nth-child(4)').show();
-             
+                  $('#back').hide();
+                 $('#edit').show();             
             });
         });
              
@@ -47,8 +51,8 @@
 			<div class="blog-bg">
 			   <h4>My Account</h4>
                <span class="author">Edit your info 
-                <input id="back" type="button" class="btnAll" value="Back"/>
-                <input id="edit" type="button" class="btnAll" value="Edit"/>
+                <input id="back" type="button" class="btnLogin" value="Back"/>
+                <input id="edit" type="button" class="btnLogin" value="Edit"/>
                
                 `</span>
 
@@ -59,9 +63,9 @@
 
 			<div class="blog-img">
 
-    <form method="post"  action="/user/update" onsubmit="return validateUpdateAccount(this)" enctype='multipart/form-data'>
+    <form method="post"  action="{{ URL::asset('/user/update') }}" onsubmit="return validateUpdateAccount(this)" enctype='multipart/form-data'>
     
-      <input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
+ <input type="hidden" name="_token" value="{{{ csrf_token() }}}" /> 
     <table class="alignLeft container ">
         <tr>
             
@@ -89,34 +93,32 @@
       
         </tr>
 
-        <tr>
-            <td><label>Password: </label></td>
-            <td><input type = "Password" class="required" name="Password" id = "Password" /> <span class="errorMsg"></span></td>
-            <td><label>Password: </label></td>
-            <td><input type = "Password" class="updateTextBoxes" value="**********" readonly/></td>
         
-         </tr> 
 
-        <tr>  
-            <td><label>Confirm Password: </label></td>
-            <td><input type = "Password" class="required password" name="confirmPassword" id = "confirmPassword" /><span class="errorMsg"></span> </td>
+        <tr>
+            <td><label>DOB: </label></td>
+            <td><input type = "date" class="required" value ="<?php echo  $user[0]->DOB; ?>" name = "DOB" id = "DOB" /><span class="errorMsg"></span></td>
+            
+
             <td><label>DOB: </label></td>
             <td><input type = "date" class="updateTextBoxes" value ="<?php echo  $user[0]->DOB; ?>" readonly/></td>
       
         </tr>
 
         <tr>
-        	<td><label>DOB: </label></td>
-            <td><input type = "date" class="required" value ="<?php echo  $user[0]->DOB; ?>" name = "DOB" id = "DOB" /><span class="errorMsg"></span></td>
-            
+            <td><label>Phone: </label></td>
+            <td><input type = "tel" class="required validmobile" value ="<?php echo  $user[0]->Phone; ?>" name="phone" id = "phone" />
+                <span class="errorMsg"></span> </td>
+        	
             <td><label>Phone: </label></td>
             <td><input type = "tel" class="updateTextBoxes" value ="<?php echo  $user[0]->Phone; ?>" readonly/></td>
         </tr>
      
 
-        <tr>       
-            <td><label>Phone: </label></td>
-            <td><input type = "tel" class="required validmobile" value ="<?php echo  $user[0]->Phone; ?>" name="phone" id = "phone" />
+        <tr>   
+        <td><label>Gender :</label></td>    
+            <td>Male: <input type="radio" value="M" checked name="rdbGender" value="male"/> 
+                Female: <input type="radio" value="F" name="rdbGender" value="female"/> 
                 <span class="errorMsg"></span> </td>
 
             <td><label>Gender :</label></td>
@@ -124,33 +126,25 @@
         </tr>
 
          <tr>
-            <td><label>Gender :</label></td>
-            <td>Male: <input type="radio" value="M" checked name="rdbGender" value="male"/> 
-                Female: <input type="radio" value="F" name="rdbGender" value="female"/> 
-                <span class="errorMsg"></span> </td>
-
+            
+            
+            <td><label>Email: </label></td>
+            <td><input type = "Email" class="required email updateTextBoxes" value ="<?php echo  $user[0]->Email; ?>" name="Email" id="Email" readonly/>
+                <span class="errorMsg"></span></td>
             <td><label>Email: </label></td>
             <td><input type = "Email" class="updateTextBoxes" value ="<?php echo  $user[0]->Email; ?>" readonly/></td>
         </tr>
       
 
         <tr>
-            <td><label>Email: </label></td>
-            <td><input type = "Email" class="required email updateTextBoxes" value ="<?php echo  $user[0]->Email; ?>" name="Email" id="Email" readonly/>
-                <span class="errorMsg"></span></td>
+            <td><label>Address </label></td>
+            <td><input type="text" name="address" value="<?php echo  $user[0]->Address; ?>" id="address" class="required"/><span class="errorMsg"></span> </td>
 
             <td><label>Address </label></td>
             <td><input type="text" value ="<?php echo  $user[0]->Address; ?>" class="updateTextBoxes" readonly/></td>
         </tr>
 
-            <tr>
-            <td><label>Address </label></td>
-            <td><input type="text" name="address" value="<?php echo  $user[0]->Address; ?>" id="address" class="required"/><span class="errorMsg"></span> </td>
-            <td><label>Country </label></td>
-            <td><input type="text" value="<?php echo  $user[0]->Country; ?>" class="updateTextBoxes" readonly/></td>
-            
-            </tr>
-
+          
 
         <tr>
             <td><label>Country </label></td>
@@ -405,20 +399,36 @@
                     <option value="Zimbabwe">Zimbabwe</option>
             </select><span class="errorMsg"></span> </td>
 
-            <td> <label>Postal Code:</label> </td>
-            <td> <input type="text" value="<?php echo  $user[0]->PostalCode; ?>" class="updateTextBoxes" readonly/></td>
 
+            <td><label>Country </label></td>
+            <td><input type="text" value="<?php echo  $user[0]->Country; ?>" class="updateTextBoxes" readonly/></td>
+
+            
         </tr>
 
         <tr>
             <td><label>Postal Code:</label></td>
             <td> <input type="text" value="<?php echo  $user[0]->PostalCode; ?>" class="required" name="postalCode" id="postalCode"/>
             <span class="errorMsg"></span></td>
+
+
+            <td> <label>Postal Code:</label> </td>
+            <td> <input type="text" value="<?php echo  $user[0]->PostalCode; ?>" class="updateTextBoxes" readonly/></td>
+
         </tr>
 
             
         <tr>
-            <td colspan="3" align="center"><input type = "submit" id = "submit" value = "Submit"  class="btnAll" ></td>
+            <td></td>
+            <td align="center"><input type = "submit" id = "submit" value = "Submit"  class="btnLogin" ></td>
+            <td></td>
+        </tr>
+
+
+        <tr>
+            <td></td>
+            <td align="center"><div id='message'></div></td>
+            <td></td>
         </tr>
 
         </table>

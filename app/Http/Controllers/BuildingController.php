@@ -73,6 +73,11 @@ use App\buildingFacilityModel as buildingFacilityModel;
 		   
 		   RequestStatic::file('image')->move($name,  $fileName );
 		}
+		else
+		{
+			$fileName = 'nopreview.jpg';
+		}
+
 
 		
 		// Retrieve user session
@@ -85,7 +90,7 @@ use App\buildingFacilityModel as buildingFacilityModel;
 		$building-> longitude = $longitude ;
 		$building-> buildingLocation = $location ;
 		$building-> buildingCatId = $category;
-		$building-> landlordID = $user[0]->ID; 
+		$building-> landlordID = $user[0]->id; 
 		$building-> desc = $desc ;
 		$building-> image = $fileName;
 
@@ -112,7 +117,7 @@ use App\buildingFacilityModel as buildingFacilityModel;
 		$user = $request->session()->get('user');
 
 		//Gets buildings
-		$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
+		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 
 		
 
@@ -124,9 +129,12 @@ use App\buildingFacilityModel as buildingFacilityModel;
 
 	public function delete(Request $request){
 		if ($request['id'] != null){
+
+
 			$buildings = buildingModel::where('id', '=', $request['id'])->delete();
+			
 		}
-		print json_encode(array(1));
+		print json_encode(array());
 	}	
 
 

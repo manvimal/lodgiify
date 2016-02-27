@@ -55,29 +55,39 @@ function validateLogin(form){
 		
 		else hasError = true;
 
-		/*if (!hasError) {
+		if (!hasError) {
+
+			  var $html='';
 			url = "user/login";
 			data =  $(form).serialize();
 			$.ajax({
-			  type: "GET",
+			  type: "POST",
 			  url: url,
 			  data: data,
 			  success: function(response){
 			  	  var obj = $.parseJSON( response );
+			  	
+			
 			  	  if (obj.status == -1){
-			  	  	//user eists
-			  	  	alert(obj.msg);
+			  	  		$html += "<span class='errorMsg'>";
+			  	 		$html += obj.msg ;
+			  	 		$html += "</span>";
+
 			  	  }
 			  	  else if(obj.status == 1){
-			  	  		alert(obj.msg);
-			  	  		//location.reload();
-			  	  		//redirect 
+			  	  		$html += "<span class='successMsg'>";
+			  	 		$html += obj.msg ;
+			  	 		$html += "</span>";
+			  	 		location.reload();
+
 			  	  }
+			  	  $('#logMsg').html($html);
 				
 			  }
 			});
-		}*/
-		return !hasError;
+		}
+
+		return false;
 }
 
 
@@ -252,21 +262,40 @@ function validateContactForm(){
 			url = "user/registration";
 			data =  $(form).serialize();
 			$.ajax({
-			  type: "GET",
+			  type: "POST",
 			  url: url,
 			  data: data,
 			  success: function(response){
+			  		var $html='';
 			  	  var obj = $.parseJSON( response );
 			  	  if (obj.status == -1){
 			  	  	//user eists
-			  	  	alert(obj.msg);
+			  	  	$html += "<span class='errorMsg'>";
+			  	 		$html += obj.msg ;
+			  	 		$html += "</span><br />";
+
+
+
+				
+			  	 		$('#Password').val("");
+			  	 		  $('#Email').val("");
+			  	 		  $('#confirmPassword').val("");
+			  	 		  $('#userName').val('');
+			  	 		  $('#txtInput').val('');
+
 			  	  }
 			  	  else if(obj.status == 1){
-			  	  		window.location = "index";
-			  	  		//location.reload();
-			  	  		//redirect 
+			  	  		$html += "<span class='successMsg'>";
+			  	 		$html += obj.msg ;
+			  	 		$html += "</span><br />";
+			  	 		  $('.clearAll').val('');
+			  	 		   
+
+
 			  	  }
-				
+			  	  $('#regMessage').html($html);
+			  	  $('#btnrefresh').click();
+
 			  }
 			});
 		}
@@ -1466,11 +1495,55 @@ removeAllErrors($(form));
 		if (!checkError(lastName)) clearError(lastName);
 
 		else hasError = true;
-	
 
 
+	var address = form['address'];
+		if (!checkError(address)) clearError(address);
 
-	return !hasError;
+		else hasError = true;
+
+
+	var phone = form['phone'];
+		if (!checkError(phone)) clearError(phone);
+
+		else hasError = true;
+		
+
+
+		if (!hasError) {
+			
+			url = "/user/update";
+			data =  $(form).serialize();
+			$.ajax({
+			  type: "POST",
+			  url: url,
+			  data: data,
+			  success: function(response){
+			  	  var obj = $.parseJSON( response );
+			  	  var $html="";
+
+			  	  if (obj.status == 1){
+			  	  		$html += "<span class='successMsg'>";
+			  	 		$html += obj.msg ;
+			  	 		$html += "</span><br />";
+
+
+			  	  }
+			  	  else if(obj.status == -1){
+			  	  		$html += "<span class='errorMsg'>";
+			  	 		$html += obj.msg ;
+			  	 		$html += "</span><br />";
+			  	  }
+
+			  	  $("#message").html($html);
+
+				
+			  }
+			});
+		}
+
+
+	return false;
 
 
 }

@@ -75,7 +75,7 @@ use App\facilityModel as facilityModel;
 	public function myBookings(Request $request){
 		$user = $request->session()->get('user');
 
-		$bookings = bookingModel::where('tenantID', '=', $user[0]->ID)->orderBy('created_at', 'DESC')->get();
+		$bookings = bookingModel::where('tenantID', '=', $user[0]->id)->orderBy('created_at', 'DESC')->get();
 
 		return view('pages.mybookings',  array('user' => $user, 'bookings' => $bookings));
 

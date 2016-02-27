@@ -89,7 +89,7 @@ use App\packageModel as packageModel;
 		$user = $request->session()->get('user');
 
 		//Gets buildings
-		$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
+		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 
 			//Gets packages of building
 		$packages = packageModel::where('buildingid', '=', $buildings[0]->id)->get();

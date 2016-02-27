@@ -41,8 +41,8 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		//Gets building categories
 		$categories = buildingCategory::all();
-		$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
-		$hasBuildings = buildingModel::where('landlordID','=',$user[0]->ID)->get();
+		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
+		$hasBuildings = buildingModel::where('landlordID','=',$user[0]->id)->get();
 
 		$facilities = facilityModel::all();
 
@@ -72,16 +72,16 @@ use App\roomFacilityModel as roomFacilityModel;
 		$categories = roomCategory::all();
 
 		//Gets buildings
-		$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
+		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 		
 		$facilities = facilityModel::all();
 
 
 
 		//Get rooms
-		$rooms = roomModel::where('landlordID', '=', $user[0]->ID)->get();
+		$rooms = roomModel::where('landlordID', '=', $user[0]->id)->get();
 		
-		$AddRoomFacilities = roomModel::where('landlordID', '=', $user[0]->ID)->get();
+		$AddRoomFacilities = roomModel::where('landlordID', '=', $user[0]->id)->get();
 
 
 		$roomFacAr = array();
@@ -106,7 +106,7 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		$categories = roomCategory::all();
 
-		$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
+		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 		
 		return view('pages.insertPackage',  array('user' => $user, 'buildings' => $buildings, 'categories' => $categories));
 	}
