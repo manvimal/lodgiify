@@ -19,6 +19,9 @@ use Session;
 use DB;
 use Redirect;
 use App\buildingFacilityModel as buildingFacilityModel;
+use App\travelModel as travelModel;
+
+
 
 
 
@@ -44,6 +47,9 @@ use App\buildingFacilityModel as buildingFacilityModel;
 			}
 			else if ($action == "rooms"){
 				$result =$this->getQueryRooms($request)-> toJson();
+			}
+			else if($action == "availabilityVehicle"){
+				$result = json_encode ($this->getQueryAvailableVehicles($request));
 			}
 
 		}
@@ -117,8 +123,9 @@ use App\buildingFacilityModel as buildingFacilityModel;
 		return $buildings;
 	}
 
+	//Query to search all vehiclers based on different filters
 	private function getQueryVehicles(Request $request){
-	$initialised  = false;
+		$initialised  = false;
 		$query = '';
 
 		//Search by id
@@ -133,7 +140,7 @@ use App\buildingFacilityModel as buildingFacilityModel;
 			$query->where('vehicleOwnerID','=',$request['vehicleOwnerID']);
 		}
 		else{
-			if (!$initialised){
+			if (!$initialised && isset($request['vehicleOwnerID'])){
 				$query = vehicleModel :: where ('vehicleOwnerID','=',$request['vehicleOwnerID']);
 				$initialised = true;
 			}
@@ -145,7 +152,7 @@ use App\buildingFacilityModel as buildingFacilityModel;
 			$query->where('category','=',$request['category']);
 		}
 		else{
-			if (!$initialised){
+			if (!$initialised && isset($request['category'])){
 				$query = vehicleModel :: where ('vehicleCatID','=',$request['category']);
 				$initialised = true;
 			}
@@ -156,7 +163,7 @@ use App\buildingFacilityModel as buildingFacilityModel;
 			$query->where('name','LIKE',  "%".$request['name']."%");
 		}
 		else{
-			if (!$initialised){
+			if (!$initialised && isset($request['name'])){
 				$query = vehicleModel :: where ('name','LIKE', "%".$request['name']."%");
 				$initialised = true;
 			}
@@ -167,7 +174,7 @@ use App\buildingFacilityModel as buildingFacilityModel;
 			$query->where('numOfSeats','LIKE', "%".$request['numOfSeats']."%");
 		}
 		else{
-			if (!$initialised){
+			if (!$initialised && isset($request['numOfSeats'])){
 				$query = buildingModel :: where ('numOfSeats','LIKE', "%".$request['numOfSeats']."%");
 				$initialised = true;
 			}
@@ -179,9 +186,111 @@ use App\buildingFacilityModel as buildingFacilityModel;
 		}
 		
 
-
-		$vehicles = $query->get();
+		if ($initialised){
+			$vehicles = $query->get();
+		}else{
+			$vehicles= vehicleModel :: get();
+		}
+		
 		return $vehicles;
+
+	}
+
+
+
+	//Get if vehicle is available
+	private function getQueryAvailableVehicles(Request $request){
+		$initialised  = false;
+		$query = '';
+
+		//Search by id
+		if ($request['id'] != null){
+			$query = travelModel :: where ('id' , '=' , $request['id']);
+
+			$initialised = true;
+		}
+
+		//Search by checkin
+		if($request['vehicleid'] != null && $initialised ){
+			$query->where('vehicleID','=',$request['vehicleid']);
+		}
+		else{
+			if (!$initialised && isset($request['vehicleid'])){
+				$query = travelModel :: where ('vehicleID','=',$request['vehicleid']);
+				$initialised = true;
+			}
+			
+		}
+
+		
+
+		//limit query 
+		if($request['limit'] != null &&  $query != ''){
+			$query->take($request['limit']);
+		}
+		
+
+		if ($initialised){
+			$vehicles = $query->get();
+		}else{
+			$vehicles= vehicleModel :: get();
+		}
+
+
+
+		//Check if greater than today
+		$errorMessage = "";
+
+		$checkIn =  new \DateTime($request['checkin']);
+		$checkOut =  new \DateTime($request['checkout']);
+		$dispatch =  $request['dispatch'];
+
+		$error = false;
+
+		foreach ($vehicles as $vehicle) {
+			$checkInVehicle =  new \DateTime($vehicle->pickUpTime1);
+			$checkOutVehicle =  new \DateTime($vehicle->pickUpTime2);
+
+			$checkInVehicle1h =  new \DateTime($vehicle->pickUpTime1);
+			$checkOutVehicle1h =  new \DateTime($vehicle->pickUpTime2);
+
+			$checkInVehicle1h->add(new \DateInterval('PT1H'));
+			$checkOutVehicle1h->add(new \DateInterval('PT1H'));
+
+			$dispatchvehicle =  $request['dispach'];
+
+			
+			if (($checkIn >= $checkInVehicle ) && ($checkIn <= $checkInVehicle1h)){
+				//Conflict in check in
+				$errorMessage  = "A conflict in checkin time";
+				$error = true;
+			}
+			elseif(($dispatch=='true' ) && ($checkOut >= $checkInVehicle ) && ($checkOut <= $checkInVehicle1h)){
+				// Conflict in return journey
+				$errorMessage  = "A conflict in checkout time";
+				$error = true;
+				
+
+			}
+			elseif($dispatchvehicle && ($checkIn >= $checkOutVehicle ) && ($checkIn <= $checkOutVehicle1h)){
+				// Conflict in return journey
+				$errorMessage  = "A conflict in checkin time";
+				$error = true;
+				
+			}
+			elseif($dispatchvehicle && $dispatch && ($checkOut >= $checkOutVehicle ) && ($checkOut <= $checkOutVehicle1h)){
+				// Conflict in return journey
+				$errorMessage  = "A conflict in checkout time";
+				$error = true;
+				
+			}else{
+				$errorMessage  = "No conflict in checkout time";
+				
+			}
+			
+		}
+		
+		return array('status'=>$error, 'msg'=>$errorMessage);
 
 	}
 	private function getQueryUsers(Request $request){

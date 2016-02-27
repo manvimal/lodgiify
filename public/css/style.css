@@ -4051,6 +4051,7 @@ table.main-list2 {
 .ui-menu-item{
 	font-size:14px;
 }
+
 #txtCaptcha{
 
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#aebcbf+0,6e7774+50,0a0e0a+51,0a0809+100;Black+Gloss */
@@ -4063,3 +4064,36 @@ color:white;
 font-size:25px;
 font-family: 'Brush Script MT', cursive;
 }
+
+
+
+.hide-block-vehicle{
+
+	display:none;
+}
+
+.block-vehicle{
+background: black;
+    padding: 30px;
+    margin-bottom: 30px;
+    color:white;
+}
+
+
+.block-vehicle h4{
+    font-size: 1.4em;
+    color: #ffea00;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+
+    }
+
+.block-vehicle-detail{
+	   border: 1px solid yellow;
+    margin-bottom: 19px;
+}
+ 
+
+ .block-vehicle-detail-error{
+ 	border: 1px solid red;
+ }

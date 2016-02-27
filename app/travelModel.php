@@ -30,7 +30,7 @@ class travelModel extends Model implements AuthenticatableContract,
      * @var array
      */
 
-    protected $primarykey = 'id';
+     protected $primarykey = 'id';
 
      protected $fillable = ['id',
                             'pickUpTime1',
@@ -39,7 +39,7 @@ class travelModel extends Model implements AuthenticatableContract,
                             'pickUpLocation2',
                             'pickUpDestination1',
                             'pickUpDestination2',
-                            'dispach',
+                            'dispach','vehicleID',
                                             ];
 
     //displays the relationships in json format
