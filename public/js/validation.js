@@ -1863,7 +1863,7 @@ $(document).ready(function(){
 	//Insert Room facility by ajax
 	$("#addRoomFacilities").click(function(){
 
-
+		$htmlFacility = "";
 		$url = $(this).parents("form").attr("action");
 			$data =  $(this).parents("form").serialize();
 			var $html = "";
@@ -1873,14 +1873,23 @@ $(document).ready(function(){
 			  data: $data,
 			  success: function(response){
 			  	  var obj = $.parseJSON( response );
-			  	
+			  	console.log(obj)
 			  	  //  $("#Message").html(obj);
-				
+				 $index = $("#roomFacilityTableHide tr").size() - 1;
 			  	 for (i =0; i< obj.length; i++){
 			  	 	if (obj[i].status == 1 ){
+			  	 		
+			  	 		  $index  ++;
 			  	 		$html += "<span class='successMsg'>";
 			  	 		$html += obj[i].msg ;
 			  	 		$html += "</span><br />";
+			  	 		$htmlFacility += '<tr class="booking">';
+			  	 		$htmlFacility += '<td>'+$index +'</td>';
+			  	 		$htmlFacility += '<td>sasasa</td>';
+			  	 		$htmlFacility += '<td>meal</td>';
+			  	 		$htmlFacility += '<td>     <a href="/RoomFacility/delete?id='+ obj[i].facility.id +'" class="btnLogin deleteRoomFacility">Delete</a></td>';
+						$htmlFacility += '</tr>';
+			  	 		
 			  	 	}
 			  	 	else if (obj[i].status == -1 )	{
 			  	 		$html += "<span class='errorMsg'>";
@@ -1889,6 +1898,7 @@ $(document).ready(function(){
 			  	 	}
 			  	 }
 				$("#Message").html($html);
+				$("#roomFacilityTableHide").append($htmlFacility);
 			  }
 			});
 		return false;
