@@ -94,7 +94,7 @@ $(document).ready(function () {
 <form method="post" action="{{ URL::asset('/getAdvancedSearch') }}"/>
 
 <input type="hidden" name="_token" value="{{{ csrf_token() }}}" /> 
-<div>
+<div class="bestdealsHeader">
       <input id="buildingName" value="" placeholder="Building Name" name="buildingName"/>
 
 
@@ -136,6 +136,8 @@ $(document).ready(function () {
 
 
       <input type="text" name="numOfPeople" placeholder="Number of people" />
+      <span class="flexibleDate"><input type="checkbox" name="flexibleDate" id="flexibleDate" value="flexibleDate"/>My dates are flexible</span>
+
 
 
 
@@ -149,23 +151,22 @@ $(document).ready(function () {
       </div>
 
 
-   <input type="checkbox" name="flexibleDate" id="flexibleDate" value="flexibleDate"/>My dates are flexible</input>
-
+   
     </div>
 
       
-<div>
+<div class="advheader2">
   Rooms: 
   <input type="radio" name="numOfRooms" value="oneRoom" checked/>1
   <input type="radio" name="numOfRooms" value="twoRoom"/>2
   <input type="radio" name="numOfRooms" value="threeRoom"/>3
   <input type="radio" name="numOfRooms" value="fourRoom"/>4
   <input type="radio" name="numOfRooms" value="moreRooms"/>More
+
+  <input type="submit" name="submit" id="advancedSearch" value="Search"/>
 </div>
 
-<div>
-<input type="submit" name="submit" id="advancedSearch" value="Search"/>
-  </div>
+
 </form>
 
           <script type="text/javascript">

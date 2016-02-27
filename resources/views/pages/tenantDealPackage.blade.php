@@ -98,7 +98,7 @@
 
               <h2 class="whiteText"><?php echo (isset($building->buildingName) ? $building->buildingName : ''); ?></h2>
 
-              <div style="height:200px;background-repeat: no-repeat;background-size:contain;background-position:50%;background-color:#DAD6E2; background-image:url({{ URL::asset('/') }}upload/<?php  echo isset($building->image)? $building->image : ''; ?>)" ></div>
+              <div style="height:200px;background-repeat: no-repeat;background-size:contain;background-position:50%;background-color:#4A4545; background-image:url({{ URL::asset('/') }}upload/<?php  echo isset($building->image)? $building->image : ''; ?>)" ></div>
              
               <p><?php echo isset($building->desc)?  $building->desc : ''; ?></p>
               <!-- <h3><?php echo isset($building->rooms)?  count($building->rooms) : 0; ?></h3> -->

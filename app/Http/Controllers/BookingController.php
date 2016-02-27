@@ -17,8 +17,9 @@ use App\UserAdmin as UserAdmin;
 use App\packageModel as packageModel;
 use App\bookingModel as bookingModel;
 use App\buildingModel as buildingModel;
+use App\travelModel as travelModel;
 use App\bookingPackageModel as bookingPackageModel;
-
+use Redirect;
 
 
 
@@ -53,6 +54,7 @@ use App\bookingPackageModel as bookingPackageModel;
 		$user = $request->session()->get('user');
 
 
+
 		if ((isset($request['date10'])) && (!empty($request['date10'])) ){
 				$date10Obj = $request['date10'];
 		}
@@ -69,12 +71,12 @@ use App\bookingPackageModel as bookingPackageModel;
 		}
 
 
-
+		
 		if ((isset($request['packages'])) && (!empty($request['packages'])) ){
 			//$packageObj = $request['package'];
 			//$package = packageModel::find ($request['package']);
 
-			$bookings = bookingModel::where('tenantID', "=", $user[0]->ID)
+			$bookings = bookingModel::where('tenantID', "=", $user[0]->id)
 					->where('checkin' ,'>=' ,$date10Obj)
 					->where('checkout' ,'<=' ,$date11Obj)
 					->get();
@@ -88,7 +90,7 @@ use App\bookingPackageModel as bookingPackageModel;
 						$booking = new bookingModel;
 						$booking-> checkin = $date10Obj;
 						$booking-> checkOut = $date11Obj ;
-						$booking-> tenantID = $user[0]->ID; 
+						$booking-> tenantID = $user[0]->id; 
 						$booking->save();
 
 
@@ -129,10 +131,43 @@ use App\bookingPackageModel as bookingPackageModel;
 							}
 									
 						}
+
 						$booking-> price = $price ; 
 						$booking->save();
 						$status['success'] = 1;
 						$status['msg'] = "Booking successfully registered";
+
+						foreach ($request['block-vehicle'] as $blockVehicle) {
+						 	
+							
+							if ( isset($blockVehicle)){
+									$vehicle = $blockVehicle['vehicle'];
+									
+									
+									$travelModel = new travelModel;
+									$travelModel-> bookingID = $booking->id;
+									$travelModel-> vehicleID = $vehicle;
+									$travelModel-> dispach = $blockVehicle['dispatch'];
+									$travelModel-> pickUpTime1 = $booking-> checkin;
+									$travelModel-> pickUpLocation1 = $user[0]->Address;
+									$travelModel-> pickUpDestination1 = $vehicle;
+
+									if ($booking-> dispach){
+										$travelModel-> pickUpTime2 = $booking-> checkout;
+										$travelModel-> pickUpLocation2 = $user[0]->Address;
+										$travelModel-> pickUpDestination2 = $user[0]->Address;
+									}
+										
+									
+									
+									$travelModel->save();
+							}
+									
+						}
+
+
+
+						
 				 }
 
 				

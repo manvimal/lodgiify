@@ -2094,6 +2094,7 @@ advSearch($(this));
         else{
         	 $(".tenantDealPackage .block-vehicle").addClass("hide-block-vehicle");
             $(".tenantDealPackage .block-vehicle").hide();
+            $(".block-vehicle-detail").remove();
         }
        
     });
