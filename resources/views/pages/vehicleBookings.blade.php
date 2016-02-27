@@ -34,8 +34,7 @@
               </tr>
               <?php
                foreach($bookings as $booking){
-
-                
+            
                     ?>
                          <tr>
                            

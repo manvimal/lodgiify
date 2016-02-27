@@ -91,6 +91,7 @@ use Redirect;
 						$booking-> checkin = $date10Obj;
 						$booking-> checkOut = $date11Obj ;
 						$booking-> tenantID = $user[0]->id; 
+						$booking-> buildingID = $request['buildingId'];
 						$booking->save();
 
 
@@ -127,6 +128,9 @@ use Redirect;
 									$bookingpackage = new bookingPackageModel;
 									$bookingpackage-> booking_id = $booking->id;
 									$bookingpackage-> package_id = $idpackage;
+
+
+
 									$bookingpackage->save();
 							}
 									
@@ -150,11 +154,15 @@ use Redirect;
 									$travelModel-> dispach = $blockVehicle['dispatch'];
 									$travelModel-> pickUpTime1 = $booking-> checkin;
 									$travelModel-> pickUpLocation1 = $user[0]->Address;
-									$travelModel-> pickUpDestination1 = $vehicle;
 
-									if ($booking-> dispach){
-										$travelModel-> pickUpTime2 = $booking-> checkout;
-										$travelModel-> pickUpLocation2 = $user[0]->Address;
+
+									$travelModel-> pickUpDestination1 = $booking->building->buildingLocation;
+
+
+
+									if ($travelModel-> dispach == 'true'){
+										$travelModel-> pickUpTime2 = $booking-> checkOut;
+										$travelModel-> pickUpLocation2 = $booking->building->buildingLocation;
 										$travelModel-> pickUpDestination2 = $user[0]->Address;
 									}
 										

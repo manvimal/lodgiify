@@ -27,16 +27,16 @@ class bookingModel extends Model implements AuthenticatableContract,
 
 
      protected $fillable = ['id',
-                            'tenantID', 'travelID', 'checkin', 'checkOut','price'];
+                            'tenantID', 'buildingID', 'checkin', 'checkOut','price'];
 
     //displays the relationships in json format
-    protected $with = array('tenant'/*,'travel'*/ , 'packages');
+    protected $with = array('tenant'/*,'travel'*/ , 'packages','building');
 
 
    
     public function tenant()
     {
-        return $this->belongsTo('App\tenantModel' , 'tenantID', 'ID');
+        return $this->belongsTo('App\tenantModel' , 'tenantID', 'id');
     }
 
     public function packages()
@@ -107,6 +107,11 @@ class bookingModel extends Model implements AuthenticatableContract,
     {
         return $this->belongsTo('App\travelModel' , 'travelID');
     }*/
+
+public function building()
+    {
+        return $this->belongsTo('App\buildingModel' , 'buildingID');
+    }
    
 }
 

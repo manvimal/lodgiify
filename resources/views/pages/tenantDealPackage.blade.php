@@ -18,6 +18,7 @@
       <form method="" name="registerBooking">
 
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />    
+    <input type="hidden" name="buildingId" value="<?php echo (isset($building->id) ? $building->id : ''); ?>" /> 
    <div class="project-wrapper">
     <div class="project-sidebar">
 
