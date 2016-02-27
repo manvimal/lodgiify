@@ -193,7 +193,9 @@ use App\facilityModel as facilityModel;
 			$roomFacilities = roomFacilityModel::where('roomid', '=',$ddlAddRoomFacility)
 	                    ->get();
 	                    
-
+$facilities  = array(
+			   
+						);
 			foreach($AddfacilityCheckboxes as $facilityCheckbox){
 					$messgeTmp  = array(
 			   
@@ -219,10 +221,23 @@ use App\facilityModel as facilityModel;
 						$facility-> roomid = $ddlAddRoomFacility;
 						$facility->save();
 
+
+						$room = roomModel::where('id','=', $ddlAddRoomFacility)->get();
+						$fac = facilityModel::where('id','=', $facilityCheckbox)->get();
+						
+						
+						$facility['facility']= $fac;
+						$facility['room']= $room;
+
+
+
 						$messgeTmp['status'] = 1;
 					 	$messgeTmp['msg'] = "Facility Successfully added";
-						//return redirect()->action('LandlordController@addRoom');
+					 	$messgeTmp['facility'] = $facility;
 
+
+						//return redirect()->action('LandlordController@addRoom');
+					 	array_push($facilities, $facility);
 				}
 					
 

@@ -93,8 +93,6 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		}
 
-
-	
 		
 		return view('pages.landlordAddRoom',  array('categories' => $categories,'user' => $user, 'roomFacilities'=> $roomFacAr, 'buildings' => $buildings, 'facilities'=>$facilities, 'rooms' => $rooms, 'AddRoomFacilities' => $AddRoomFacilities));
 	}

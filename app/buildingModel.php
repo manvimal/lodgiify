@@ -60,19 +60,6 @@ class buildingModel extends Model implements AuthenticatableContract,
     }
   
 
-     public static function boot()
-    {
-        // make the parent (Eloquent) boot method run
-        parent::boot();    
-
-        // cause a soft delete of a product to cascade to children so they are also soft deleted
-        static::deleted(function($building)
-        {
-            $building->rooms->delete();
-      
-         });
-
-}
 
 }
 
