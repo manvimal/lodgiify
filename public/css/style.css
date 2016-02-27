@@ -4097,3 +4097,51 @@ background: black;
  .block-vehicle-detail-error{
  	border: 1px solid red;
  }
+
+.bestdealsHeader{
+	padding:30px;
+	    padding-bottom: 10px;
+}
+
+
+
+.bestdealsHeader select,.bestdealsHeader input{
+	color:white;
+	background-color:grey;
+	height:1.9em;
+	    
+    margin-right: 30px;
+}
+
+
+.bestdealsHeader .flexibleDate input
+{
+	height:0.8em;
+}
+
+.bestdealsHeader .HideIfChecked{
+	    margin-top:10px;
+   
+}
+
+.advheader2{
+	color:white;
+	
+	
+	   padding-left: 30px;
+    margin-right: 30px;
+	clear:both;
+}
+
+.bestdealsHeader div label{
+	
+}
+
+#bestDeals .building_wrapper form{
+	width:100%;
+}
+
+.flexibleDate {
+
+    margin-top: 20px;
+}
