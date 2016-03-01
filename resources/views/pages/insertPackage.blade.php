@@ -87,8 +87,16 @@
 
 
             <tr>
-            <td colspan="3" align="center"><input type = "submit" id = "submit" value = "Submit"  class="btnAll" ></td>
+              <td></td>
+            <td colspan="2" align="center"><input type = "submit" id = "addPackage" value = "Submit"  class="btnLogin" ></td>
             </tr>
+
+
+            <tr>
+              <td></td>
+            <td colspan="2" align="center" id="packageMessage"></td>
+            </tr>
+            
 
         </table>
           </form>

@@ -38,6 +38,12 @@ use App\packageModel as packageModel;
 	public function registerPackage(Request $request){
 
 		$user = $request->session()->get('user');
+
+		$messge  = array(
+		    "status" => 0,
+		);
+
+		 
 	
 		if ((isset($request['packageName'])) && (!empty($request['packageName'])) ){
 			$packageName = $request['packageName'];
@@ -63,6 +69,19 @@ use App\packageModel as packageModel;
 		if ((isset($request['newPrice'])) && (!empty($request['newPrice'])) ){
 				$newPrice = $request['newPrice'];
 		}
+
+
+		$checkPackageExist = packageModel::where('packageName','=',$packageName)->get();
+
+		if((isset($checkPackageExist)) || (empty($checkPackageExist))){
+
+			$messge['status'] = -1;
+		 	$messge['msg'] = "Package Name Already Exist";
+
+		
+		}
+		else{
+
 		
 
 		// Retrieve use session
@@ -77,12 +96,21 @@ use App\packageModel as packageModel;
 		$package-> newPrice = $newPrice;
 		$package-> packageName = $packageName;
 
-		$package->save();
-		//Session::flash('success', 'Package successfully registered'); 
+			
 
-		return Redirect::to('/insertPackage');
+		$package->save();
+
+		$messge['status'] = 1;
+		$messge['msg'] = "Successfully inserted";
+		
+
+		
+}
+return json_encode($messge);
 
 	}
+
+	
 
 	public function viewPackage(Request $request){	
 

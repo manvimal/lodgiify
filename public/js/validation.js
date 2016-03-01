@@ -1561,29 +1561,40 @@ removeAllErrors($(form));
 
 
 	if (!hasError) {
-			url = "insertPackage";
+			url = "/package/register";
 			data =  $(form).serialize();
+			var $html='';
 			$.ajax({
 			  type: "POST",
 			  url: url,
 			  data: data,
 			  success: function(response){
+
+			  	 	
+			  	console.log(obj);
 			  	  var obj = $.parseJSON( response );
-			  	  if (obj.status == -1){
-			  	  	//user eists
-			  	  	alert(obj.msg);
-			  	  }
-			  	  else if(obj.status == 1){
-			  	  		alert(obj.msg);
-			  	  		//location.reload();
-			  	  		//redirect 
-			  	  }
+			  	  
+			  	
+			  	 	if (obj.status == 1 ){
+			  	 		alert('dasdas');
+			  	 		$html += "<span class='successMsg'>";
+			  	 		$html += obj.msg ;
+			  	 		$html += "</span><br />";
+			  	 	}
+			  	 	else if (obj.status == -1 )	{
+			  	 		alert('-1');
+			  	 		$html += "<span class='errorMsg'>";
+			  	 		$html += obj.msg ;
+			  	 		$html += "</span><br />";
+			  	 	}
+			  	 
+				$("#packageMessage").html($html);
 				
 			  }
 			});
 		}
 
-	return !hasError;
+	return false;
 
 
 
@@ -1885,7 +1896,7 @@ $(document).ready(function(){
 			  	 		$html += "</span><br />";
 			  	 		$htmlFacility += '<tr class="booking">';
 			  	 		$htmlFacility += '<td>'+$index +'</td>';
-			  	 		$htmlFacility += '<td>sasasa</td>';
+			  	 		$htmlFacility += '<td>'+ 'dsaasd' +' </td>';
 			  	 		$htmlFacility += '<td>meal</td>';
 			  	 		$htmlFacility += '<td>     <a href="/RoomFacility/delete?id='+ obj[i].facility.id +'" class="btnLogin deleteRoomFacility">Delete</a></td>';
 						$htmlFacility += '</tr>';
