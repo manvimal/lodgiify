@@ -92,78 +92,11 @@ function validateLogin(form){
 
 
 
-function validateContactForm(){
-
-	$("#contact").submit(function(){ 
-
-		var form = $(this).get(0);
-
-		var contactName = form['contactName'];
-
-		
-
-		removeAllErrors($(this));
-		var hasError = false;
-
-		
-
-		if (!checkError(contactName)) clearError(contactName);
-
-		else hasError = true;
-
-		
-
-		var contactEmail = form['contactemail'];
-
-		
-
-		if (!checkError(contactEmail)) clearError(contactEmail);
-		
-		else hasError = true;
-
-		
-
-		var contactSubject = form['contactsubject'];
-
-		if (!checkError(contactSubject)) clearError(contactSubject);
-		
-		else hasError = true;
-
-
-		var contactMessage = form['desc'];
-
-		if (!checkError(contactMessage)) clearError(contactMessage);
-		
-		else hasError = true;
-
-
-
-		if( !hasError){
-
-			$.ajax({
-			  method: "get",
-			  url: "user/sendMsg",
-			  data: $(form).serialize()
-			})
-			  .success(function( msg ) {
-			  	 $(".msg").addClass("success");
-			  	 $(contactEmail).val("");
-			  	 $(contactMessage).val("");
-			  	 $(contactName).val("");
-			    $(".msg").text( "Your message has been sent "  );
-			  })
-			  .error(function( msg){
-			  		$(".msg").addClass("error");
-			  	 $(".msg").text( "Your message has not been sent"  );
-
-			  })
-
-		}
-
-	});
 
 	
-}
+
+	
+
 
 
 
@@ -560,10 +493,86 @@ $(document).ready(function(){
 	var infowindow ;
 	var prevData ;
 
+
+$(".contact .submit").click(function(){ 
+
+
+		var form = $(".contact form") .get(0);
+
+		var contactName = form['contactName'];
+
+		
+
+		removeAllErrors($(this));
+		var hasError = false;
+
+		
+
+		if (!checkError(contactName)) clearError(contactName);
+
+		else hasError = true;
+
+		
+
+		var contactEmail = form['contactemail'];
+
+		
+
+		if (!checkError(contactEmail)) clearError(contactEmail);
+		
+		else hasError = true;
+
+		
+
+		var contactSubject = form['contactsubject'];
+
+		if (!checkError(contactSubject)) clearError(contactSubject);
+		
+		else hasError = true;
+
+
+		var contactMessage = form['desc'];
+
+		if (!checkError(contactMessage)) clearError(contactMessage);
+		
+		else hasError = true;
+
+
+
+		if( !hasError){
+
+			$.ajax({
+			  method: "post",
+			  url: "feedback",
+			  data: $(form).serialize()
+			})
+			  .success(function( msg ) {
+			  	 $(".msg").addClass("success");
+			  	 $(contactEmail).val("");
+			  	 $(contactMessage).val("");
+			  	 $(contactName).val("");
+			  	 $(contactsubject).val("");
+
+			    $(".msg").text( "Your message has been sent "  );
+			    
+			  })
+			  .error(function( msg){
+			  		$(".msg").addClass("error");
+			  	 $(".msg").text( "Your message has not been sent"  );
+
+			  })
+
+
+
+		}
+
+		return false;
+
+	});
 	//set capcha
 	$("#btnrefresh").click();
 
-	validateContactForm();
+	
 
 
 	$("body").on('click','.BuildingUpdate', function(){
@@ -919,7 +928,7 @@ $(document).ready(function(){
 					$html += '<img alt="" href="" class="builindImg"/>';
 				}
 				else{
-					$html += '<img alt="" href="'+ data.image + '" class="builindImg"/>';
+					$html += '<img alt="" href="'+ data.image + '" class="builindImg "/>';
 				}
 				
             
@@ -1573,16 +1582,13 @@ removeAllErrors($(form));
 			  	 	
 			  	console.log(obj);
 			  	  var obj = $.parseJSON( response );
-			  	  
-			  	
+
 			  	 	if (obj.status == 1 ){
-			  	 		alert('dasdas');
 			  	 		$html += "<span class='successMsg'>";
 			  	 		$html += obj.msg ;
 			  	 		$html += "</span><br />";
 			  	 	}
 			  	 	else if (obj.status == -1 )	{
-			  	 		alert('-1');
 			  	 		$html += "<span class='errorMsg'>";
 			  	 		$html += obj.msg ;
 			  	 		$html += "</span><br />";
@@ -1716,29 +1722,25 @@ removeAllErrors($(form));
 //packages update delete view
 	
 $(document).ready(function(){
-
+		
+	
+	
 		$(".buildings-list1 a").click(function(){
 
-		//alert("hello");
+		
 
 		$(this).parents("ul").find("li").removeClass("active");
 		$(this).parents("li").addClass("active");
 	
 		$.getJSON( $(this).attr("href"), function( data ) {
-    		
+    		console.log(data);
     		if (typeof data[0] !== "undefined") {
     			var str = packageSearchSkeleton(data[0]);
+
     			$(".building_wrapper1").html(str);
 
 
-    			var map=new google.maps.Map(document.getElementById("googleMap"), initMap());
-    			var marker=new google.maps.Marker({
-				  position:myCenter,
-				  });
-    			marker.setMap(map);
-
-			
-				infowindow.open(map,marker);
+    			
 
 				//updateDeleteAction();
 				//updateDeleteRoomAction();
@@ -1750,7 +1752,7 @@ $(document).ready(function(){
 
 		return false
 	});
-
+$(".buildings-list1 .active a").click();
 
 
 	$("body").on('click','.BuildingDelete1', function(){
@@ -1817,7 +1819,11 @@ $(document).ready(function(){
             $html += '<div class="buildingdesc">  Description : <span> '+ data.desc +'</span></div>';
 
             $html += '<div class="buildingLoc">  Address : <span> '+ data.buildingLocation +'</span></div>';
-            $html += '<div class="buildingpackages">  No of packages : <span> '+ data.packages.length +'</span></div>';
+            
+            if (typeof data.packages !== "undefined") {
+            	$html += '<div class="buildingpackages">  No of packages : <span> '+ data.packages.length +'</span></div>';
+            }
+            
             $html += '<div class="buildingrooms">  Image : <span> <img height="80" width="120" src  = "' + ' upload/' + data.image +' " </span></div>';
          	$html += '</div>';
            
@@ -1825,33 +1831,29 @@ $(document).ready(function(){
             $html += '';
           	$html += '</div>';
         	$html += '<div class="clear"></div></div>';
-       alert(data.longitude);
-
-        		infowindow = new google.maps.InfoWindow({
-				content:data.buildingName + " - " + data.desc
-		 		});
-        		myCenter=new google.maps.LatLng( data.lattitude, data.longitude);
-        		
-
+       
 			$html += '</div>';
 			$html += '<div class="rooms">';
 
-			for (i=0 ; i< data.packages.length ; i++){
-				packages =  data.packages[i];
-				$html += '<div class="room">';
-				$html += '<div class="roomDetails">';
-				$html += '<a class="RoomDelete"  title = "delete" href="package/delete?id='+ packages.id +'"></a>';
-			 	$html += '<a class="RoomUpdate" title ="update" href="room/update?id='+ packages.id +'"></a>';
-              	$html += '<div class="packageName"> Room name : <span> '+ packages.packageName +'</span></div>';
-              	$html += '<div class="packageDesc"> Package Description : <span> '+ packages.packageDesc +'</span></div>';
-              	$html += '<div class="oldPrice"> Old Price : <span> '+ packages.oldPrice +'</span></div>';
-              	$html += '<div class="promotionExpiryDate"> Promotion Expiry Date : <span> '+ packages.promotionExpiryDate +'</span></div>';
-              	$html += '<div class="capacityAdult"> Capacity Adult : <span> '+ packages.capacityAdult +'</span></div>';
-	         
-	              
-          	$html += '</div>';
-			$html += '</div>';
+			if (typeof data.packages !== "undefined") {
+				for (i=0 ; i< data.packages.length ; i++){
+							packages =  data.packages[i];
+							$html += '<div class="room">';
+							$html += '<div class="roomDetails">';
+							$html += '<a class="RoomDelete"  title = "delete" href="package/delete?id='+ packages.id +'"></a>';
+						 	$html += '<a class="RoomUpdate" title ="update" href="room/update?id='+ packages.id +'"></a>';
+			              	$html += '<div class="packageName"> Package name : <span> '+ packages.packageName +'</span></div>';
+			              	$html += '<div class="packageDesc"> Package Description : <span> '+ packages.packageDesc +'</span></div>';
+			              	$html += '<div class="oldPrice"> Old Price : <span> '+ packages.oldPrice +'</span></div>';
+			              	$html += '<div class="promotionExpiryDate"> Promotion Expiry Date : <span> '+ packages.promotionExpiryDate +'</span></div>';
+			              	$html += '<div class="capacityAdult"> Capacity Adult : <span> '+ packages.capacityAdult +'</span></div>';
+				         
+				              
+			          	$html += '</div>';
+						$html += '</div>';
+				}
 			}
+			
         	$html += ' </div>';
        
 	   		$html += '<div class="clear"></div>';
@@ -1917,11 +1919,8 @@ $(document).ready(function(){
 
 
 
-
-
  //Insert building facility by ajax
  $("#addBuildingFacilities").click(function(){
-
 
 		$url = $(this).parents("form").attr("action");
 			$data =  $(this).parents("form").serialize();

@@ -4,9 +4,7 @@
  @section('content')
  
  
-    <script src="{{ URL::asset('js/googleMap.js') }}" type="text/javascript"></script>
-
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6v5-2uaq_wusHDktM9ILcqIrlPtnZgEk&sensor=false">
+   
     </script> 
    <div class="banner">
       	<div class="wrap">

@@ -20,6 +20,7 @@ use DB;
 use Redirect;
 use App\buildingFacilityModel as buildingFacilityModel;
 use App\travelModel as travelModel;
+use App\packageModel as packageModel;
 
 
 
@@ -120,6 +121,12 @@ use App\travelModel as travelModel;
 
 
 		$buildings = $query->get();
+
+
+		foreach($buildings as $building){
+			$package = packageModel::where('buildingid', '=', $building->id)->get();
+			$building['packages'] = $package;
+		}
 		return $buildings;
 	}
 

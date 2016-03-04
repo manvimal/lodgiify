@@ -1,5 +1,7 @@
 <?php
 
+
+
 /****  MENU ****/
 Route::get('/index', 'MainController@index');
 Route::get('/registration', 'MainController@registrationPage');
@@ -118,3 +120,5 @@ Route::post('/getAdvancedSearch','searchController@getAdvancedSearch');
 Route::get('/user/block', 'adminController@blockUsers');
 Route::get('/manageBuilding', 'adminController@manageBuilding');
 Route::post('/searchUser', 'adminController@searchUser');
+
+

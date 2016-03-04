@@ -18,23 +18,36 @@ use App\buildingModel as buildingModel;
 
 
 
+
  class MainController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
 	public function index(Request $request){
+
 		$user = $request->session()->get('user');
 
-	
-
-		$buildings = buildingModel::all();
+		$blockedUsers = UserLandlord::where('userStatus','=', 1)->get();
 
 		$building = buildingModel::orderBy('created_at', 'DESC')->paginate(3);
 
 
-		return view('pages.index',  array('user' => $user, 'buildings'=>$buildings,'building'=>$building));
+		foreach($blockedUsers as $blockedUser){
+			$blocked = ($blockedUser['id']);
 
+		}
+
+		if(!empty($blocked)){
+
+			$buildings = buildingModel::where('landlordID', '=', $blocked)->get();
+		}
+		else{
+
+			$buildings = "";
+		}
+
+		return view('pages.index',  array('user' => $user, 'buildings'=>$buildings,'building'=>$building));
 	
 	}
 
@@ -614,6 +627,37 @@ echo json_encode($messge);
 
 
 }
+
+
+
+//Contact Us email form
+
+function customerQuery(Request $request){
+
+
+
+
+ // create curl resource 
+        $ch = curl_init(); 
+
+
+	    $link = "http://localhost:8082/lodgiify_/peerExternalMailPlugin/mainTest.php?contactname=".$request['contactName'].'&email='.$request['contactemail'].'&contactsubject='.$request['contactsubject'].'&desc='.$request['desc'];
+        // set url contactName
+        curl_setopt($ch, CURLOPT_URL, $link); 
+
+        //return the transfer as a string 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+        // $output contains the output string 
+        $output = curl_exec($ch); 
+//var_dump($output);die;
+        // close curl resource to free up system resources 
+        curl_close($ch);     
+
+
+
+}
+
 
 
 }

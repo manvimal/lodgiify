@@ -19,12 +19,13 @@
 	 	  		<h5 class="leave">Leave us your Queries</h5><div class="clear"></div>	
 
 
-				  <form method="post"  id="contact" action="feedback">
-				  	<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
+				  <form method="post" action="/feedback">
+				  
+				  	 <input type="hidden" id="token" name="_token" value="{{ csrf_token() }}" />    
 					<div class="contact-to">
                      	
-					 	<input type="text" name="contactName" id="contactName" class="required" /><span class="errorMsg"></span><br/>
-					 	<input type="text" name="contactemail" id="contactemail" class="text email" value="Email..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email...';}" style="margin-left: 10px"><span class="errorMsg"></span><br/>
+					 	<input type="text" name="contactName" id="contactName" class="required" value="Contact Name..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Contact Name...';}" style="margin-left: 10px" /><span class="errorMsg"></span>
+					 	<input type="text" name="contactemail" id="contactemail" class="text email" value="Email..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email...';}" style="margin-left: 10px"><span class="errorMsg"></span>
 					 	<input type="text" name="contactsubject"  id="contactsubject" class="text" value="Subject..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Subject...';}" style="margin-left: 10px">
 					
 					</div>
@@ -33,8 +34,13 @@
 	                </div>
 
 	                <div>
-	               		<input type="submit" class="submit">
+	               		<input type="submit" name="submit" class="submit">
 	                </div>
+
+	                 <div class="contactUsMsg">
+	               		
+	                </div>
+	              
 
 	             </form>
 

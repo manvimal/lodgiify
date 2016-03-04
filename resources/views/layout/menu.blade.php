@@ -7,6 +7,7 @@
 					<?php
 						if (empty($user)){
 			 		?>
+			 			
 			 			<li><a href="{{ URL::asset('/aboutus') }}">About Us</a></li>
 						<li><a href="{{ URL::asset('/registration') }}">Sign Up</a></li> 
 						<li><a href="{{ URL::asset('/contactus') }}">Contact</a></li>
@@ -31,6 +32,7 @@
 					<?php
 						if($user['type'] == 'tenant'){
 					?>
+						
 						<li><a href="{{ URL::asset('/booking') }}">Bookings</a></li>
 						<li><a href="{{ URL::asset('/mybooking') }}">My Bookings</a></li>
 						<li><a href="{{ URL::asset('/aboutus') }}">About Us</a></li> 
@@ -44,6 +46,7 @@
 					<?php 
 						if ($user['type']==  'landlord'){
 					?>
+						
 						<li><a href="{{ URL::asset('/addBuilding') }}">Add Building</a></li>
 						<li><a href="{{ URL::asset('/addRoom') }}">Add Room</a></li>
 						<li><a href="{{ URL::asset('/viewBuildings') }}">Building</a></li>

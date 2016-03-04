@@ -20,6 +20,7 @@ use App\roomModel as roomModel;
 use App\facilityModel as facilityModel;
 use App\buildingFacilityModel as buildingFacilityModel;
 use App\roomFacilityModel as roomFacilityModel;
+use App\packageModel as packageModel;
 
 
 
@@ -105,6 +106,33 @@ use App\roomFacilityModel as roomFacilityModel;
 		$categories = roomCategory::all();
 
 		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
+
+/**
+
+		foreach($buildings as $building){
+
+			$buildingArr[] = $building->id;
+		}
+		
+		foreach($buildingArr as $array){
+
+
+			
+			$packages = packageModel::where('buildingid','=', $array);
+
+			
+			
+		}
+
+
+	var_dump($packages->packageName);
+
+		die;
+
+	//	var_dump($packages);
+	
+**/
+		
 		
 		return view('pages.insertPackage',  array('user' => $user, 'buildings' => $buildings, 'categories' => $categories));
 	}

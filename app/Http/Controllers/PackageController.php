@@ -60,6 +60,10 @@ use App\packageModel as packageModel;
 		if ((isset($request['capacity'])) && (!empty($request['capacity'])) ){
 				$capacity = $request['capacity'];
 		}
+		if ((isset($request['childrenCapacity'])) && (!empty($request['childrenCapacity'])) ){
+				$childrenCapacity = $request['childrenCapacity'];
+		}
+
 
 
 		if ((isset($request['building'])) && (!empty($request['building'])) ){
@@ -71,9 +75,16 @@ use App\packageModel as packageModel;
 		}
 
 
-		$checkPackageExist = packageModel::where('packageName','=',$packageName)->get();
 
-		if((isset($checkPackageExist)) || (empty($checkPackageExist))){
+		// Retrieve use session
+		$user = $request->session()->get('user');
+
+
+		//$checkPackageExist = packageModel::where('packageName', '=', $packageName)->get();
+
+		$checkPackageExist = DB::table('tblpackage')->where('packageName', $packageName)->get();
+
+		if((isset($checkPackageExist)) && (!empty($checkPackageExist))){
 
 			$messge['status'] = -1;
 		 	$messge['msg'] = "Package Name Already Exist";
@@ -82,17 +93,13 @@ use App\packageModel as packageModel;
 		}
 		else{
 
-		
-
-		// Retrieve use session
-		$user = $request->session()->get('user');
-
-		//Save room for user
 		$package = new packageModel;
 		$package-> buildingID = $building  ;
 		$package-> roomCategoryID = $category;
 		$package-> packageDesc = $desc ;
 		$package-> capacityAdult = $capacity;
+		$package-> capacityChildren = $childrenCapacity;
+
 		$package-> newPrice = $newPrice;
 		$package-> packageName = $packageName;
 
@@ -122,6 +129,7 @@ return json_encode($messge);
 			//Gets packages of building
 		$packages = packageModel::where('buildingid', '=', $buildings[0]->id)->get();
 
+		
 		//var_dump($packages[0]->id);
 
 		return view('pages.landlordpackages',  array('user' => $user, 'packages' => $packages, 'buildings' => $buildings));

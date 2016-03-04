@@ -2,7 +2,7 @@
 	<input type="hidden" id="token" name="_token" value="{{{ csrf_token() }}}" />
       <div class="wrap"> 
 	         <div class="logo">
-				<a href="index"><img src="{{ URL::asset('images/logo.png') }}" alt=""/></a>
+				<a href="{{ URL::asset('/index') }}"><img src="{{ URL::asset('images/logo.png') }}" alt=""/></a>
 			 </div>
 
 			 <!-- login  -->

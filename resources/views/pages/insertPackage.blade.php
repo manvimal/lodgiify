@@ -51,8 +51,13 @@
         </tr>
 
          <tr>
-            <td><label>Capacity: </label></td>
+            <td><label>Adults: </label></td>
             <td><input type="text" class="required onlyLetters" name = "capacity" id = "capacity"/></select> <span class="errorMsg"></span></td>
+         </tr>
+
+          <tr>
+            <td><label>Children: </label></td>
+            <td><input type="text" class="required onlyLetters" name = "childrenCapacity"/></select> <span class="errorMsg"></span></td>
          </tr>
 
          <tr>
@@ -116,7 +121,7 @@
 		 </div>
 		</div>
 		<div class="project-list">
-	     	<h4>My Rooms</h4>
+	     	<h4>My packages</h4>
 			<ul class="blog-list">
            
 			</ul>

@@ -179,6 +179,8 @@
 				</div>
 
 				<?php
+
+				if(isset($building) && (!empty($building))){
 					foreach($building as $build){
 
 
@@ -186,7 +188,7 @@
 					?>
 				<div class="col_1_of_4 span_1_of_4">
 					<div class="grid1">
-						<img src="<?php echo '/upload/'.$build->image; ?>" alt=""/>
+						<img  src="<?php echo '/upload/'.$build->image; ?>" alt=""/>
 						<h4><?php echo($build->buildingName);?></h4>
 					</div>
 					<div class="desc">
@@ -196,8 +198,21 @@
 				<?php
 
 			}
+			?>
+			<diV>
+			<ul>
+				<li>
+					<?php
 
 		echo $building->render();
+
+		?>
+	</li>
+</ul>
+</diV
+
+		<?php
+		}
 				?>
 				
 				<div class="clear"></div>
@@ -206,7 +221,7 @@
 	</div>
 	<div class="content-middle">
 		<h2><span>Our work</span></h2>
-		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod</p>
+		<p>All Buildings</p>
       <div id="container">
 
 
@@ -216,16 +231,29 @@
 
        <ul id="tiles">
        	<?php
+		if(isset($buildings) && (!empty($buildings))){
        	foreach($buildings as $building){
   	?>
         <li>
           <a href="<?php if($user['type']!=""){ echo('/package/' .$building->id );}else{ echo('/registrationPage');  } ?>" rel="lightbox" class="cboxElement">
-            <img src="upload/<?php echo($building->image) ?>" width="200" height="283">
+            <img class="zoom-gallery" src="upload/<?php echo($building->image) ?>" width="200" height="283">
           </a>
         </li>
 
         <?php
     }
+}
+
+	else{
+		?>
+		 <li>
+		 	<div id="homePageBuilding">No Available Building<div class="clear"></div>
+ 
+        </li>
+		
+		<?php
+	}
+
     ?>
         
      </ul>
@@ -275,16 +303,13 @@
 </div>
    <div class="content-bottom">
 		<h2><span>Our Clients</span></h2>  
-		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod</p>     
+		<p>Sponsors</p>     
 		<ul id="flexiselDemo3">
 			<li><img src="images/client1.jpg" /></li>
 			<li><img src="images/client2.jpg" /></li>
 			<li><img src="images/client3.jpg" /></li>
 			<li><img src="images/client4.jpg" /></li>
 			<li><img src="images/client5.jpg" /></li>
-			<li><img src="images/client6.jpg" /></li>
-			<li><img src="images/client7.jpg" /></li>
-			<li><img src="images/client8.jpg" /></li>
 		</ul>
 	<script type="text/javascript">
 $(window).load(function() {
