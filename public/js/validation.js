@@ -1785,6 +1785,24 @@ $(".buildings-list1 .active a").click();
 		return false;
 	})
 
+
+	$("body").on('click','.BuildingDeletePackage', function(){
+		var r = confirm("Are you sure you want to delete the building!");
+		if (r == true) {
+		    $.getJSON( $(this).attr("href"), function( data ) {
+
+    		
+    			$(".building_wrapper").html("");
+    			
+    			$(".buildings-list li.active").remove();
+    			$(".buildings-list a:eq(0)").click();
+    		
+			});
+		}
+		return false;
+		})
+
+
 	
 
 
@@ -1796,8 +1814,8 @@ $(".buildings-list1 .active a").click();
 			$html = '<div class="building-left">';
 			$html += '<div class="building-header">';
 			$html += '<div class="buildingname">  <span>'+ data.buildingName +' </span>';
-			//  $html += '<a class="BuildingDelete1"  title = "delete" href="building/delete?id='+ data.id +'"></a>';
-			//  $html += '<a class="BuildingUpdate1" title ="update" href="building/update?id='+ data.id +'"></a>';
+		    $html += '<a class="BuildingDelete"  title = "delete" href="building/delete?id='+ data.id +'"></a>';
+		    $html += '<a class="BuildingUpdate" title ="update" href="building/update?id='+ data.id +'"></a>';
               
             $html += '</div>';
 				if (data.image != ''){
