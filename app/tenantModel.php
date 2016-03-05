@@ -43,6 +43,7 @@ class tenantModel extends Model implements AuthenticatableContract,
                             'Phone',
                             'Gender',
                             'DOB'
+                            ,'hash', 'expiryHash'
                                             ];
 
 

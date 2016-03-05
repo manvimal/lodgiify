@@ -238,6 +238,83 @@ function validateLogin(form){
 	}
 
 
+
+//removes all previous errors
+		
+	
+	function validateforgetPassword(form, status){
+		//removes all previous errors
+		removeAllErrors($(form));
+		var hasError = false;
+
+
+		//checks NIC for errors
+		//var txtNIC = form['txtNic'];
+		//pass input element txtnic as ref to checkerror for validation
+		//if (!checkError(txtNIC)) clearError(txtNIC);
+		
+		
+
+		
+		//checks userName for errors
+		
+
+		if (status == 0){
+			var userName = form['userName'];
+			if (!checkError(userName)) clearError(userName);
+			else hasError = true;
+		}
+
+		else if(status == 1){
+			//checks email for errors
+			var txtPassword = form['Password'];
+			if (!checkError(txtPassword)) clearError(txtPassword);
+			else hasError = true;
+			
+			//checks email for errors
+			var confirmPassword = form['confirmPassword'];
+			if (!checkError(confirmPassword)) clearError(confirmPassword);
+			else hasError = true;
+		
+		}
+
+		$url = $(form).attr("action");
+		$(".gblError").removeClass("successMsg");
+		$(".gblError").removeClass("errorMsg1");
+
+		if (!hasError) {
+			url = $url;
+			data =  $(form).serialize();
+			$.ajax({
+			  type: "POST",
+			  url: url,
+			  data: data,
+			  success: function(response){
+			  		var $html='';
+			  	  var obj = $.parseJSON( response );
+			  	 
+			  	  if (obj.status == -1){
+			  	  	$(".gblError").addClass("errorMsg1")
+			  	  }
+			  	  else{
+			  	  	$(".gblError").addClass("successMsg");
+			  	  	if (typeof userName !== "undefined") {
+						userName.value = "";
+			  	  	}
+			  	  	
+			  	  }
+			  	  $(".gblError").text(obj.msg)
+
+			  }
+			});
+		}
+
+		
+		return false;
+	}
+
+
+
 	
 	
 	//Chceks error based on various classes

@@ -44,7 +44,9 @@ class userLandlord extends Model implements AuthenticatableContract,
                             'Address',
                             'PostalCode',
                             'Country',
-                            'type'
+                            'type',
+                            'expiryHash',
+                            'hash'
                             ];
     /**
      * The attributes excluded from the model's JSON form.

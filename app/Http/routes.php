@@ -19,6 +19,7 @@ Route::post('/feedback','MainController@customerQuery');
 Route::get('/userAccount', 'MainController@userAccount');
 Route::get('/viewPackage','packageController@viewPackage');
 Route::get('/viewVehicleBookings','VehicleOwnerController@viewVehicleBookinga');
+Route::get('/user/forgetPassword','MainController@forgetPassword');
 
 
 /**** USER ***/
@@ -27,6 +28,8 @@ Route::post('/user/update', 'MainController@updateAccount');
 Route::post('/user/login', 'MainController@loginUser');
 Route::get('/user/logoff', 'MainController@logoff');
 Route::get('/user/sendMsg', 'MainController@sendMsg');
+Route::post('/user/forgetPasswordProcess','MainController@forgetPasswordProcess');
+Route::get('/user/postForgetPassword/{hash}','MainController@postForgetPassword');
 
 
 /****  LANDLORD ****/

@@ -4,8 +4,8 @@
 					<li class=""><a href="{{ URL::asset('/index') }}">Home</a></li>
 					
 
-					<?php
-						if (empty($user)){
+					<?php  
+						if (empty($user) ){
 			 		?>
 			 			
 			 			<li><a href="{{ URL::asset('/aboutus') }}">About Us</a></li>

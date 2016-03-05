@@ -12,9 +12,11 @@ use Mail;
 use App\User as User;
 use App\vehicleOwnerModel as vehicleOwnerModel;
 use App\userLandlord as userLandlord;
-use App\UserAdmin as UserAdmin;
 use App\buildingModel as buildingModel;
 
+use App\adminModel as adminModel;
+use App\tenantModel as tenantModel;
+use URL;
 
 
 
@@ -660,6 +662,203 @@ function customerQuery(Request $request){
 
 
 
+
+function sendEmail($contactName, $to, $subject, $body){
+
+ // create curl resource 
+        $ch = curl_init(); 
+
+	    $link = "http://localhost:8082/lodgiify_/peerExternalMailPlugin/mainTest.php?contactname=".$contactName.'&email='.$to.'&contactsubject='.$subject.'&desc='.$body;
+        // set url contactName
+        curl_setopt($ch, CURLOPT_URL, $link); 
+
+        //return the transfer as a string 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+        // $output contains the output string 
+        $output = curl_exec($ch); 
+        curl_close($ch);     
+
+
+
+}
+
+
+
+	public function forgetPassword(Request $request){
+		$user = $request->session()->get('user');
+
+		return view('pages.forgetPassword', array('user' => $user));
+	}
+
+	public function postForgetPassword($hash, Request $request){
+		$user = $request->session()->get('user');
+
+		
+		$usertoUpdate = $this->getUserBy("hash",$hash );
+		$msg = array();
+
+		$return = array();
+		$return['hash'] = $hash;
+		if (!is_null($usertoUpdate)){
+
+			$then = new \DateTime($usertoUpdate->expiryHash);
+	
+			
+			$now = new \DateTime();
+			$now->setTimezone(new \DateTimeZone('Indian/Mauritius'));
+			
+
+			
+			if ($now < $then){
+				
+				$msg['statuspost'] = 1;
+				$msg['msgpost'] = "OK";
+			}
+			else{
+				
+				$msg['statuspost'] = -1;
+				$msg['msgpost'] = "Link has expired";
+			}
+			$return['userforget'] = $usertoUpdate;
+			
+		}
+		else{
+			$msg['statuspost'] = -1; 
+			$msg['msgpost'] = "Link is not valid";
+		}
+		$return['user'] = $user;
+		$return['msg'] = $msg;
+
+		return view('pages.forgetPassword', $return);
+	}
+
+
+
+	public function forgetPasswordProcess(Request $request){
+		
+		if ((isset($request['id'])) && (!empty($request['id'])) ){
+			$usertoUpdate = $this->getUserBy("hash",$request['hash'] );
+
+			$usertoUpdate->hash ="";
+			$usertoUpdate-> expiryHash= "";
+			if (isset($request['password']) && !empty($request['password'])){
+				$usertoUpdate->password = md5($request['password'] );
+			}
+			$usertoUpdate->save();
+
+			$messge['status'] = 1;
+			$messge['msg'] = "Password successfully changed.";
+
+		}
+		else{
+
+			$messge = array('msg'=>'A mail has been sent');
+			if ((isset($_REQUEST['userName'])) && (!empty($_REQUEST['userName'])) ){
+				$userName = $_REQUEST['userName'];
+				$usertoUpdate = $this->getUserBy("userName",$userName );
+
+				if (!is_null($usertoUpdate)){
+					$strmd5 = md5(($usertoUpdate->Email)."".$this->rand_char(20));
+					$usertoUpdate->hash = $strmd5 ;
+
+					$dt = new \DateTime();
+
+					$dt->setTimezone(new \DateTimeZone('Indian/Mauritius'));
+					$dt->add(new \DateInterval('PT1H'));
+
+					$usertoUpdate->expiryHash = $dt ;
+					$usertoUpdate->save();
+
+					$messge['status'] = 1;
+					$messge['msg'] = "A link has been sent to your email.";
+					$error=false;
+
+					$body = "Hello ".$userName.",<br />";
+					$body .="The link to rest your password is :";
+
+					$url = URL::to('/user/postForgetPassword', array($strmd5));;
+					$body .="<a href='".$url."'>".$url."</a>";
+					$body .="Your link will expire in 1 hour.".
+					$body .= "Lodgiify team";
+
+					
+					$this-> sendEmail($userName, $usertoUpdate->Email, "Password reset link for Lodgiify", $body);
+
+				}
+				else{
+					$messge['status'] = -1;
+					$messge['msg'] = "User not found.";
+				}
+
+				
+
+			}
+			else{
+					$messge['status'] = -1;
+					$error=true;
+					$userName=false;
+
+			}
+
+		}
+
+		return json_encode($messge) ;
+	}
+
+
+
+	private function getUserBy($filter,$value){
+		$vehicleOwnerModel = vehicleOwnerModel::where($filter, '=', $value)->first();
+		if (is_null($vehicleOwnerModel)){
+
+			$userLandlord = userLandlord::where($filter, '=', $value)->first();
+
+			if (is_null($userLandlord)){
+				$adminModel = adminModel::where($filter, '=', $value)->first();
+
+				if (is_null($adminModel)){
+					$tenantModel = tenantModel::where($filter, '=', $value)->first();
+
+					if (is_null($tenantModel)){
+						return null;
+					}
+					else{
+							return $tenantModel; 
+					}
+				}
+				else{
+						
+						return $adminModel; 
+				}
+
+				
+			}
+			else{
+					
+					return $userLandlord; 
+			}
+
+			
+		}
+		else{
+			
+			return $vehicleOwnerModel; 
+		}
+		
+		return null;
+		
+	}
+
+
+	private function rand_char($length) {
+	  $random = '';
+	  for ($i = 0; $i < $length; $i++) {
+	    $random .= chr(mt_rand(33, 126));
+	  }
+	  return $random;
+	}
+	
 }
 ?>
 
