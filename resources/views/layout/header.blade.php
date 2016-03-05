@@ -24,6 +24,17 @@
 							<td></td>
 							<td><input type="submit" value="Login" id = "btnLogin" class="btnLogin"/> </td> 
 							</tr>
+							<tr>
+							<td></td> 
+							<td> </td>
+						
+							<td></td> 
+							<td><a href="{{ URL::asset('/user/forgetPassword') }}">Forgot password</a> </td>
+						
+							<td></td>
+							<td></td> 
+							</tr>
+
 
 						<tr>
 							

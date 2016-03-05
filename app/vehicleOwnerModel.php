@@ -44,7 +44,9 @@ class vehicleOwnerModel extends Model implements AuthenticatableContract,
                             'Address',
                             'PostalCode',
                             'Country',
-                            'type'
+                            'type',
+                            'hash',
+                            'expiryHash'
                             ];
     /**
      * The attributes excluded from the model's JSON form.
