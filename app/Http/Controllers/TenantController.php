@@ -23,7 +23,8 @@ use App\tenantModel as tenantModel;
 use App\bookingModel as bookingModel;
 use App\buildingFacilityModel as buildingFacilityModel;
 use App\facilityModel as facilityModel;
- 
+ use App\bookingPackageModel as bookingPackageModel;
+ use App\travelModel as  travelModel;
 
 
 
@@ -219,6 +220,11 @@ use App\facilityModel as facilityModel;
 
 		if ($request['id'] != null){
 			$deleteBookings = bookingModel::where('id', '=', $request['id'])->delete();
+
+			$deletePackageModel = bookingPackageModel::where("booking_id","=", $request['id'])->delete();
+
+			$travelModel= travelModel::where("bookingID",'=', $request['id'])->delete();
+
 			return redirect()->action('tenantController@myBookings');
 		}
 			print json_encode(array(1));
