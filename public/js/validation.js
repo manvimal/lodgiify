@@ -686,7 +686,7 @@ $(".contact .submit").click(function(){
 		  data: $data
 		})
 		  .success(function( msg ) {
-		    $(".building_wrapper").html(updateRoomSkeleton(prevData, $(this)));
+		    //$(".building_wrapper").html(updateRoomSkeleton(prevData, $(this)));
 		    $(".buildings-list .active a").click();
 		  });
 
@@ -772,11 +772,12 @@ $(".contact .submit").click(function(){
 
 	function updateRoomSkeleton(data, $obj){
 		prevData = data;
-		var $index = $obj.index();
+		var $index = $obj.parents(".room").index();
+		
+		
 		var room = "";
-		if ($index > 0){
-			room = data.rooms[$index-1];
-
+		if ($index >= 0){
+			room = data.rooms[$index];
 			$html = '<div class="room-left">';
 			$html += '<div class="room-header">';
 			 $html += '<div class="roomname">  <span>Update - '+ room.roomName +' </span>';
@@ -801,7 +802,7 @@ $(".contact .submit").click(function(){
 
               
               $html += '<div class="roomCat">  Building type : <span> '+ data.category.buildingCatName +'</span></div>';
-              $html += '<div class="roomdesc">  Description : <input  id="roomdesc" name="roomdesc" value="'+ data.desc + '" />  </div>';
+              $html += '<div class="roomdesc">  Description : <input  id="roomdesc" name="roomdesc" value="'+ room.desc + '" />  </div>';
                $html += '<div class="roomprice">  Price : <input  id="roomprice" name="roomprice" value="'+ room.price + '" />  </div>';
                $html += '<div class="roomcapacity">  Capacity : <input  id="roomcapacity" name="roomcapacity" value="'+ room.capacity + '" />  </div>';
               $html += '<div class="roomLoc">  Address : <span> ' + data.buildingLocation + ' </span>  </div>';
@@ -823,6 +824,8 @@ $(".contact .submit").click(function(){
         $html += ' </div>';
        
 	   $html += '<div class="clear"></div>';
+
+	   
 	   return $html;
 		}
 
@@ -1021,7 +1024,7 @@ $(".contact .submit").click(function(){
 
               $html += '<div class="buildingLoc">  Address : <span> '+ data.buildingLocation +'</span></div>';
               $html += '<div class="buildingrooms">  No of rooms : <span> '+ data.rooms.length +'</span></div>';
-              $html += '<div class="buildingrooms">  Image : <span> <img height="80" width="120" src  = "' + ' upload/' + data.image +' " </span></div>';
+              $html += '<div class="buildingrooms">   <span> <img height="80" width="120" src  = "' + ' upload/' + data.image +' " </span></div>';
               //	alert('./upload/' + data.image);
           $html += '</div>';
            
@@ -1646,6 +1649,20 @@ removeAllErrors($(form));
 		else hasError = true;
 
 
+var capacity = form['capacity'];
+		if (!checkError(capacity)) clearError(capacity);
+
+		else hasError = true;
+
+		var childrenCapacity = form['childrenCapacity'];
+		if (!checkError(childrenCapacity)) clearError(childrenCapacity);
+
+		else hasError = true;
+
+		var newPrice = form['newPrice'];
+		if (!checkError(newPrice)) clearError(newPrice);
+
+		else hasError = true;
 	if (!hasError) {
 			url = "/package/register";
 			data =  $(form).serialize();
@@ -1810,7 +1827,6 @@ $(document).ready(function(){
 		$(this).parents("li").addClass("active");
 	
 		$.getJSON( $(this).attr("href"), function( data ) {
-    		console.log(data);
     		if (typeof data[0] !== "undefined") {
     			var str = packageSearchSkeleton(data[0]);
 
@@ -1901,7 +1917,7 @@ $(".buildings-list1 .active a").click();
             	$html += '<div class="buildingpackages">  No of packages : <span> '+ data.packages.length +'</span></div>';
             }
             
-            $html += '<div class="buildingrooms">  Image : <span> <img height="80" width="120" src  = "' + ' upload/' + data.image +' " </span></div>';
+            $html += '<div class="buildingrooms">   <span> <img height="80" width="120" src  = "' + ' upload/' + data.image +' " </span></div>';
          	$html += '</div>';
            
           	$html += '<div id="googleMap">';
