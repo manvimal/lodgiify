@@ -35,6 +35,10 @@ $headers = array(
     'Subject' => $subject
 );
 
+
+
+    $headers_ = 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
+
 $smtp = Mail::factory('smtp', array(
         'host' => 'ssl://smtp.gmail.com',
         'port' => '465',
@@ -43,7 +47,7 @@ $smtp = Mail::factory('smtp', array(
         'password' => 'JEFFHARDY747474'
     ));
 
-$mail = $smtp->send($to, $headers, $body);
+$mail = $smtp->send($to, $headers, $body, $headers_);
 
 if (PEAR::isError($mail)) {
     echo('<p>' . $mail->getMessage() . '</p>');
