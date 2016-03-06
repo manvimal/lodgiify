@@ -57,7 +57,7 @@
     <table class="alignLeft container ">
         <tr>
             <td width="30%"><label>Room Name:</label></td>
-            <td width="70%"> <input type="text" class="required onlyLetters" name = "roomName" id = "roomName"/><span class="errorMsg"></span> </td>
+            <td width="70%"> <input type="text" class="required" name = "roomName" id = "roomName"/><span class="errorMsg"></span> </td>
         </tr>
         <tr>
             <td><label>Building: </label></td>
@@ -103,12 +103,12 @@
          <tr>
             <td><label>Capacity: </label></td>
          <td>
-                <input type="text" class="required onlyLetters" name = "capacity" id = "capacity"/>
+                <input type="text" class="required numeric" name = "capacity" id = "capacity"/>
                 </select> <span class="errorMsg"></span></td>
         </tr>
          <tr>
             <td width="30%"><label>Price:</label></td>
-            <td width="70%"> <input type="text" class="required" name = "price" id = "price"/><span class="errorMsg"></span> </td>
+            <td width="70%"> <input type="text" class="required numeric" name = "price" id = "price"/><span class="errorMsg"></span> </td>
         </tr>
 
 

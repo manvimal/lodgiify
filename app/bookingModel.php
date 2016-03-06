@@ -53,6 +53,7 @@ class bookingModel extends Model implements AuthenticatableContract,
                     $checkOut =  new \DateTime($booking -> checkOut);
                     $noDays = $checkOut->diff( $checkIn)->format("%a");
                     $perprice = $this->getPromotionalPrice($package, 0);
+                  
                     $price = $noDays *  $perprice;
                 }
                 else if(!is_null($package->building->category->buildingCatName) && ($package->building->category->buildingCatName == 'Bungalow' 
