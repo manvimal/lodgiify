@@ -67,12 +67,15 @@ Route::get('/booking/delete','tenantController@deleteBooking');
 
 
 
+
 /*** PACKAGE ***/
 Route::get('/package/get/{id}', 'packageController@get');
 Route::get('/booking/getDirections', 'tenantController@getDirections');
 Route::get('/insertPackage','LandlordController@insertPackage');
 Route::post('/package/register','packageController@registerPackage');
-Route::get('/package/delete','packageController@delete');
+Route::get('/deletePackage/delete','packageController@delete');
+Route::post('/updatePackage/update','packageController@update');
+
 
 /**Admin **/
 Route::get('/viewUsers', 'adminController@viewUsers');

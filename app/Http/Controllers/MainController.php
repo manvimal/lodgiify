@@ -775,15 +775,20 @@ function sendEmail($contactName, $to, $subject, $body){
 					$error=false;
 
 					$body = "Hello ".$userName.",<br />";
-					$body .="The link to rest your password is :";
+					$body .="The link to reset your password is :";
+
+
 
 					$url = URL::to('/user/postForgetPassword', array($strmd5));;
-					$body .="<a href='".$url."'>".$url."</a>";
-					$body .="Your link will expire in 1 hour.".
+					//$body .="<a href='".$url."'>".$url."</a>";
+					$body .=$url;
+					
+					$body .="   Your link will expire in 1 hour.";
 					$body .= "Lodgiify team";
 
-					
-					$this-> sendEmail($userName, $usertoUpdate->Email, "Password reset link for Lodgiify", $body);
+					$body = urlencode($body);
+
+					$this-> sendEmail($userName, $usertoUpdate->Email, urlencode("Password reset link for Lodgiify"), $body);
 
 				}
 				else{

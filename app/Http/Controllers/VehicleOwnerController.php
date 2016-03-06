@@ -54,13 +54,19 @@ use App\travelModel as travelModel;
 
 		$bookings = travelModel::get();
 
+		$bookingsBck = array();
+
 		foreach ($bookings as $booking ) {
-			if ($booking->booking->tenantID == $user[0]->id){
-				unset($booking);
+
+			if ($booking->vehicle->vehicleOwnerID == $user[0]->id){
+						
+
+				array_push($bookingsBck);
+
 			}
 		}
-
-		return view('pages.vehicleBookings',  array('user' => $user, 'bookings' => $this->getVehicleBookingRemaining($bookings)));
+		
+		return view('pages.vehicleBookings',  array('user' => $user, 'bookings' => $this->getVehicleBookingRemaining($bookingsBck)));
 
 	}
 

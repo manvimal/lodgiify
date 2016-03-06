@@ -135,8 +135,45 @@ use App\packageModel as packageModel;
 		return view('pages.landlordpackages',  array('user' => $user, 'packages' => $packages, 'buildings' => $buildings));
 
 	}
+
+
 	public function delete(Request $request){
 
+		if ($request['id'] != null){
+			$buildings = packageModel::where('id', '=', $request['id'])->delete();
+		}
+		print json_encode(array(1));
+
+
+	}
+
+	public function update(Request $request){
+
+		if ((isset($request['roomid'])) && (!empty($request['roomid'])) ){
+			$roomid = $request['roomid'];
+		}
+
+		if ((isset($request['packagedesc'])) && (!empty($request['packagedesc'])) ){
+				$packagedesc = $request['packagedesc'];
+		}
+		if ((isset($request['roomprice'])) && (!empty($request['roomprice'])) ){
+				$roomprice = $request['roomprice'];
+		}
+		if ((isset($request['roomcapacity'])) && (!empty($request['roomcapacity'])) ){
+				$roomcapacity = $request['roomcapacity'];
+		}
+		
+		// Retrieve user session
+		$user = $request->session()->get('user');
+
+		//Save room for user
+		$room = roomModel::find($roomid);
+		$room-> packagedesc = $packagedesc ;
+		$room-> capacityAdult = $capacityAdult ;
+		
+		$room->save();
+		Session::flash('success', 'Package successfully updated'); 
+		print json_encode(array(1));
 
 	}
 

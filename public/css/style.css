@@ -4150,3 +4150,41 @@ background: black;
 background-color:#424147;
 color:white;
 }
+
+.BuildingUpdate1, .innerUpdate,.BuildingDelete1, .innerDelete{
+	    float: right;
+	  width: 29px;
+    height: 29px;
+}
+
+.BuildingUpdate1,.innerUpdate{
+	background:url(../images/update.png)no-repeat;
+	    background-size: cover;
+}
+
+.BuildingDelete1, .innerDelete{
+	background:url(../images/delete.png)no-repeat;
+	    background-size: cover;
+}
+.BuildingView1,  .innerView{
+	background:url(../images/back.jpg) no-repeat;
+	    background-size: cover;
+	     width: 31px;
+    height: 31px;
+    float:left;
+}
+.packageUpdate,.packageDelete{
+	    float: right;
+	  width: 20px;
+    height: 20px;
+}
+
+.packageUpdate{
+	background:url(../images/update.png)no-repeat;
+	    background-size: cover;
+}
+
+.packageDelete{
+	background:url(../images/delete.png)no-repeat;
+	    background-size: cover;
+}

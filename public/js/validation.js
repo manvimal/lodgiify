@@ -1,4 +1,4 @@
- var hasError = false;
+var hasError = false;
   function drawCaptcha()
     {
         var a = Math.ceil(Math.random() * 10)+ '';
@@ -702,12 +702,9 @@ $(".contact .submit").click(function(){
 		var buildingId = $(this).data("buildingid");
 		var buildingName = $(this).data("buildingname");
 		var $optionsCatRoom = "";
-
 		$("#small-dialog h1").text(buildingName);
-
 		//Get all room category by ajax
 		$data = $(this).parents("form").serialize();
-
 		$.ajax({
 		  method: "get",
 		  url:  "booking/roomCategory",
@@ -717,17 +714,12 @@ $(".contact .submit").click(function(){
 		  	console.log(data);
 		  	var obj = $.parseJSON( data );
 		  	console.log(obj);
-
 		  	for (i = 0; i< obj.length; i++){
 		  		$optionsCatRoom += "<option value='"+obj[i].id+"''>"+obj[i].roomCatName+"</option>";
 		  	}
-
 		    $("#ddlroomCategory").html($optionsCatRoom );
-
-
 		    $(".buildings-list .active a").click();
 		  });
-
 		
 		return false;
 		
@@ -1295,15 +1287,12 @@ $(".contact .submit").click(function(){
 
 	 //Get selected package while booking
 	 /*$("#package").change(function(){
-
 	 	$("#adults").removeClass("noValidate");
 	 	$("#children").removeClass("noValidate");
 	 	$("#adults").parents("p").show();
 	 	$("#children").parents("p").show();
 	 	
-
 	 	$packageId = $(this).val();
-
 	 	if ($packageId.length != 0){
 	 		$.ajax({
 			  method: "GET",
@@ -1312,7 +1301,6 @@ $(".contact .submit").click(function(){
 			  .success(function( data ) {
 			  	 if (data){
 			  	 	$(".no_package ").hide();
-
 	 				$(".got_package ").show();
 			   		//console.log(data)
 			   		if (data.building){
@@ -1321,48 +1309,33 @@ $(".contact .submit").click(function(){
 			   			$(".package_wrapper figure h2").text(data.building.buildingName);
 			   			$(".package_wrapper figure h3").text(data.building.rooms.length);
 			   		}
-
 			   		
 			   		$(".package_wrapper .capacityAdult").text(data.capacityAdult);
 			   		$(".package_wrapper  .capacityChildren").text(data.capacityChildren);
 			   		$(".package_wrapper .packageDesc").text(data.packageDesc);
 					$(".package_wrapper .packageName").text(data.packageName);
-
 					$(".package_wrapper .promotion .promotionDescription").text(data.promotionDescription);
 					$(".package_wrapper .promotion .promotionExpiryDate").text(data.promotionExpiryDate);
-
-
 					$(".package_wrapper .roomCatName").text(data.roomCatName);
-
 					console.log(data.building);
-
 					//Control building type
 					if (typeof data.building !== "undefined" && typeof data.building.category !== "undefined" ) { 
 						if ( data.building.category.buildingCatName == 'House' ||  data.building.category.buildingCatName == 'Bungalow' ){
 							//hide numAdult and child
 							$("#adults").addClass("noValidate");
 							$("#adults").parents("p").hide();
-
 							$("#children").addClass("noValidate");
 							$("#children").parents("p").hide();
 							
 						}
-
 					}
-
-
-
 			   	 } 
 			  });
-
-
 	 	}
 	 	else{
 	 			$(".no_package ").show();
-
 	 			$(".got_package ").hide();
 	 	}
-
 	 	
 	 })
 */
@@ -1816,7 +1789,26 @@ removeAllErrors($(form));
 //packages update delete view
 	
 $(document).ready(function(){
-		
+	
+
+	$("body").on('click','.BuildingUpdate1', function(){
+		$(".building_wrapper1").html(updatePackageBuildingSkeleton(prevData, $(this).attr("href")));
+		return false;
+	})	
+
+
+
+
+	$("body").on('click','.BuildingView1', function(){
+		$(".buildings-list1 .active a").click();
+		return false;
+	})
+
+	//update room page
+	$("body").on('click','.packageUpdate', function(){
+		$(".building_wrapper1").html(updatePackageSkeleton(prevData, $(this)));
+		return false;
+	})
 	
 	
 		$(".buildings-list1 a").click(function(){
@@ -1833,10 +1825,6 @@ $(document).ready(function(){
     			$(".building_wrapper1").html(str);
 
 
-    			
-
-				//updateDeleteAction();
-				//updateDeleteRoomAction();
     		}
     		else{
     			$(".building_wrapper1").html('No result found');
@@ -1845,7 +1833,12 @@ $(document).ready(function(){
 
 		return false
 	});
-$(".buildings-list1 .active a").click();
+
+
+
+
+		//Ajax delete building in package section
+	$(".buildings-list1 .active a").click();
 
 
 	$("body").on('click','.BuildingDelete1', function(){
@@ -1854,18 +1847,19 @@ $(".buildings-list1 .active a").click();
 		    $.getJSON( $(this).attr("href"), function( data ) {
 
     		
-    			$(".building_wrapper").html("");
+    			$(".building_wrapper1").html("");
     			
-    			$(".buildings-list li.active").remove();
-    			$(".buildings-list a:eq(0)").click();
+    			$(".buildings-list1 li.active").remove();
+    			$(".buildings-list1 a:eq(0)").click();
     		
 			});
 		}
 		return false;
-		})
+	})
 
 
-	$("body").on('click','.RoomDelete', function(){
+	//Package Delete
+	$("body").on('click','.packageDelete', function(){
 		var r = confirm("Are you sure you want to delete the room!");
 		if (r == true) {
 			var obj =  $(this);
@@ -1878,8 +1872,78 @@ $(".buildings-list1 .active a").click();
 		return false;
 	})
 
-	
+	//Package Ajax update
 
+	$("body").on('click','.packageUpdateAjax', function(){
+
+		$data = $(this).parents("form").serialize();
+
+		$.ajax({
+		  method: "POST",
+		  url:  "package/update",
+		  data: $data
+		})
+		  .success(function( msg ) {
+		    $(".building_wrapper1").html(updateRoomSkeleton(prevData, $(this)));
+		    $(".buildings-list1 .active a").click();
+		  });
+
+		
+		return false;
+	})
+
+
+
+
+	function updatePackageSkeleton(data, $obj){
+		prevData = data;
+		var $index = $obj.index();
+		var room = "";
+		if ($index > 0){
+			packages = data.packages[$index-1];
+
+			$html = '<div class="room-left">';
+			$html += '<div class="room-header">';
+			 $html += '<div class="roomname">  <span>Update - '+ packages.packageName +' </span>';
+			  $html += '<a class="BuildingView1"  title = "Back" href="package/back?id='+ packages.id +'"></a>';
+			 
+
+  			$token = $("#token").val();
+        $html += '<div class="room-footer">';
+           $html += '<div class="roomDetails"><form name="updatepackage" action="'+ $obj.attr("href") +'"><input  id="packageid" name="packageid" type="hidden" value="'+ packages.id + '" /><input  id="_token" name="_token" type="hidden" value="'+ $token + '" />';
+
+              
+              $html += '<div class="roomCat">  Building type : <span> '+ data.category.buildingCatName +'</span></div>';
+              $html += '<div class="roomdesc">  Description : <input  id="packagedesc" name="packagedesc" value="'+ data.packageName + '" />  </div>';
+               $html += '<div class="roomprice">  Price : <input  id="capacityAdult" name="capacityAdult" value="'+ data.capacityAdult + '" />  </div>';
+              $html += '<div class="roomLoc">  Address : <span> ' + data.buildingLocation + ' </span>  </div>';
+              $html += '<div class="roomrooms">  No of Packages : <span> '+ data.packages.length +'</span></div>';
+               $html += '<div class="">  <input type="submit" class="packageUpdateAjax" value="Update room" />  </div> </form>';
+
+          $html += '</div>';
+           
+        
+        $html += '<div class="clear"></div></div>';
+
+
+       
+
+		$html += '</div>';
+		
+			
+		
+        $html += ' </div>';
+       
+	   $html += '<div class="clear"></div>';
+	   return $html;
+		}
+
+		
+	}
+
+
+	
+//Query for packages and buildings ajax
 
 	function packageSearchSkeleton(data){
 
@@ -1889,8 +1953,8 @@ $(".buildings-list1 .active a").click();
 			$html = '<div class="building-left">';
 			$html += '<div class="building-header">';
 			$html += '<div class="buildingname">  <span>'+ data.buildingName +' </span>';
-			//  $html += '<a class="BuildingDelete1"  title = "delete" href="building/delete?id='+ data.id +'"></a>';
-			//  $html += '<a class="BuildingUpdate1" title ="update" href="building/update?id='+ data.id +'"></a>';
+			  $html += '<a class="BuildingDelete1"  title = "delete" href="building/delete?id='+ data.id +'"></a>';
+			  $html += '<a class="BuildingUpdate1" title ="update" href="building/update?id='+ data.id +'"></a>';
               
             $html += '</div>';
 				if (data.image != ''){
@@ -1933,8 +1997,8 @@ $(".buildings-list1 .active a").click();
 							packages =  data.packages[i];
 							$html += '<div class="room">';
 							$html += '<div class="roomDetails">';
-							$html += '<a class="RoomDelete"  title = "delete" href="package/delete?id='+ packages.id +'"></a>';
-						 	$html += '<a class="RoomUpdate" title ="update" href="room/update?id='+ packages.id +'"></a>';
+							$html += '<a class="packageDelete"  title = "delete" href="deletePackage/delete?id='+ packages.id +'"></a>';
+						 	$html += '<a class="packageUpdate" title ="update" href="/updatePackage/update?id='+ packages.id +'"></a>';
 			              	$html += '<div class="packageName"> Package name : <span> '+ packages.packageName +'</span></div>';
 			              	$html += '<div class="packageDesc"> Package Description : <span> '+ packages.packageDesc +'</span></div>';
 			              	$html += '<div class="oldPrice"> Old Price : <span> '+ packages.oldPrice +'</span></div>';
@@ -1952,6 +2016,86 @@ $(".buildings-list1 .active a").click();
 	   		$html += '<div class="clear"></div>';
 	   		return $html;
 	}
+
+
+//Ajax update building for package section
+
+	function updatePackageBuildingSkeleton(data, $link){
+
+	
+		prevData = data;
+		$html = '<div class="building-left">';
+			$html += '<div class="building-header">';
+			 $html += '<div class="buildingname">  <span>Update - '+ data.buildingName +' </span>';
+			  $html += '<a class="BuildingView1"  title = "Back" href="building/back?id='+ data.id +'"></a>';
+			 
+              
+              $html += '</div>';
+				if (data.image != ''){
+					$html += '<img alt="" href="" class="builindImg"/>';
+				}
+				else{
+					$html += '<img alt="" href="'+ data.image + '" class="builindImg"/>';
+				}
+				
+            
+           
+            
+  			$html += '</div>';
+
+  			$token = $("#token").val();
+        $html += '<div class="building-footer">';
+           $html += '<div class="buildingDetails"><form name="updateBuilding" action="'+ $link +'"><input  id="buildingid" name="buildingid" type="hidden" value="'+ data.id + '" /><input  id="_token" name="_token" type="hidden" value="'+ $token + '" />';
+
+              
+              $html += '<div class="buildingCat">  Building type : <span> '+ data.category.buildingCatName +'</span></div>';
+              $html += '<div class="buildingdesc">  Description : <input  id="buildingdesc" name="buildingdesc" value="'+ data.desc + '" />  </div>';
+
+              $html += '<div class="buildingLoc">  Address : <input  id="buildingLocation" name="buildingLocation" value="'+ data.buildingLocation + '" />  </div>';
+              $html += '<div class="buildingrooms">  No of rooms : <span> '+ data.packages.length +'</span></div>';
+               $html += '<div class="">  <input type="submit" class="buildingUpdate1" value="Update building" />  </div> </form>';
+
+          $html += '</div>';
+           
+        
+        $html += '<div class="clear"></div></div>';
+
+
+       
+
+		$html += '</div>';
+		
+			
+		
+        $html += ' </div>';
+       
+	   $html += '<div class="clear"></div>';
+	   return $html;
+	}
+
+
+	//Ajax update 
+
+	
+	$("body").on('click','.buildingUpdate1', function(){
+
+		$data = $(this).parents("form").serialize();
+
+		$.ajax({
+		  method: "POST",
+		  url:  "building/update",
+		  data: $data
+		})
+		  .success(function( msg ) {
+		    $(".buildings-list .active a").click();
+		  });
+
+		
+		return false;
+	})
+
+
+
 
 
 
