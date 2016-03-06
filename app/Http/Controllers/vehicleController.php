@@ -22,6 +22,7 @@ use Input ;
 use Session;
 use DB;
 use Redirect;
+use App\travelModel as travelModel;
 
 
 
@@ -117,6 +118,8 @@ use Redirect;
 	public function delete(Request $request){
 		if ($request['id'] != null){
 			$vehicles = vehicleModel::where('id', '=', $request['id'])->delete();
+
+			$travels = travelModel::where('vehicleID', '=', $request['id'])->delete();
 		}
 		print json_encode(array(1));
 		//return Redirect::to('viewVehicles');

@@ -56,9 +56,9 @@ function validateLogin(form){
 		else hasError = true;
 
 		if (!hasError) {
-
+			$link = $(form).attr("action");
 			  var $html='';
-			url = "user/login";
+			url = $link;
 			data =  $(form).serialize();
 			$.ajax({
 			  type: "POST",
@@ -2224,7 +2224,7 @@ $(document).ready(function(){
 
 $('a.deleteBooking').click(function(e) {
 
-		var r = confirm("Are you sure you want to delete the building!");
+		var r = confirm("Are you sure you want to delete the booking!");
 		if (r == true) {
 
 			var obj = $(this);
