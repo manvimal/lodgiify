@@ -26,12 +26,12 @@
     <table class="alignLeft container ">
         <tr>
             <td><label>First Name:</label></td>
-            <td> <input type="text" class="required onlyLetters clearAll" name = "firstName" id = "firstName"/><span class="errorMsg"></span> </td>
+            <td> <input type="text" class="required  clearAll" name = "firstName" id = "firstName"/><span class="errorMsg"></span> </td>
         </tr>
 
         <tr>
             <td><label>Last Name: </label></td>
-            <td><input type="text" class="required onlyLetters clearAll" name = "lastName" id ="lastName"?> <span class="errorMsg"></span></td>
+            <td><input type="text" class="required  clearAll" name = "lastName" id ="lastName"?> <span class="errorMsg"></span></td>
         </tr>
 
         <tr>

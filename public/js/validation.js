@@ -1953,8 +1953,8 @@ $(document).ready(function(){
 			$html = '<div class="building-left">';
 			$html += '<div class="building-header">';
 			$html += '<div class="buildingname">  <span>'+ data.buildingName +' </span>';
-			  $html += '<a class="BuildingDelete1"  title = "delete" href="building/delete?id='+ data.id +'"></a>';
-			  $html += '<a class="BuildingUpdate1" title ="update" href="building/update?id='+ data.id +'"></a>';
+			  //$html += '<a class="BuildingDelete1"  title = "delete" href="building/delete?id='+ data.id +'"></a>';
+			  //$html += '<a class="BuildingUpdate1" title ="update" href="building/update?id='+ data.id +'"></a>';
               
             $html += '</div>';
 				if (data.image != ''){

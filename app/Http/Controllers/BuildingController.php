@@ -27,6 +27,8 @@ use App\packageModel as packageModel;
 use App\bookingModel as bookingModel;
 use App\roomBookingModel as roomBookingModel;
 use App\travelModel as travelModel;
+use App\bookingPackageModel as bookingPackageModel;
+
 
 
  class BuildingController extends BaseController
@@ -167,8 +169,9 @@ use App\travelModel as travelModel;
 			//delete travel
 			$bookings = bookingModel::where("buildingID","=",$request['id'])->get();
 			foreach($bookings as $booking){
-				
+				bookingPackageModel::where("booking_id","=",$booking->id)->delete();
 				travelModel::where("bookingID","=",$booking->id)->delete();
+				
 				$booking->delete();
 			}
 			
