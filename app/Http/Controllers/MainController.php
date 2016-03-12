@@ -55,7 +55,10 @@ use URL;
 
 	public function registrationPage(Request $request){
 		$user = $request->session()->get('user');
+
 		return view('pages.registration',  array('user' => $user));
+
+
 	}
 
 	public function aboutUs(Request $request){
@@ -191,10 +194,20 @@ use URL;
 													'Gender' => $Gender,
 													'type' => "Landlord"
 													 ]);
+/**
+					$messge['status'] = 1;
+				 	$messge['msg'] = "Please wait...";
+
+					$subject = "Hello" . $userName;
+					$body ="Please confirm your mail";
+					$to=$Email;
+
+					$this->emailConfirmation($userName, $to, $subject, $body);
 
 
 					$messge['status'] = 1;
-				 	$messge['msg'] = "LandLord registered";
+				 	$messge['msg'] = "LandLord Successfully registered, Please confirm your mail.";
+				 	**/
 		
 			}
 
@@ -254,6 +267,7 @@ use URL;
 		$request->session()->pull('user');
 		return redirect()->action('MainController@index');
 	}
+
 
 
 	public function loginUser(Request $request){
@@ -598,6 +612,7 @@ use URL;
 					 	$messge['msg'] = $user[0]->UserName . " Landlord Successfully updated";
 
 
+
 	}
 		else {
 			$vehicleowner = vehicleOwnerModel::find($user[0]->id);
@@ -626,6 +641,28 @@ else{
 
 
 echo json_encode($messge);
+
+
+}
+
+
+
+function emailConfirmation($contactName, $to, $subject, $body){
+
+ // create curl resource 
+        $ch = curl_init(); 
+
+	    $link = "http://localhost:8082/lodgiify_/peerExternalMailPlugin/mainTest.php?contactname=".$contactName.'&email='.$to.'&contactsubject='.$subject.'&desc='.$body;
+        // set url contactName
+        curl_setopt($ch, CURLOPT_URL, $link); 
+
+        //return the transfer as a string 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+        // $output contains the output string 
+        $output = curl_exec($ch); 
+        curl_close($ch);     
+
 
 
 }
@@ -774,7 +811,7 @@ function sendEmail($contactName, $to, $subject, $body){
 					$messge['msg'] = "A link has been sent to your email.";
 					$error=false;
 
-					$body = "Hello ".$userName.",<br />";
+					$body = "Hello ". $userName. "," ."\n";
 					$body .="The link to reset your password is :";
 
 
