@@ -20,6 +20,7 @@ Route::get('/userAccount', 'MainController@userAccount');
 Route::get('/viewPackage','packageController@viewPackage');
 Route::get('/viewVehicleBookings','VehicleOwnerController@viewVehicleBookinga');
 Route::get('/user/forgetPassword','MainController@forgetPassword');
+Route::get('/user/sessionTimeOutRedirect','MainController@sessionTimeOutRedirect');
 
 
 /**** USER ***/
@@ -64,7 +65,7 @@ Route::post('/booking/register', 'bookingController@register');
 Route::get('/package/{id}', 'bookingController@packages');
 Route::get('/booking/viewBooking', 'tenantController@viewBookingPDF');
 Route::get('/booking/delete','tenantController@deleteBooking');
-
+Route::post('/checkRoomAvail','bookingController@checkAvailability');
 
 
 

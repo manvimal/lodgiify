@@ -17,8 +17,8 @@
   <div class="main tenantDealPackage">  
       <form method="" name="registerBooking">
 
-    <input type="hidden" name="_token" value="{{ csrf_token() }}" />    
-    <input type="hidden" name="buildingId" value="<?php echo (isset($building->id) ? $building->id : ''); ?>" /> 
+    <input type="hidden" name="_token" id="token"  value="{{ csrf_token() }}" />    
+    <input type="hidden" name="buildingId" id="buildingid" value="<?php echo (isset($building->id) ? $building->id : ''); ?>" /> 
    <div class="project-wrapper">
     <div class="project-sidebar">
 
@@ -73,15 +73,15 @@
         <select name="numvehicles">
           <option value="0">0</option>
           <option value="1">1</option>
-            <option value="2">2</option>
-              <option value="3">3</option>
-                <option value="4">4</option>
-                  <option value="5">5</option>
-                    <option value="6">6</option>
-                      <option value="7">7</option>
-                        <option value="8">8</option>
-                          <option value="9">9</option>
-                            <option value="10">10</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
         </select> <span class="errorMsg"></span></p>
 
 <br />
@@ -117,13 +117,13 @@
                           <div class="pack_label <?php echo  $index ; ?>">
                             <div id="package_chk">
                                 <h2 class="packageName "><?php echo $package->packageName ; ?></h2>
-                                <input type="checkbox" name="packages[<?php echo $i; ?>][package]" value="<?php echo $package->id ; ?>" />
+                                <input type="checkbox" class="packageid" name="packages[<?php echo $i; ?>][package]" value="<?php echo $package->id ; ?>" />
                              </div>
 
                               <div id="package_number">
                                
                                 
-                                 <p> Adults: <select name="packages[<?php echo $i; ?>][adult]" class="required numeric">
+                                 <p> Adults: <select name="packages[<?php echo $i; ?>][adult]" class="required numeric adults">
                                     <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -136,7 +136,7 @@
                                     <option value="9">9</option>
                                     <option value="10">10</option>
                                  </select> <span class="errorMsg"></span></P> 
-                               <p>Children: <select name="packages[<?php echo $i; ?>][child]" class="numeric" ><option value="0">0</option>
+                               <p>Children: <select name="packages[<?php echo $i; ?>][child]" class="numeric child" ><option value="0">0</option>
                                    <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -148,6 +148,31 @@
                                     <option value="8">8</option>
                                     <option value="9">9</option>
                                     <option value="10">10</option></select>  <span class="errorMsg"></span></P> 
+
+                                    <p><?php if($buildingCat[0]->buildingCatName == "Hotel"){
+
+
+                                        ?>
+
+                                  <p>  Rooms: <select name="packages[<?php echo $i; ?>][room]" id="noOfRooms" class="required numeric rooms">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                 </select> <span class="errorMsg"></span>
+
+
+                                     </p>
+                                     <?php
+                                     }
+                                     ?>
                              </div>
 
                              <div id="package_desc">
@@ -155,14 +180,45 @@
                                 Description: <span class="packageDesc"><?php echo $package->packageDesc ; ?></span><br />
                                 Children : <span class="capacityChildren"><?php echo $package->capacityChildren ; ?></span><br />
                                 Adults : <span class="capacityAdult"><?php echo $package->capacityAdult ; ?></span><br />
-                                category : <span class="roomCatName"><?php echo $package->roomCatName ; ?></span><br />
+                            <?php
+                            if(($buildingCat[0]->buildingCatName == "Hotel") || ($buildingCat[0]->buildingCatName == "Appartment"))
+                           
+                              {
+
+                                ?>
+
+                                category : <span class="roomCatName"><?php echo $package->roomCategory->roomCatName ; ?></span><br />
+                            
+                            <?php
+                            
+                            }
+
+                            ?>
                              </div>
 
                               <div class="promotion">
                                 Promotion Description: <span class="promotionDescription"><?php echo $package->promotionDescription ; ?></span><br />
                                 promotionExpiryDate : <span class="promotionExpiryDate"><?php echo $package->promotionExpiryDate ; ?></span><br />
-                                
+                                <?php if($buildingCat[0]->buildingCatName == "Hotel"){
+
+
+                                        ?>
+
+
+                              <a href="{{ URL::asset('/checkRoomAvail' )}}"  class="btnLogin checkRoomAvailability" id="checkRoomAvailability">Check Availability</a>
+                            
+                              <?php
+                            }
+                              ?>
+
+                              <p class="successMsgRoom"></p>
+                             <p class="errorMsgRoom"></p>
                              </div>
+
+
+
+
+                         
                      </div>
                      <?php 
                       $i++;

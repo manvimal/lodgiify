@@ -4188,3 +4188,12 @@ color:white;
 	background:url(../images/delete.png)no-repeat;
 	    background-size: cover;
 }
+
+.successMsgRoom{
+	font-size:13px;
+	color:green;
+}
+.errorMsgRoom{
+	font-size:13px;
+	color:red;
+}

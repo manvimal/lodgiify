@@ -54,7 +54,17 @@
                               }
 
                           }
+
+
                       ?>
+
+                      else{
+
+                      <tr class="booking">
+                              <td colspan="5" style="text-align: center;"><p>No Booking done yet</p> </td>
+                              
+                            </tr> 
+                    }
           </table>
       </div>
     </section>

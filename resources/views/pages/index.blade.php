@@ -204,7 +204,7 @@
 				<li>
 					<?php
 
-		echo $building->render();
+		//echo $building->render();
 
 		?>
 	</li>
@@ -311,8 +311,11 @@
 			<li><img src="images/client4.jpg" /></li>
 			<li><img src="images/client5.jpg" /></li>
 		</ul>
+
+
 	<script type="text/javascript">
-$(window).load(function() {
+
+	$(window).load(function() {
 	$("#flexiselDemo1").flexisel();
 	$("#flexiselDemo2").flexisel({
 		enableResponsiveBreakpoints: true,
