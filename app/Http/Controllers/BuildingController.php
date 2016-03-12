@@ -21,6 +21,13 @@ use Session;
 use DB;
 use Redirect;
 use App\buildingFacilityModel as buildingFacilityModel;
+use App\roomModel as roomModel;
+use App\roomFacilityModel as roomFacilityModel;
+use App\packageModel as packageModel;
+use App\bookingModel as bookingModel;
+use App\roomBookingModel as roomBookingModel;
+use App\travelModel as travelModel;
+use App\bookingPackageModel as bookingPackageModel;
 
 
 
@@ -132,6 +139,44 @@ use App\buildingFacilityModel as buildingFacilityModel;
 
 
 			$buildings = buildingModel::where('id', '=', $request['id'])->delete();
+
+
+			// delete facilities
+			$buildingFacilities = buildingFacilityModel::where("buildingid","=",$request['id'])->delete();
+			
+
+
+			
+
+			//delete room
+			//delete room facilities
+			//delete room booking
+			$rooms = roomModel::where("buildingID","=",$request['id'])->get();
+			foreach($rooms as $room){
+				roomFacilityModel::where("roomid","=",$room->id)->delete();
+
+				roomBookingModel::where("roomid","=",$room->id)->delete();
+				$room->delete();
+			}
+
+			
+
+
+			//delete packages
+			$packages = packageModel::where("buildingid","=",$request['id'])->delete();
+			
+			//delete booking
+			//delete travel
+			$bookings = bookingModel::where("buildingID","=",$request['id'])->get();
+			foreach($bookings as $booking){
+				bookingPackageModel::where("booking_id","=",$booking->id)->delete();
+				travelModel::where("bookingID","=",$booking->id)->delete();
+				
+				$booking->delete();
+			}
+			
+
+			
 			
 		}
 		print json_encode(array());

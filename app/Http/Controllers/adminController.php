@@ -22,6 +22,14 @@ use App\packageModel as packageModel;
 use App\vehicleOwnerModel as vehicleOwnerModel;
 use App\vehicleCategory as vehicleCategory;
 use App\facilityModel as facilityModel;
+use App\bookingModel as bookingModel;
+use App\travelModel as travelModel;
+use App\bookingPackageModel as bookingPackageModel;
+use App\roomBookingModel as roomBookingModel;
+use App\vehicleModel as vehicleModel;
+use App\buildingFacilityModel as buildingFacilityModel;
+use App\roomFacilityModel as roomFacilityModel;
+
 
 
 
@@ -48,6 +56,24 @@ use App\facilityModel as facilityModel;
 
 			if ($request['id'] != null){
 			$deleteTenant = User::where('id', '=', $request['id'])->delete();
+
+			//Get all bookings
+
+			//delete travel
+			$bookings = bookingModel::where("tenantID","=",$request['id'])->get();
+			foreach($bookings as $booking){
+				bookingPackageModel::where("booking_id","=",$booking->id)->delete();
+				travelModel::where("bookingID","=",$booking->id)->delete();
+				roomBookingModel::where("bookingId","=",$booking->id)->delete();
+				
+				$booking->delete();
+			}
+
+
+			//delete bookings
+			// delete bookingpackage
+			//delete roombooking
+			//delete travel
 			return redirect()->action('adminController@viewUsers');
 		}
 			print json_encode(array(1));
@@ -68,9 +94,45 @@ use App\facilityModel as facilityModel;
 			
 
 			if ($_REQUEST['id'] != null){
+				
+					
+				$buildings = buildingModel::where('landlordID', '=', $request['id'])->get();
+
+				foreach($buildings as $building){
+					// delete facilities
+					$buildingFacilities = buildingFacilityModel::where("buildingid","=",$building->id)->delete();
+					//delete room
+					//delete room facilities
+					//delete room booking
+					$rooms = roomModel::where("buildingID","=",$building->id)->get();
+					foreach($rooms as $room){
+						roomFacilityModel::where("roomid","=",$room->id)->delete();
+
+						roomBookingModel::where("roomid","=",$room->id)->delete();
+						$room->delete();
+					}
+
+					//delete packages
+					$packages = packageModel::where("buildingid","=",$building->id)->delete();
+
+
+					//delete booking
+					//delete travel
+					$bookings = bookingModel::where("buildingID","=",$building->id)->get();
+					foreach($bookings as $booking){
+						bookingPackageModel::where("booking_id","=",$booking->id)->delete();
+						travelModel::where("bookingID","=",$booking->id)->delete();
+						
+						$booking->delete();
+					}
+
+					$building->delete();
+				}
+		
+
 			$deletelandlord = userLandlord::where('id', '=', $_REQUEST['id'])->delete();
 
-			var_dump($_REQUEST['id']);
+
 			return redirect()->action('adminController@viewUsers');
 		}
 			print json_encode(array(1));
@@ -95,6 +157,13 @@ use App\facilityModel as facilityModel;
 
 			if ($request['id'] != null){
 			$deletevehicleowner = vehicleOwnerModel::where('id', '=', $request['id'])->delete();
+			
+			$vehicles = vehicleModel::where('vehicleOwnerID', '=', $request['id'])->get();
+			foreach($vehicles as $vehicle){
+				$travels = travelModel::where('vehicleID', '=', $vehicle->id)->delete();
+				$vehicle->delete();
+			}
+			
 			return redirect()->action('adminController@viewUsers');
 		}
 			print json_encode(array(1));

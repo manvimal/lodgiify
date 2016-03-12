@@ -19,6 +19,7 @@ use App\RoomCategory as roomCategory;
 use App\buildingModel as buildingModel;
 use App\roomModel as roomModel;
 use App\packageModel as packageModel;
+use App\bookingPackageModel as bookingPackageModel;
 
 
 
@@ -141,10 +142,9 @@ use App\packageModel as packageModel;
 
 		if ($request['id'] != null){
 			$buildings = packageModel::where('id', '=', $request['id'])->delete();
+			bookingPackageModel::where('package_id', '=', $request['id'])->delete();
 		}
 		print json_encode(array(1));
-
-
 	}
 
 	public function update(Request $request){

@@ -27,7 +27,7 @@
 
         <tr>
             <td width="30%"><label>Package Name:</label></td>
-            <td width="70%"> <input type="text" class="required onlyLetters" name = "packageName" id = "packageName"/><span class="errorMsg"></span> </td>
+            <td width="70%"> <input type="text" class="required" name = "packageName" id = "packageName"/><span class="errorMsg"></span> </td>
         </tr>
 
         <tr>
@@ -52,17 +52,17 @@
 
          <tr>
             <td><label>Adults: </label></td>
-            <td><input type="text" class="required onlyLetters" name = "capacity" id = "capacity"/></select> <span class="errorMsg"></span></td>
+            <td><input type="text" class="required numeric" name = "capacity" id = "capacity"/></select> <span class="errorMsg"></span></td>
          </tr>
 
           <tr>
             <td><label>Children: </label></td>
-            <td><input type="text" class="required onlyLetters" name = "childrenCapacity"/></select> <span class="errorMsg"></span></td>
+            <td><input type="text" class="required numeric" name = "childrenCapacity" value="0"/></select> <span class="errorMsg"></span></td>
          </tr>
 
          <tr>
             <td width="30%"><label>New Price:</label></td>
-            <td width="70%"> <input type="text" class="required" name = "newPrice" id = "newPrice"/><span class="errorMsg"></span> </td>
+            <td width="70%"> <input type="text" class="required numeric"  name = "newPrice" id = "newPrice"/><span class="errorMsg"></span> </td>
          </tr>
 
          <tr>

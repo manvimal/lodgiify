@@ -18,6 +18,7 @@ use DB;
 use Redirect;
 use App\roomFacilityModel as roomFacilityModel;
 use App\facilityModel as facilityModel;
+use App\roomBookingModel as roomBookingModel;
 
 
  class RoomController extends BaseController
@@ -127,8 +128,17 @@ use App\facilityModel as facilityModel;
 
 	public function delete(Request $request){
 		if ($request['id'] != null){
-			$buildings = roomModel::where('id', '=', $request['id'])->delete();
+			$rooms = roomModel::where('id', '=', $request['id'])->delete();
+
+			roomFacilityModel::where("roomid","=",$request['id'])->delete();
+
+			roomBookingModel::where("roomid","=",$request['id'])->delete();
+
 		}
+
+
+		
+			
 		print json_encode(array(1));
 	}	
 
@@ -159,11 +169,14 @@ use App\facilityModel as facilityModel;
 		//Save room for user
 		$room = roomModel::find($roomid);
 		$room-> desc = $roomdesc ;
-		$room-> capacity = $roomprice ;
+		$room-> price = $roomprice ;
 		$room-> capacity = $roomcapacity ;
 
 		$room->save();
 		Session::flash('success', 'Room successfully updated'); 
+
+		
+
 		print json_encode(array(1));
 	}
 

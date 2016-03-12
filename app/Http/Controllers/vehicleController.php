@@ -118,7 +118,7 @@ use App\travelModel as travelModel;
 	public function delete(Request $request){
 		if ($request['id'] != null){
 			$vehicles = vehicleModel::where('id', '=', $request['id'])->delete();
-
+			
 			$travels = travelModel::where('vehicleID', '=', $request['id'])->delete();
 		}
 		print json_encode(array(1));

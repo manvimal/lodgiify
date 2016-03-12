@@ -25,6 +25,8 @@ use App\buildingFacilityModel as buildingFacilityModel;
 use App\facilityModel as facilityModel;
  use App\bookingPackageModel as bookingPackageModel;
  use App\travelModel as  travelModel;
+ use App\roomBookingModel as  roomBookingModel;
+ 
 
 
 
@@ -224,6 +226,8 @@ use App\facilityModel as facilityModel;
 			$deletePackageModel = bookingPackageModel::where("booking_id","=", $request['id'])->delete();
 
 			$travelModel= travelModel::where("bookingID",'=', $request['id'])->delete();
+
+			roomBookingModel::where("bookingId","=",$request['id'])->delete();
 
 			return redirect()->action('tenantController@myBookings');
 		}
