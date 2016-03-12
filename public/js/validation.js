@@ -56,9 +56,9 @@ function validateLogin(form){
 		else hasError = true;
 
 		if (!hasError) {
-			$link = $(form).attr("action");
+
 			  var $html='';
-			url = $link;
+			url = "user/login";
 			data =  $(form).serialize();
 			$.ajax({
 			  type: "POST",
@@ -1338,10 +1338,105 @@ $(".contact .submit").click(function(){
 */
 
 
+$(".checkRoomAvailability").click(function(){
+
+		$obj = $(this);
+
+
+ 		//var numChild = $(".deals-list #children").val();
+
+ 		var buildingid = $("#buildingid").val();
+
+ 		var packageid = $(this).parents('.pack_label').find('input[type="checkbox"]').val();	
+
+ 		var start = $(".deals-list input[name=date10]").val();
+
+ 		var end = $(".deals-list input[name=date11]").val();
+
+ 		var token = $("#token").val();
+
+ 		varCheckBox = $('.checkbox').val();
+ 		
+ 		//var $data =  { 'numChild': numChild, 'numAdult': numAdult ,'package': package, 'start': start, 'end': end , "_token": token};
+
+ 		//var $data =  $(this).parents("form").serialize();
+
+ 		var baseform = document.forms['registerBooking'];
+ 		
+ 		//var adultsObj = baseform['adults'];
+ 		//var childrenObj = baseform['children'];
+ 		var date10Obj = baseform['date10'];
+ 		var date11Obj = baseform['date11'];
+
+ 		var adults = $(this).parents('.pack_label').find('.adults').val();
+
+ 		var children = $(this).parents('.pack_label').find('.child').val();
+
+ 		var rooms = $(this).parents('.pack_label').find('.rooms').val();
+
+ 		removeAllErrors($(baseform));
+
+ 		
+
+ 		
+// alert(1)
+ 		var hasError = false;
+
+ 		$url = $(this).attr("href");
+
+ 		var token = $("#token").val();
+
+ 		var $data =  {"checkin":start , "checkout":end, "buildingid":buildingid , "packageid":packageid, 'adults':adults , 'children': children, 'rooms':rooms,'_token': token};
+
+
+ 		if (!checkError(date10Obj))  clearError(date10Obj);
+ 		else hasError = true;
+
+
+
+ 		if (!checkError(date11Obj))  clearError(date11Obj);
+ 		else hasError = true;
+
+ 	
+ 		if (!hasError ){
+ 		
+
+ 			$.ajax({
+			  method: "POST",
+			  url:  $url  ,
+			  data: $data,
+			})
+			  .success(function( data ) {
+			  	data = $.parseJSON( data );
+			  	 if (data.status == 1){
+			  	 	//Successfully booked
+			  	 	 $obj .parents('.pack_label').find('.errorMsgRoom').text('');
+			  	 	 $obj .parents('.pack_label').find('.successMsgRoom').text(data.msg);
+			  	 	 
+			  	 	//$(".errorMsg1sgRoom").text("");
+			   		//$(".successMsgRoom").text(data.msg);
+			   	 } 
+			   	 else{
+
+			   	 	$obj .parents('.pack_label').find('.errorMsgRoom').text(data.msg);
+			  	 	$obj .parents('.pack_label').find('.successMsgRoom').text('');
+			   	 //	$(".successMsgRoom").text("");
+			   	 	//$(".errorMsgRoom").text(data.msg);
+			   	 }
+			   	 
+			  });
+	 		}
+ 		
+		  return false;
+
+	 })
+
 
  	 
-
-
+	//on change room trigger chek availability
+	$('#noOfRooms').change(function(){
+		$(this).parents('.pack_label').find('.checkRoomAvailability').click();
+	})
 	
  	// Register booking
 	$(".bookPckNow").click(function(){
@@ -1349,8 +1444,13 @@ $(".contact .submit").click(function(){
 
 	 	//validate booking
 	 	var numChild = $(".deals-list #children").val();
+
+
+
  		var numAdult = $(".deals-list #adults").val();
  		var package = $(".deals-list #package").val();
+
+
  		var start = $(".deals-list input[name=date10]").val();
  		var end = $(".deals-list input[name=date11]").val();
 
@@ -1361,6 +1461,7 @@ $(".contact .submit").click(function(){
  		var $data =  $(this).parents("form").serialize();
 
  		var baseform = document.forms['registerBooking'];
+
  		
  		//var adultsObj = baseform['adults'];
  		//var childrenObj = baseform['children'];
@@ -1772,8 +1873,13 @@ removeAllErrors($(form));
 //packages update delete view
 	
 $(document).ready(function(){
-	
 
+/**
+	setInterval(function(){
+     $.get("/user/sessionTimeOutRedirect");
+		}, 6000); // send request each 60 seconds
+	
+**/
 	$("body").on('click','.BuildingUpdate1', function(){
 		$(".building_wrapper1").html(updatePackageBuildingSkeleton(prevData, $(this).attr("href")));
 		return false;
@@ -2224,7 +2330,7 @@ $(document).ready(function(){
 
 $('a.deleteBooking').click(function(e) {
 
-		var r = confirm("Are you sure you want to delete the booking!");
+		var r = confirm("Are you sure you want to delete the building!");
 		if (r == true) {
 
 			var obj = $(this);

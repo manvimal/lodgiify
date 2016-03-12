@@ -52,8 +52,9 @@ class bookingModel extends Model implements AuthenticatableContract,
                     $checkIn = new \DateTime($booking -> checkIn);
                     $checkOut =  new \DateTime($booking -> checkOut);
                     $noDays = $checkOut->diff( $checkIn)->format("%a");
-                    $perprice = $this->getPromotionalPrice($package, 0);
-                    $price = $noDays *  $perprice;
+                    $price = $this->getPromotionalPrice($package, 0);
+                    $price['days'] =  $noDays ;
+                    
                 }
                 else if(!is_null($package->building->category->buildingCatName) && ($package->building->category->buildingCatName == 'Bungalow' 
                     || $package->building->category->buildingCatName == 'Villa'  || $package->building->category->buildingCatName == 'Penthouse' 
@@ -78,7 +79,7 @@ class bookingModel extends Model implements AuthenticatableContract,
                 if ($type == 0){
                     return array(
                          "adult" => $package-> adultPrice,
-                        "child" => $package-> childPrice,
+                        "child" => $package-> ChildPrice,
                     );
 
                 }
@@ -91,7 +92,7 @@ class bookingModel extends Model implements AuthenticatableContract,
                 if ($type == 0){
                     return array(
                         "adult" => $package-> adultPrice,
-                        "child" => $package-> childPrice,
+                        "child" => $package-> ChildPrice,
                     );
 
                 }

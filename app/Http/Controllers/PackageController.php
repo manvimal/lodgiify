@@ -98,7 +98,7 @@ use App\packageModel as packageModel;
 		$package-> roomCategoryID = $category;
 		$package-> packageDesc = $desc ;
 		$package-> capacityAdult = $capacity;
-		$package-> capacityChildren = $childrenCapacity;
+		//$package-> capacityChildren = $childrenCapacity;
 
 		$package-> newPrice = $newPrice;
 		$package-> packageName = $packageName;
