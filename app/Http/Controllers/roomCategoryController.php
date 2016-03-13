@@ -24,7 +24,10 @@ use App\roomModel as roomModel;
 
 	public function getAll(Request $request){
 		$user = $request->session()->get('user');
-
+		
+		if (is_null($user)){
+			return false;
+		}
 		//Gets room categories
 		$categories = roomCategory::all();
 		

@@ -33,13 +33,19 @@ use App\packageModel as packageModel;
 	//Loads the landlord home
 	public function landlordhome(Request $request){
 		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		return view('pages.LandlordHome',  array('user' => $user));
 	}
 
 	// Add building
 	public function addBuilding(Request $request){
 		$user = $request->session()->get('user');
-
+		
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		//Gets building categories
 		$categories = buildingCategory::all();
 		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
@@ -68,7 +74,9 @@ use App\packageModel as packageModel;
 	// Add room
 	public function addRoom(Request $request){
 		$user = $request->session()->get('user');
-
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		//Gets room categories
 		$categories = roomCategory::all();
 
@@ -102,36 +110,14 @@ use App\packageModel as packageModel;
 	public function insertPackage(Request $request){
 
 		$user = $request->session()->get('user');
-
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$categories = roomCategory::all();
 
 		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 
-/**
 
-		foreach($buildings as $building){
-
-			$buildingArr[] = $building->id;
-		}
-		
-		foreach($buildingArr as $array){
-
-
-			
-			$packages = packageModel::where('buildingid','=', $array);
-
-			
-			
-		}
-
-
-	var_dump($packages->packageName);
-
-		die;
-
-	//	var_dump($packages);
-	
-**/
 		
 		
 		return view('pages.insertPackage',  array('user' => $user, 'buildings' => $buildings, 'categories' => $categories));

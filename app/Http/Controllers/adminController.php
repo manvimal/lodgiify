@@ -42,6 +42,10 @@ use App\roomFacilityModel as roomFacilityModel;
 	public function viewUsers(Request $request){
 		
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$tenants = User::all();
 		 $landlords = userLandlord::all();
 		 $vehicleowners = vehicleOwnerModel::all();
@@ -53,7 +57,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 	public function deleteTenant(Request $request){
 			
-
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return redirect()->action('MainController@index');
+			}
 			if ($request['id'] != null){
 			$deleteTenant = User::where('id', '=', $request['id'])->delete();
 
@@ -92,7 +99,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 	public function deleteLandlord(Request $request){
 			
-
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return false;
+			}
 			if ($_REQUEST['id'] != null){
 				
 					
@@ -153,7 +163,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 
 	public function deleteVehicleOwner(Request $request){
-			
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return false;
+			}
 
 			if ($request['id'] != null){
 			$deletevehicleowner = vehicleOwnerModel::where('id', '=', $request['id'])->delete();
@@ -183,6 +196,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 	 public function addCategoryPage(Request $request){
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		return view('pages.adminAddCategories',  array('user' => $user));		
 	}
 
@@ -194,7 +211,10 @@ use App\roomFacilityModel as roomFacilityModel;
 			$messge  = array(
 			    "status" => 0,
 			);
-
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return false;
+			}
 
 			if ((isset($_REQUEST['roomCatName'])) && (!empty($_REQUEST['roomCatName'])) ){
 					$roomCatName = $_REQUEST['roomCatName'];
@@ -305,6 +325,10 @@ use App\roomFacilityModel as roomFacilityModel;
 	public function viewCategoryPage(Request $request){
 
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$roomCategories = roomCategory::all();
 		$buildingCategories = buildingCategory::all();
 		$vehicleCategories = vehicleCategory::all();
@@ -312,7 +336,10 @@ use App\roomFacilityModel as roomFacilityModel;
 	}
 
 	function deleteRoomCat(Request $request){
-			
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return false;
+			}
 
 			if ($request['id'] != null){
 			$deleteRoomcat = roomCategory::where('id', '=', $request['id'])->delete();
@@ -325,7 +352,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 
 	function deleteBuildingCat(Request $request){
-			
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return false;
+			}
 
 			if ($request['id'] != null){
 			$deleteBuildingCat = buildingCategory::where('id', '=', $request['id'])->delete();
@@ -338,7 +368,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 	function deleteVehicleCat(Request $request){
 			
-
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return false;
+			}
 			if ($request['id'] != null){
 			$deletevehicleCat = vehicleCategory::where('id', '=', $request['id'])->delete();
 			return redirect()->action('adminController@viewCategoryPage');
@@ -352,6 +385,10 @@ use App\roomFacilityModel as roomFacilityModel;
 	public function addFacilityPage(Request $request){
 
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$facilities = facilityModel::all();
 		
 		return view('pages.adminAddFacility',  array('user'=>$user, 'facilities'=>$facilities)); 
@@ -421,7 +458,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 	public function deleteFacility(Request $request){
 			
-
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return false;
+			}
 			if ($_REQUEST['id'] != null){
 			$deletFacility = facilityModel::where('id', '=', $request['id'])->delete();
 			return redirect()->action('adminController@addFacilityPage');
@@ -433,7 +473,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 
 	public function updateFacilityPage(Request $request){
-	
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 
 		if(isset($_REQUEST['id'])) {
 			$facilityid = $_REQUEST['id'];
@@ -450,6 +493,9 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		$user = $request->session()->get('user');
 
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 
 		if((isset($_REQUEST['facilityType'])) && (isset($_REQUEST['idText'])))  {
 			$facilityType = $_REQUEST['facilityType'];
@@ -476,6 +522,9 @@ use App\roomFacilityModel as roomFacilityModel;
 		}
 
 		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$roomCat = roomCategory::where('id', '=', $roomcatId)->get();
 
 		return view('pages.adminUpdateCategories',  array('user' => $user, 'roomCat'=>$roomCat));	
@@ -492,6 +541,10 @@ use App\roomFacilityModel as roomFacilityModel;
 		}
 
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$buildingCat = buildingCategory::where('id', '=', $buildingcatId)->get();
 
 		return view('pages.adminUpdateCategories',  array('user' => $user, 'buildingCat'=>$buildingCat));	
@@ -506,6 +559,10 @@ use App\roomFacilityModel as roomFacilityModel;
 		}
 
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$vehicleCat = vehicleCategory::where('id', '=', $vehiclecatId)->get();
 
 		return view('pages.adminUpdateCategories',  array('user' => $user, 'vehicleCat'=>$vehicleCat));	
@@ -520,6 +577,9 @@ use App\roomFacilityModel as roomFacilityModel;
 	
 		$user = $request->session()->get('user');
 
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 
 
 		if((isset($_REQUEST['roomCatName'])) && (!empty($_REQUEST['roomCatName'])) && (isset($_REQUEST['roomCategoryID'])) && (!empty($_REQUEST['roomCategoryID'])))  {
@@ -582,6 +642,10 @@ use App\roomFacilityModel as roomFacilityModel;
 		}
 
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$tenant = User::where('id', '=', $tenantID)->get();
 
 		return view('pages.adminUpdateUsers',  array('user' => $user, 'tenant'=>$tenant));	
@@ -597,7 +661,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		
 		}
-
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 
 
 
@@ -705,6 +772,10 @@ use App\roomFacilityModel as roomFacilityModel;
 	function manageBuilding(Request $request){
 
 		$user = $request->session()->get('user');
+		
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		//Gets buildings
 		$buildings = buildingModel::all();
 

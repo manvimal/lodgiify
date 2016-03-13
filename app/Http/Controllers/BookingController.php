@@ -36,6 +36,9 @@ use Redirect;
 		
 		$user = $request->session()->get('user');
 
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$packages = packageModel::where('buildingid', '=', $id)->get();
 
 		$building = buildingModel::where("id",'=',  $id)->first();
@@ -50,7 +53,10 @@ use Redirect;
 
 	//Book for tenant
 	public function register(Request $request){
-		
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 		$error  = false;
 
 		$status =  array('success' => 0 , 'msg' => 'Error occured');
@@ -400,10 +406,10 @@ use Redirect;
 									if ($travelModel->dispach == 'true'){
 										$travelModel-> pickUpTime2 = $booking->checkOut;
 										$travelModel-> pickUpLocation2 = $booking->building->buildingLocation;
-										var_dump(3);
+										
 
 										$travelModel-> pickUpDestination2 = $user[0]->Address;
-										var_dump(4);
+										
 									}
 										
 									
@@ -438,7 +444,10 @@ use Redirect;
 
 	public function checkAvailability(Request $request){
 		$user = $request->session()->get('user');
-
+		
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 
 
 		if ((isset($request['buildingid'])) && (!empty($request['buildingid'])) ){

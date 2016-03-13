@@ -40,6 +40,9 @@ use App\bookingPackageModel as bookingPackageModel;
 	// Add building
 	public function register(Request $request){
 		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$categories = buildingCategory::all();
 
 		if ((isset($request['buildingName'])) && (!empty($request['buildingName'])) ){
@@ -122,7 +125,9 @@ use App\bookingPackageModel as bookingPackageModel;
 
 	public function viewBuildings(Request $request){
 		$user = $request->session()->get('user');
-
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		//Gets buildings
 		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 
@@ -135,6 +140,10 @@ use App\bookingPackageModel as bookingPackageModel;
 
 
 	public function delete(Request $request){
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 		if ($request['id'] != null){
 
 
@@ -187,7 +196,10 @@ use App\bookingPackageModel as bookingPackageModel;
 	// update building
 	public function update(Request $request){
 		//$categories = buildingCategory::all();
-
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 		if ((isset($request['buildingid'])) && (!empty($request['buildingid'])) ){
 			$buildingid = $request['buildingid'];
 		}
@@ -214,7 +226,10 @@ use App\bookingPackageModel as bookingPackageModel;
 
 
 	function addBuildingFacility(Request $request){
-
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 		$error=1;
 			$messge  = array(
 			   
@@ -295,7 +310,10 @@ use App\bookingPackageModel as bookingPackageModel;
 
 
 	function deleteBuildingFacility(Request $request){
-		
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 
 			if ($request['id'] != null){
 			$deleteBuildingFacility = buildingFacilityModel::where('id', '=', $request['id'])->delete();

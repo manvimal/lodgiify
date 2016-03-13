@@ -29,6 +29,10 @@ use App\travelModel as travelModel;
 	//Loads the landlord home
 	public function landlordhome(Request $request){
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		return view('pages.LandlordHome',  array('user' => $user));
 	}
 
@@ -38,6 +42,9 @@ use App\travelModel as travelModel;
 		//saves user sesssion in $user to be used in the redirected page
 		$user = $request->session()->get('user');
 
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		//Gets vehicles categories
 		$categories = vehicleCategory::all();
 		$vehicles = vehicleModel::where('vehicleOwnerID', '=', $user[0]->id)->get();
@@ -51,7 +58,10 @@ use App\travelModel as travelModel;
 	public function viewVehicleBookinga(Request $request){
 		//saves user sesssion in $user to be used in the redirected page
 		$user = $request->session()->get('user');
-
+		
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$bookings = travelModel::get();
 
 		$bookingsBck = array();

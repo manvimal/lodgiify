@@ -91,6 +91,9 @@ use App\roomBookingModel as roomBookingModel;
 		// Retrieve use session
 
 		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 
 		//Save room for user
 		$room = new roomModel;
@@ -127,6 +130,10 @@ use App\roomBookingModel as roomBookingModel;
 
 
 	public function delete(Request $request){
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 		if ($request['id'] != null){
 			$rooms = roomModel::where('id', '=', $request['id'])->delete();
 
@@ -148,7 +155,10 @@ use App\roomBookingModel as roomBookingModel;
 	// update room
 	public function update(Request $request){
 		//$categories = buildingCategory::all();
-
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 		if ((isset($request['roomid'])) && (!empty($request['roomid'])) ){
 			$roomid = $request['roomid'];
 		}
@@ -185,7 +195,10 @@ use App\roomBookingModel as roomBookingModel;
 	
 	function addRoomFacility(Request $request){
 
-
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return false;
+			}
 			$error=1;
 			$messge  = array(
 			   
@@ -277,7 +290,10 @@ $facilities  = array(
 	}
 
 	function deleteRoomFacility(Request $request){
-		
+			$user = $request->session()->get('user');
+			if (is_null($user)){
+				return false;
+			}
 
 			if ($request['id'] != null){
 			$deleteRoomFacility = roomFacilityModel::where('id', '=', $request['id'])->delete();

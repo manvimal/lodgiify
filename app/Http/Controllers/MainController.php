@@ -462,6 +462,10 @@ use URL;
 
 	public function userAccount(Request $request){
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		return view('pages.UpdateAccount',  array('user' => $user));
 
 	}
@@ -566,7 +570,10 @@ use URL;
 
 	$user = $request->session()->get('user');
 
-
+	
+	if (is_null($user)){
+		return false;
+	}
 	if($error==false){
 
 	
