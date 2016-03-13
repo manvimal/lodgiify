@@ -26,6 +26,7 @@ use App\facilityModel as facilityModel;
  use App\bookingPackageModel as bookingPackageModel;
  use App\travelModel as  travelModel;
  use App\roomBookingModel as  roomBookingModel;
+
  
 
 
@@ -79,6 +80,11 @@ use App\facilityModel as facilityModel;
 		$user = $request->session()->get('user');
 
 		$bookings = bookingModel::where('tenantID', '=', $user[0]->id)->orderBy('created_at', 'DESC')->get();
+
+//$query = "SELECT rating_number, FORMAT((total_points / rating_number),1) as average_rating FROM post_rating WHERE post_id = 1 AND status = 1";
+
+
+
 
 		return view('pages.mybookings',  array('user' => $user, 'bookings' => $bookings));
 

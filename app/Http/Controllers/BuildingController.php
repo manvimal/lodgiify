@@ -157,6 +157,7 @@ use App\bookingPackageModel as bookingPackageModel;
 
 				roomBookingModel::where("roomid","=",$room->id)->delete();
 				$room->delete();
+				
 			}
 
 			

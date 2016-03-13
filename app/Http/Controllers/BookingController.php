@@ -112,6 +112,7 @@ use Redirect;
 						$buildingId = $request['buildingId'];
 						$error = false;
 						$roomPackage = array();
+
 						foreach ($request['packages'] as $packaged) {
 					
 							if ( isset($packaged['package']  )){
@@ -170,18 +171,10 @@ use Redirect;
 				         		{
 
 									$error = true;
-						           	/*$bookings = bookingModel::where('tenantID', "=", $user[0]->id)
-
-						           							->where(function($query) {
-				            
-				             					  			 $query->where('buildingID', '=', $request['buildingId']);
-				   	
-				    					      				  })
-																->delete();*/
-					
+						      
 
 						           	$status['msg'] = "No selected room ";
-						           	//return;
+	
 				           		}
 
 
@@ -334,29 +327,18 @@ use Redirect;
 						 	
 							
 							if ( isset($packaged['package']  )){
+
+								//Access array packaged key pacakges, ie:number of selected packages
 									$idpackage = $packaged['package'] ;
 									$child = $packaged['child'] ;
 									$adult = $packaged['adult'] ;
 
 									$package = packageModel::find ( $idpackage);
 
-									//Get package
 									
-									//$buildingtype = $package->building->category;
-
-									
-								//	if (!is_null($buildingtype->buildingCatName) && ($buildingtype->buildingCatName == 'Hotel' 
-								//				|| $buildingtype->buildingCatName == 'Appartment'  )) {
-								//				$price += $booking->getPrice($package, $booking);
-								//	}
-								//	else if(!is_null($buildingtype->buildingCatName) && ($buildingtype->buildingCatName == 'Bungalow' 
-								//				|| $buildingtype->buildingCatName == 'Villa'  || $buildingtype->buildingCatName == 'Penthouse' 
-								//				|| $buildingtype->buildingCatName == 'House'    )){
-
-												$price += $booking->getPrice($package, $booking);
+									$price += $booking->getPrice($package, $booking);
 											
-								//	}
-
+								
 									//Add to booking
 
 									$bookingpackage = new bookingPackageModel;
@@ -488,6 +470,8 @@ use Redirect;
 
 
             $arrmsg = array();
+
+
                     
 		   if (!empty($rooms) && !empty($roomsub)){
 		   		$roomsAvailable = array_diff($rooms ,$roomsub);

@@ -134,6 +134,7 @@ use App\roomBookingModel as roomBookingModel;
 
 			roomBookingModel::where("roomid","=",$request['id'])->delete();
 
+
 		}
 
 
