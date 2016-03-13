@@ -45,6 +45,9 @@ use App\facilityModel as facilityModel;
 	public function rentRoomVehicles(Request $request){
 		$user = $request->session()->get('user');
 
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		//Gets building categories
 		$buildingCategories = buildingCategory::all();
 	//	$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
@@ -79,6 +82,9 @@ use App\facilityModel as facilityModel;
 	public function myBookings(Request $request){
 		$user = $request->session()->get('user');
 
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		$bookings = bookingModel::where('tenantID', '=', $user[0]->id)->orderBy('created_at', 'DESC')->get();
 
 //$query = "SELECT rating_number, FORMAT((total_points / rating_number),1) as average_rating FROM post_rating WHERE post_id = 1 AND status = 1";
@@ -98,6 +104,10 @@ use App\facilityModel as facilityModel;
 
 
 		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		return view('pages.tenantGetDirections',  array('user' => $user));
 
 		
@@ -111,6 +121,9 @@ use App\facilityModel as facilityModel;
 	$error=true;
 	$user = $request->session()->get('user');
 	
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 
 
 	if(isset($request['id'])){
@@ -225,7 +238,10 @@ use App\facilityModel as facilityModel;
 	}
 
 	public function deleteBooking(Request $request){
-
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 		if ($request['id'] != null){
 			$deleteBookings = bookingModel::where('id', '=', $request['id'])->delete();
 

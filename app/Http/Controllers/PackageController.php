@@ -40,6 +40,10 @@ use App\bookingPackageModel as bookingPackageModel;
 
 		$user = $request->session()->get('user');
 
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
 		$messge  = array(
 		    "status" => 0,
 		);
@@ -123,7 +127,9 @@ use App\bookingPackageModel as bookingPackageModel;
 	public function viewPackage(Request $request){	
 
 		$user = $request->session()->get('user');
-
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		//Gets buildings
 		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 
@@ -139,7 +145,10 @@ use App\bookingPackageModel as bookingPackageModel;
 
 
 	public function delete(Request $request){
-
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 		if ($request['id'] != null){
 			$buildings = packageModel::where('id', '=', $request['id'])->delete();
 			bookingPackageModel::where('package_id', '=', $request['id'])->delete();
@@ -148,7 +157,7 @@ use App\bookingPackageModel as bookingPackageModel;
 	}
 
 	public function update(Request $request){
-
+		
 		if ((isset($request['roomid'])) && (!empty($request['roomid'])) ){
 			$roomid = $request['roomid'];
 		}
@@ -165,7 +174,9 @@ use App\bookingPackageModel as bookingPackageModel;
 		
 		// Retrieve user session
 		$user = $request->session()->get('user');
-
+		if (is_null($user)){
+			return false;
+		}
 		//Save room for user
 		$room = roomModel::find($roomid);
 		$room-> packagedesc = $packagedesc ;

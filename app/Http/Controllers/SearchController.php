@@ -34,6 +34,11 @@ use App\packageModel as packageModel;
 
 	//Loads the search
 	public function search(Request $request){
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
+
 		$result = null;
 		if ($_GET != null){
 			$action = $request['action'];

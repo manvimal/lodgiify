@@ -35,6 +35,11 @@ use App\travelModel as travelModel;
 	// Add building
 	public function register(Request $request){
 		$user = $request->session()->get('user');
+		
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
 		$categories = vehicleCategory::all();
 
 
@@ -106,6 +111,9 @@ use App\travelModel as travelModel;
 	public function viewVehicle(Request $request){
 		$user = $request->session()->get('user');
 
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
 		//Gets buildings
 		$vehicles = vehicleModel::where('vehicleOwnerID', '=', $user[0]->id)->get();
 
@@ -116,6 +124,10 @@ use App\travelModel as travelModel;
 
 
 	public function delete(Request $request){
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return false;
+		}
 		if ($request['id'] != null){
 			$vehicles = vehicleModel::where('id', '=', $request['id'])->delete();
 			
@@ -134,6 +146,7 @@ use App\travelModel as travelModel;
 		$color = "";
 		$vehicleid = "";
 
+
 		$error = false;
 		if ((isset($request['color'])) && (!empty($request['color'])) ){
 				$color = $request['color'];
@@ -147,7 +160,9 @@ use App\travelModel as travelModel;
 
 		// Retrieve use session
 		$user = $request->session()->get('user');
-
+		if (is_null($user)){
+			return false;
+		}
 		//Save vehicle for user
 		$vehicle = vehicleModel::find($vehicleid);
 
