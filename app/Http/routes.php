@@ -129,3 +129,7 @@ Route::get('/manageBuilding', 'adminController@manageBuilding');
 Route::post('/searchUser', 'adminController@searchUser');
 
 
+Route::post('/rating', 'bookingController@buildingRating');
+
+
+

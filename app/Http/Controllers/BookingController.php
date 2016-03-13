@@ -39,6 +39,8 @@ use Redirect;
 		if (is_null($user)){
 			return redirect()->action('MainController@index');
 		}
+
+		else if($user[0]->type == 'tenant'){
 		$packages = packageModel::where('buildingid', '=', $id)->get();
 
 		$building = buildingModel::where("id",'=',  $id)->first();
@@ -48,6 +50,12 @@ use Redirect;
 		
 	
 		return view('pages.tenantDealPackage',  array('user' => $user,'packages' => $packages, 'building' => $building, 'buildingCat'=> $buildingCat  ));
+	}
+	else{
+		return redirect()->action('MainController@index');
+	}
+
+	
 	}
 
 
@@ -513,6 +521,13 @@ use Redirect;
            		$arrmsg['msg'] = "Error";
            }
            return json_encode($arrmsg);
+
+	}
+
+	public function buildingRating(Request $request){
+		$user = $user = $request->session()->get('user');
+
+		var_dump('Hello');
 
 	}
 

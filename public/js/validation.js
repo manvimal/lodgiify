@@ -1437,7 +1437,7 @@ $(".checkRoomAvailability").click(function(){
 
  	 
 	//on change room trigger chek availability
-	$('#noOfRooms').change(function(){
+	$('.rooms').change(function(){
 		$(this).parents('.pack_label').find('.checkRoomAvailability').click();
 	})
 	
@@ -1451,6 +1451,7 @@ $(".checkRoomAvailability").click(function(){
 
 
  		var numAdult = $(".deals-list #adults").val();
+ 		
  		var package = $(".deals-list #package").val();
 
 

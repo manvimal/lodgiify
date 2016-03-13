@@ -45,9 +45,13 @@ use App\facilityModel as facilityModel;
 	public function rentRoomVehicles(Request $request){
 		$user = $request->session()->get('user');
 
+
+
 		if (is_null($user)){
 			return redirect()->action('MainController@index');
 		}
+
+		else if($user[0]->type == 'tenant'){
 		//Gets building categories
 		$buildingCategories = buildingCategory::all();
 	//	$buildings = buildingModel::where('landlordID', '=', $user[0]->ID)->get();
@@ -73,7 +77,12 @@ use App\facilityModel as facilityModel;
 		//return view('pages.landlordbuildings',  array('user' => $user, 'buildings' => $buildings));
 
 		return view('pages.bestDeals',  array('user' => $user, 'Facilities'=>$Facilities, 'buildings' => $buildings,'buildingCategories'=>$buildingCategories,'buildingFacilities'=>$buildingFacAr));
+}
 
+else{
+
+	return redirect()->action('MainController@index');
+}
 
 	}
 
@@ -88,6 +97,7 @@ use App\facilityModel as facilityModel;
 		$bookings = bookingModel::where('tenantID', '=', $user[0]->id)->orderBy('created_at', 'DESC')->get();
 
 //$query = "SELECT rating_number, FORMAT((total_points / rating_number),1) as average_rating FROM post_rating WHERE post_id = 1 AND status = 1";
+
 
 
 

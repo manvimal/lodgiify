@@ -3,6 +3,11 @@
 
  @section('content')
 
+ <!--Capslock on or off indicator -->
+ <script type="text/javascript" src="{{ URL::asset('js/jquery.tipsy.js') }}"></script>
+ <script type="text/javascript" src="{{ URL::asset('js/jquery.jccapsalert.js') }}"></script>
+ <link rel="stylesheet" href="{{ URL::asset('css/jquery.capsalerttipsy.css') }}" type="text/css" />
+
    <div class="banner">
       	<div class="wrap">
       	     <h2>Forget password</h2><div class="clear"></div>
@@ -74,6 +79,10 @@
 
         </table>
           </form>
+
+          <script type="text/javascript">
+        jQuery("#Password").CapsLockAlert();
+      </script>
 			</div>
 
 		</div>
