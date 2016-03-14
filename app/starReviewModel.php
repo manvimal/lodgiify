@@ -33,7 +33,7 @@ class starReviewModel extends Model implements AuthenticatableContract,
      protected $fillable = ['id',
                             'tenantid',
                             'buildingid',
-                            'ratingnumber',
+                            'numofstar',
                             'totalpoints'
                             ];
 

@@ -15,6 +15,7 @@ if ((isset($_REQUEST['contactName'])) && (!empty($_REQUEST['contactName'])) ){
 	
 	if ((isset($_REQUEST['contactsubject'])) && (!empty($_REQUEST['contactsubject'])) ){
 			$contactsubject = $_REQUEST['contactsubject'];
+			$subject = "Contact US" . ': ' .$contactsubject;
 
 	}
 	
@@ -22,11 +23,13 @@ if ((isset($_REQUEST['contactName'])) && (!empty($_REQUEST['contactName'])) ){
 			$desc = $_REQUEST['desc'];
 
 	}
+
+
 	
 
 $from = $contactemail;
 $to = '<lokeshpravin@gmail.com>';
-$subject = $contactsubject;
+$subject = $subject;
 $body = $desc;
 
 $headers = array(

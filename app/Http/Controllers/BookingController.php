@@ -21,6 +21,7 @@ use App\travelModel as travelModel;
 use App\buildingCategory as buildingCategory;
 use App\bookingPackageModel as bookingPackageModel;
 use App\roomBookingModel as roomBookingModel;
+use App\starReviewModel as starReviewModel;
 
 use Redirect;
 
@@ -373,7 +374,7 @@ use Redirect;
 						$booking->save();
 						$status['success'] = 1;
 						$status['msg'] = "Booking successfully registered";
-
+						if (!empty($request['block-vehicle'] )){
 						foreach ($request['block-vehicle'] as $blockVehicle) {
 						 	
 							
@@ -410,7 +411,7 @@ use Redirect;
 						}
 
 
-
+					}
 						
 				 }
 
@@ -524,12 +525,74 @@ use Redirect;
 
 	}
 
-	public function buildingRating(Request $request){
-		$user = $user = $request->session()->get('user');
+	public function tenantFeedback(Request $request){
 
-		var_dump('Hello');
+		$user = $user = $request->session()->get('user');
+		$bookingid = $request['id'];
+
+		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+		else if($user[0]->type == 'tenant'){ 
+		
+
+		$ratingExist = starReviewModel::where('tenantid','=', $user[0]->id)
+										->where('bookingid','=', $request['id'] ) ->get();						
+
+
+
+
+
+		return view('pages.tenantFeedback',  array('user' => $user, 'ratingExist'=>$ratingExist,'bookingid'=>$bookingid));
+	}
+	else{
+		return redirect()->action('MainController@index');
+	}
 
 	}
+
+
+	public function insertRating(Request $request){
+
+		$user = $user = $request->session()->get('user');
+
+
+		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+		else if($user[0]->type == 'tenant'){ 
+
+
+			if(isset($request['rating'])){
+
+				$numberOfStars = $request['rating'];
+			}
+
+			
+DB::table('tbluserstarreview')->insert(
+    array('tenantid' => $user[0]->id, 'numofstar' =>  $numberOfStars)
+);
+
+/*
+		$insertStar = new starReviewModel;
+		$insertstar-> tenantid = $user[0]->id;
+		$insertstar-> numofstars = $numberOfStars;
+
+		$insertstar-> save(); */
+
+//query insert
+
+	}
+	else{
+		return redirect()->action('MainController@index');
+	}
+
+	}
+	
 
 
 

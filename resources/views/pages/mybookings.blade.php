@@ -28,7 +28,7 @@ function processRating(val, attrVal){
     $.ajax({
         type: 'POST',
         url: '/rating',
-        data: 'postID='+attrVal+'&ratingPoints='+val,
+        data: '{postID:'+attrVal+'&ratingPoints:'+val+"}",
         dataType: 'json',
         success : function(data) {
             if (data.status == 'ok') {
@@ -63,8 +63,10 @@ function processRating(val, attrVal){
                         <th class="price">Price</th>
                         <th class="checkout">Rating </th>
                         <th class="adults">No adults </th>      
-                        <th class="children">No children </th>    
-                        <th class="Action">Action </th>                 
+                        <th class="children">No children </th>   
+
+                        <th ></th> 
+                        <th></th>                 
                     </tr>
                                    
                    <?php $i = 1;
@@ -78,6 +80,7 @@ function processRating(val, attrVal){
                             
                             $deleteLink =  "/booking/delete?id=". $booking->id;
                             $viewBookingLink =  "/booking/viewBooking?id=". $booking->id;
+                            $feedbackLink =  "/tenantfeedback?id=". $booking->id;
                               
                           ?>
                            <tr class="booking">
@@ -88,18 +91,19 @@ function processRating(val, attrVal){
                               <td><input name="rating" value="0" class="rating_star" type="hidden" postID="1" /></td>
                               <td></td>
                               <td></td>
-                              <?php
-                              if($booking->checkin > $now){ 
-                                 ?>
+                              
 
+                              <td> <?php if (count($booking->packages) > 0){  ?> <a href="<?php echo $getDirection; ?>" target="_blank" class="direction btnLogin">Get directions</a>  <?php } ?> <a href="<?php echo $viewBookingLink; ?>" class="Order btnLogin" target="_blank">View booking</a>  <a href="<?php echo $deleteLink; ?>" class="deleteBooking btnLogin" >Delete</a></td>
+                              <?php
+                              if($booking->checkOut < $now){ 
+                                 ?>
+                              <td> <a href="<?php echo $feedbackLink; ?>" target="_blank" class="direction btnLogin">Leave Feedback</a></td>
+                           
                                  <?php
 
 
                               }
                               ?>
-                              <td></td>
-                              <td> <?php if (count($booking->packages) > 0){  ?> <a href="<?php echo $getDirection; ?>" target="_blank" class="direction btnLogin">Get directions</a>  <?php } ?> <a href="<?php echo $viewBookingLink; ?>" class="Order btnLogin" target="_blank">View booking</a>  <a href="<?php echo $deleteLink; ?>" class="deleteBooking btnLogin" >Delete</a></td>
-                           
                             </tr> 
                            <?php 
                             $i ++;

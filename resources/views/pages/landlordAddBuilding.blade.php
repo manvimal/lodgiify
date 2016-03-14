@@ -95,13 +95,13 @@
 
       <tr>
           <td><label>Latitude:</label></td>
-            <td id="test"> <input type="text" class="required numeric" id="lattitude" name = "lattitude" 
-                  readonly/> <span class="errorMsg"></span></td>
+            <td id="test"> <input type="text" class="numeric" id="lattitude" name = "lattitude" 
+                 /> <span class="errorMsg"></span></td>
         </tr>
 
       <tr>
           <td><label>Longitude:</label></td>
-            <td> <input type="text" class="required numeric" name = "longitude" id="longitude"  readonly/> <span class="errorMsg"></span></td>
+            <td> <input type="text" class="numeric" name = "longitude" id="longitude" /> <span class="errorMsg"></span></td>
         </tr>
 
 
@@ -155,7 +155,7 @@
 
         <tr>
         	<td><label>Location:</label></td>
-            <td> <input type="text" class="required onlyLetters" name = "location" id ="location"?> <span class="errorMsg"></span></td>
+            <td> <input type="text" class="required" name = "location" id ="location"?> <span class="errorMsg"></span></td>
         </tr>
 
         <tr>
