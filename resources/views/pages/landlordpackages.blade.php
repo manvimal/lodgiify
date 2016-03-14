@@ -3,7 +3,53 @@
 
  @section('content')
  
- 
+ <style type="text/css">
+      .hide{display:none}
+    </style>
+<script type="text/javascript">
+
+  $(function() {
+    
+    var pageNum = 7;
+
+    function pageselectCallback(page_index, jq){
+
+        
+        
+         page_index = page_index*pageNum;
+         $('#Searchresult').empty();
+        
+         for (i=0;i<pageNum;i++){
+             str1 = '.dummy li:eq('+ (page_index + i)+')';
+             console.log( str1);
+             new_content = $(str1 ).clone();
+             console.log(  new_content );
+              $('#Searchresult').append(new_content);
+         }
+
+                return false;
+     }
+           
+     /** 
+       * Initialisation function for pagination
+      */
+    function initPagination() {
+           // count entries inside the hidden content
+          var num_entries = jQuery('.dummy li').length;
+
+          // Create content inside pagination element
+           $("#Pagination").pagination(num_entries, {
+                    callback: pageselectCallback,
+                    items_per_page:pageNum // Show only one item per page
+          });
+
+           $(".buildings-list1 .active a").click();
+          
+      }
+
+    initPagination();
+});
+</script>
    
     </script> 
    <div class="banner">
@@ -17,7 +63,9 @@
     <div class="project-sidebar">
     <div class="project-list">
         <h4>My packagess</h4>
-      <ul class="buildings-list1">
+
+        <ul class="buildings-list1"  id="Searchresult"></ul>
+      <ul class="dummy hide">
       <?php $active=0;
           if (isset($buildings)){
                 foreach($buildings as $building){
@@ -31,7 +79,7 @@
                         }
                     ?>
       </ul>
-      <div class="paginate"></div>
+      <div id="Pagination"></div>
       <div class="clear"></div>
      </div>
      

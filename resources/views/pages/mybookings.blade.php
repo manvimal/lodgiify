@@ -15,6 +15,7 @@ $now = new \DateTime();
 
  <script>
 $(function() {
+    var pageNum = 7;
     $(".rating_star").codexworld_rating_widget({
         starLength: '5',
         initialValue: '',
@@ -22,6 +23,44 @@ $(function() {
         imageDirectory: 'images/',
         inputAttr: 'postID'
     });
+
+
+    function pageselectCallback(page_index, jq){
+
+        page_index = page_index*pageNum;
+         $('#Searchresult').empty();
+
+          var new_contentH = jQuery('.main-dummy tr:eq(0)').clone();
+            $('#Searchresult').empty().append(new_contentH);
+
+         for (i=0;i<pageNum;i++){
+             str1 = '.main-dummy .booking:eq('+ (page_index+i)+')';
+             
+             new_content = $(str1 ).clone();
+           
+              $('#Searchresult').append(new_content);
+         }
+
+        
+        
+                return false;
+     }
+           
+     /** 
+       * Initialisation function for pagination
+      */
+    function initPagination() {
+           // count entries inside the hidden content
+          var num_entries = jQuery('.booking').length;
+       
+          // Create content inside pagination element
+           $("#Pagination").pagination(num_entries, {
+                    callback: pageselectCallback,
+                    items_per_page:pageNum // Show only one item per page
+          });
+      }
+
+    initPagination();
 });
 
 function processRating(val, attrVal){
@@ -42,6 +81,9 @@ function processRating(val, attrVal){
 }
 
 </script>
+<style type="text/css">
+      .hide{display:none}
+    </style>
    <div class="banner">
         <div class="wrap">
              <h2>My Bookings</h2><div class="clear"></div>
@@ -53,10 +95,12 @@ function processRating(val, attrVal){
       
       <section >
         <h4>My Bookings</h4>
-        <div class="contentHolder"  id="contentHolder">
-          <table class="main-list content" border="1" align="center">
+        <div class="contentHolder main-list content"  id="contentHolder">
+          <table border="1" align="center" id="Searchresult">
+                                </table>
+          <table class="main-dummy hide" border="1" align="center">
             <?php if (isset($bookings)){ ?>
-                    <tr class="booking">             
+                    <tr>             
                         <th class="package"> Number</th>
                         <th class="checkin">Check in date </span></th>
                         <th class="checkout">Check out date </th>
@@ -127,6 +171,8 @@ function processRating(val, attrVal){
                     }
                     ?>
           </table>
+
+          <div id="Pagination"></div>
       </div>
     </section>
      

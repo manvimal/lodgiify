@@ -21,12 +21,13 @@
 	<script src="{{ URL::asset('js/perfect-scrollbar.jquery.min.js') }}" type="text/javascript"></script>
 
 	<script src="{{ URL::asset('js/jquery-ui.min.js') }}" type="text/javascript"></script>
+	<script src="{{ URL::asset('js/jquery.pagination.js') }}" type="text/javascript"></script>
 	
 
 	<link href="{{ URL::asset('css/jquery-ui.min.css') }}" rel="stylesheet" type="text/css" media="all" />
 	<link href="{{ URL::asset('css/jquery-ui.structure.min.css') }}" rel="stylesheet" type="text/css" media="all" />
 	<link href="{{ URL::asset('css/jquery-ui.theme.min.css') }}" rel="stylesheet" type="text/css" media="all" />
-	
+	<link href="{{ URL::asset('css/pagination.css') }}" rel="stylesheet" type="text/css" media="all" />
 		<script>
 		//pop up list onclick on button
 			$(document).ready(function() {

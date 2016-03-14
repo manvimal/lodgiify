@@ -33,10 +33,11 @@
                
               </tr>
               <?php
-               foreach($bookings as $booking){
+                if(!empty($bookings)){
+                    foreach($bookings as $booking){
             
                     ?>
-                         <tr>
+                         <tr class="job">
                            
                              <th><?php echo $booking->booking->tenant->FirstName .' '.$booking->booking->tenant->LastName  ?></th>
                              <th><?php echo $booking->booking->tenant->Phone ?></th>
@@ -50,7 +51,16 @@
 
                           </tr>
                       <?php 
+                  }
+
                 }
+
+                else{ ?>
+
+                  <th colspan="7">You have no jobs yet</th>
+                <?php
+                }
+               
                 ?>
        </table>
        

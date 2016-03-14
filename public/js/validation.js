@@ -920,9 +920,9 @@ $(".contact .submit").click(function(){
 	})
 
 
-	//Ajax delete and click on menu
-	
-	$(".buildings-list a").click(function(){
+
+
+	$("body").on("click",".buildings-list a",function(){
 		$(this).parents("ul").find("li").removeClass("active");
 		$(this).parents("li").addClass("active");
 
@@ -943,6 +943,7 @@ $(".contact .submit").click(function(){
 
 				//updateDeleteAction();
 				//updateDeleteRoomAction();
+				initPaginationRoom();
     		}
     		else{
     			$(".building_wrapper").html('No result found');
@@ -1033,8 +1034,8 @@ $(".contact .submit").click(function(){
 
 
 		$html += '</div>';
-		$html += '<div class="rooms">';
-
+		$html += '<div class="rooms" id="SearchresultRoom"> </div>';
+		$html += '<div class="dummyroomparent hide">';
 			for (i=0 ; i< data.rooms.length ; i++){
 				room =  data.rooms[i];
 				$html += '<div class="room">';
@@ -1052,16 +1053,55 @@ $(".contact .submit").click(function(){
           $html += '</div>';
 				$html += '</div>';
 			}
+			
         $html += ' </div>';
+        $html += '<div id="Paginationroom"></div>';
        
 	   $html += '<div class="clear"></div>';
 	   return $html;
 	}
 
+	var pageNum = 7;
+
+	 function initPaginationRoom() {
+           // count entries inside the hidden content
+          var num_entries = jQuery('.dummyroomparent .room').length;
+
+          // Create content inside pagination element
+           $("#Paginationroom").pagination(num_entries, {
+                    callback: pageselectCallbackRoom,
+                    items_per_page:pageNum // Show only one item per page
+          });
+            
+      }
+
+
+      function pageselectCallbackRoom(page_index, jq){
+
+        page_index = page_index*pageNum;
+         $('#SearchresultRoom').empty();
+
+          
+            
+
+         for (i=0;i<pageNum;i++){
+             str1 = '.dummyroomparent .room:eq('+ (page_index+i)+')';
+             
+             new_content = $(str1 ).clone();
+           console.log( str1)
+              $('#SearchresultRoom').append(new_content);
+         }
+                return false;
+     }
+
+
 
 
 //vehicles
-	$(".inner-list a").click(function(){
+
+
+	
+	$("body").on('click',".inner-list a",function(){
 		$(this).parents("ul").find("li").removeClass("active");
 		$(this).parents("li").addClass("active");
 
@@ -1269,7 +1309,7 @@ $(".contact .submit").click(function(){
 	//click on first building
 	$(".buildings-list a:eq(0)").click();
 	//click on first vehicle
-	$(".inner-list a:eq(0)").click();
+	
 
 	//display scroll bar
 	$('#contentHolder').perfectScrollbar();
@@ -1918,7 +1958,7 @@ $(document).ready(function(){
 	})
 	
 	
-		$(".buildings-list1 a").click(function(){
+		$("body").on("click",'.buildings-list1 a',function(){
 
 		
 
@@ -2345,7 +2385,13 @@ $(document).ready(function(){
 
 
 
-$('a.deleteBooking').click(function(e) {
+ $("body").on("change",".selectAvailabilityVehicle",function(){
+	 	$(this).parents(".block-vehicle-detail").find(".availabilityVehicle").click();
+		return false;
+ })
+ 
+
+$("body").on('click', 'a.deleteBooking',function(e) {
 
 		var r = confirm("Are you sure you want to delete the building!");
 		if (r == true) {
