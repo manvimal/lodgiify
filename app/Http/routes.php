@@ -91,24 +91,21 @@ Route::post('/addCategories','adminController@addCategories');
 Route::get('/roomCategory/delete','adminController@deleteRoomCat');
 Route::get('/buildingCategory/delete','adminController@deleteBuildingCat');
 Route::get('/vehicleCategory/delete','adminController@deleteVehicleCat');
-
-
 Route::get('/viewCategoryPage','adminController@viewCategoryPage');
 Route::get('/addFacilityPage','adminController@addFacilityPage');
 Route::post('/addFacilities','adminController@addFacilities');
 Route::get('/facility/delete','adminController@deleteFacility');
 Route::get('/facility/updatePage','adminController@updateFacilityPage');
 Route::get('/updateFacilities','adminController@updateFacility');
-
-
 Route::get('/roomCategory/update','adminController@updateRoomCatPage');
 Route::get('/buildingCategory/update','adminController@updateBuildingCatPage');
 Route::get('/vehicleCategory/update','adminController@updateVehicleCatPage');
 Route::get('/updateCategories','adminController@updateCategories');
-
-
 Route::get('/tenant/update','adminController@tenantUpdatePage');
-
+Route::get('/user/block', 'adminController@blockUsers');
+Route::get('/manageBuilding', 'adminController@manageBuilding');
+Route::get('/managePackage','adminController@managePackage');
+//Route::post('/searchUser', 'adminController@searchUser');
 
 
 
@@ -124,9 +121,7 @@ Route::get('/buildingSuggestion','searchController@buildingSuggestion');
 Route::post('/getAdvancedSearch','searchController@getAdvancedSearch');
 
 
-Route::get('/user/block', 'adminController@blockUsers');
-Route::get('/manageBuilding', 'adminController@manageBuilding');
-Route::post('/searchUser', 'adminController@searchUser');
+
 
 
 Route::post('/insertRating', 'bookingController@insertRating');

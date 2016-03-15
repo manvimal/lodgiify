@@ -24,6 +24,7 @@
 						<li><a href="{{ URL::asset('/viewCategoryPage') }}">Manage All Categories</a></li>
 						<li><a href="{{ URL::asset('/addFacilityPage') }}">Administer Facility</a></li>
 						<li><a href="{{ URL::asset('/manageBuilding') }}">Manage Building</a></li>
+						<li><a href="{{ URL::asset('/managePackage') }}">Manage Package</a></li>
 					<?php
 						}
 					?>

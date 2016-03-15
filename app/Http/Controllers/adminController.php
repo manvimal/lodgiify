@@ -43,13 +43,24 @@ use App\roomFacilityModel as roomFacilityModel;
 		
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
-		$tenants = User::all();
-		 $landlords = userLandlord::all();
-		 $vehicleowners = vehicleOwnerModel::all();
-		return view('pages.adminViewUsers',  array('user'=>$user, 'tenants' => $tenants, 'landlords' => $landlords, 'vehicleowners' => $vehicleowners));
+
+		elseif($user[0]->type=="admin")
+		{
+			 $tenants = User::all();
+			 $landlords = userLandlord::all();
+			 $vehicleowners = vehicleOwnerModel::all();
+			return view('pages.adminViewUsers',  array('user'=>$user, 'tenants' => $tenants, 'landlords' => $landlords, 'vehicleowners' => $vehicleowners));
+		}
+
+		else
+		{
+
+			return redirect()->action('MainController@index');
+		}
 	}
 
 
@@ -58,17 +69,26 @@ use App\roomFacilityModel as roomFacilityModel;
 	public function deleteTenant(Request $request){
 			
 			$user = $request->session()->get('user');
-			if (is_null($user)){
+
+			if (is_null($user))
+			{
 				return redirect()->action('MainController@index');
 			}
-			if ($request['id'] != null){
+
+			elseif($user[0]->type=="admin")
+			{
+
+			if ($request['id'] != null)
+			{
 			$deleteTenant = User::where('id', '=', $request['id'])->delete();
 
 			//Get all bookings
 
 			//delete travel
 			$bookings = bookingModel::where("tenantID","=",$request['id'])->get();
-			foreach($bookings as $booking){
+
+			foreach($bookings as $booking)
+			{
 				bookingPackageModel::where("booking_id","=",$booking->id)->delete();
 				travelModel::where("bookingID","=",$booking->id)->delete();
 				roomBookingModel::where("bookingId","=",$booking->id)->delete();
@@ -81,9 +101,15 @@ use App\roomFacilityModel as roomFacilityModel;
 			// delete bookingpackage
 			//delete roombooking
 			//delete travel
-			return redirect()->action('adminController@viewUsers');
+				return redirect()->action('adminController@viewUsers');
+			}
+				print json_encode(array(1));
+			}
+
+		else
+		{
+			return redirect()->action('MainController@index');
 		}
-			print json_encode(array(1));
 	}
 
 
@@ -197,10 +223,21 @@ use App\roomFacilityModel as roomFacilityModel;
 	 public function addCategoryPage(Request $request){
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
-		return view('pages.adminAddCategories',  array('user' => $user));		
+
+		elseif($user[0]->type=="admin")
+		{
+
+			return view('pages.adminAddCategories',  array('user' => $user));
+		}
+
+		else
+		{
+			return redirect()->action('MainController@index');
+		}		
 	}
 
 
@@ -386,12 +423,23 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
+
+		elseif($user[0]->type=="admin")
+		{
 		$facilities = facilityModel::all();
 		
 		return view('pages.adminAddFacility',  array('user'=>$user, 'facilities'=>$facilities)); 
+		}
+
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
+
 	}
 
 
@@ -459,58 +507,93 @@ use App\roomFacilityModel as roomFacilityModel;
 	public function deleteFacility(Request $request){
 			
 			$user = $request->session()->get('user');
-			if (is_null($user)){
+			if (is_null($user))
+			{
 				return false;
 			}
-			if ($_REQUEST['id'] != null){
-			$deletFacility = facilityModel::where('id', '=', $request['id'])->delete();
-			return redirect()->action('adminController@addFacilityPage');
-		}
-			print json_encode(array(1));
+
+			elseif($user[0]->type=="admin")
+			{
+				if ($_REQUEST['id'] != null)
+				{
+					$deletFacility = facilityModel::where('id', '=', $request['id'])->delete();
+					return redirect()->action('adminController@addFacilityPage');
+				}
+					print json_encode(array(1));
+			}
+
+			else
+			{
+				return redirect()->action('adminController@viewCategoryPage');
+			}
+
 	}
 
+	public function updateFacilityPage(Request $request)
+	{
 
-
-
-	public function updateFacilityPage(Request $request){
 		$user = $request->session()->get('user');
-		if (is_null($user)){
+
+		if(isset($_REQUEST['id'])) 
+			{
+				$facilityid = $_REQUEST['id'];
+			
+			}
+
+
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
 
-		if(isset($_REQUEST['id'])) {
-			$facilityid = $_REQUEST['id'];
-		
+
+		elseif($user[0]->type=="admin")
+		{
+			$facility = facilityModel::where('id', '=', $facilityid)->get();
+
+			return view('pages.adminUpdateFacility',  array('user' => $user, 'facility'=>$facility));
 		}
 
-		$user = $request->session()->get('user');
-		$facility = facilityModel::where('id', '=', $facilityid)->get();
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
 
-		return view('pages.adminUpdateFacility',  array('user' => $user, 'facility'=>$facility));	
+	
 	}
 
 	public function updateFacility(Request $request){
 
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
 
-		if((isset($_REQUEST['facilityType'])) && (isset($_REQUEST['idText'])))  {
-			$facilityType = $_REQUEST['facilityType'];
-			$idText = $_REQUEST['idText'];
+		elseif($user[0]->type=="admin")
+		{
 
+			if((isset($_REQUEST['facilityType'])) && (isset($_REQUEST['idText'])))  
+				{
+					$facilityType = $_REQUEST['facilityType'];
+					$idText = $_REQUEST['idText'];
+
+				}
+
+					$facilityUpdate = facilityModel::find($idText);
+
+					$facilityUpdate-> type = $facilityType ;
+
+					$facilityUpdate->save();
+
+					return Redirect::to('/addFacilityPage');
 		}
 
-		$facilityUpdate = facilityModel::find($idText);
-
-		$facilityUpdate-> type = $facilityType ;
-
-		$facilityUpdate->save();
-
-		return Redirect::to('/addFacilityPage');
-	
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
 	}
 
 
@@ -522,13 +605,23 @@ use App\roomFacilityModel as roomFacilityModel;
 		}
 
 		$user = $request->session()->get('user');
-		if (is_null($user)){
+
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
-		$roomCat = roomCategory::where('id', '=', $roomcatId)->get();
 
-		return view('pages.adminUpdateCategories',  array('user' => $user, 'roomCat'=>$roomCat));	
+		elseif($user[0]->type=="admin")
+		{
+			$roomCat = roomCategory::where('id', '=', $roomcatId)->get();
 
+			return view('pages.adminUpdateCategories',  array('user' => $user, 'roomCat'=>$roomCat));	
+		}
+
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
 
 		
 	}
@@ -542,13 +635,22 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
-		$buildingCat = buildingCategory::where('id', '=', $buildingcatId)->get();
 
-		return view('pages.adminUpdateCategories',  array('user' => $user, 'buildingCat'=>$buildingCat));	
+		elseif($user[0]->type=="admin")
+		{
+			$buildingCat = buildingCategory::where('id', '=', $buildingcatId)->get();
 
+			return view('pages.adminUpdateCategories',  array('user' => $user, 'buildingCat'=>$buildingCat));	
+		}
+
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
 		
 	}
 
@@ -560,13 +662,22 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
-		$vehicleCat = vehicleCategory::where('id', '=', $vehiclecatId)->get();
 
-		return view('pages.adminUpdateCategories',  array('user' => $user, 'vehicleCat'=>$vehicleCat));	
+		elseif($user[0]->type=="admin")
+		{
+			$vehicleCat = vehicleCategory::where('id', '=', $vehiclecatId)->get();
 
+			return view('pages.adminUpdateCategories',  array('user' => $user, 'vehicleCat'=>$vehicleCat));	
+		}
+
+		else
+		{
+		return redirect()->action('MainController@index');
+		}
 	
 		
 	}
@@ -643,13 +754,22 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
+
+		elseif($user[0]->type=="admin")
+		{
 		$tenant = User::where('id', '=', $tenantID)->get();
 
 		return view('pages.adminUpdateUsers',  array('user' => $user, 'tenant'=>$tenant));	
+		}
 
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
 
 	}
 
@@ -777,15 +897,41 @@ use App\roomFacilityModel as roomFacilityModel;
 			return redirect()->action('MainController@index');
 		}
 		//Gets buildings
-		$buildings = buildingModel::all();
+		elseif($user[0]->type == "admin"){
 
+			$buildings = buildingModel::all();
+
+			return view('pages.adminManageBuildings',  array('user'=>$user, 'buildings' => $buildings));
+
+
+		}
+		else{
+
+			return redirect()->action('MainController@index');
+		}
 		
-
-		return view('pages.adminManageBuildings',  array('user'=>$user, 'buildings' => $buildings));
 	}
 
+	function managePackage(Request $request){
 
-	
+			$user = $request->session()->get('user');
+		
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
+		elseif($user[0]->type == "admin"){
+			$packages = packageModel::all();
+
+			$buildings = buildingModel::all();
+
+			return view('pages.adminManagePackages',  array('user'=>$user,'buildings' => $buildings ,'packages' => $packages));
+
+		}
+		else{
+			return redirect()->action('MainController@index');
+		}
+	}
 
 
 

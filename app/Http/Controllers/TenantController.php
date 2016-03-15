@@ -136,28 +136,28 @@ else{
 		}
 
 
-	if(isset($request['id'])){
+		if(isset($request['id'])){
 
-		$bookingid= $request['id'];
-		$error=false;
-	}
+			$bookingid= $request['id'];
+			$error=false;
+		}
 
-	else{
-		$bookingid= false;
-		$error=true;
+		else{
+			$bookingid= false;
+			$error=true;
 
-	}
+		}
 
-	if($error == false){
+		if($error == false){
 
-		$bookings = bookingModel::where('id', '=', $bookingid)->get();
+			$bookings = bookingModel::where('id', '=', $bookingid)->get();
 
-		foreach($bookings as $booking){
-
-
+			foreach($bookings as $booking){
 
 
-		foreach($booking->packages as $book){
+
+
+			foreach($booking->packages as $book){
 
 			foreach($book as $books){
 			}

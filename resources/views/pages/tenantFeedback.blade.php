@@ -30,7 +30,7 @@ function processRating(val1, val2){
  
       $token = $("#token").val();
       $data =  {'bookingid': val2 ,'rating':val1,'_token':$token};
-      
+      var $html='';
     $.ajax({
        
         type: 'post',
@@ -38,12 +38,21 @@ function processRating(val1, val2){
         data: $data,
         dataType: 'json',
         success : function(data) {
-            if (data.status == 'ok') {
-                alert('You have rated '+val+' to CodexWorld');
-              
-            }else{
-                alert('Some problem occured, please try again.');
+            if (data.status == -1){
+                $html += "<span class='errorMsg'>";
+                $html += data.msg ;
+                $html += "</span>";
+
             }
+            else if(data.status == 1){
+                $html += "<span class='successMsg'>";
+                $html += data.msg ;
+                $html += "</span>";
+                 window.setTimeout(function(){location.reload()},2000)
+
+            }
+            $('#logMsg').html($html);
+        
         }
     });
 }
@@ -51,7 +60,7 @@ function processRating(val1, val2){
 </script>
    <div class="banner">
         <div class="wrap">
-             <h2>My Bookings</h2><div class="clear"></div>
+             <h2>FeedBack</h2><div class="clear"></div>
         </div>
     </div>
   <div class="main">  
@@ -59,31 +68,88 @@ function processRating(val1, val2){
     <div class="main-wrapper">
       
       <section >
-        <h4>My Bookings</h4>
+        <h4>My feedback</h4>
         <div class="contentHolder"  id="contentHolder">
-             <form method="get" method="" >
+             <form method="get"  >
              <input type="hidden" name="_token" id="token"  value="{{ csrf_token() }}" />
           <table align="center">
-           
+      <?php
+        if(empty($checkExists))
+          {
+        ?>
             <tr>
+
                 <td><label>How would you rate our service</label></td>
-                              <td><input name="rating" value="0" class="rating_star" type="hidden" postID="<?php echo $bookingid; ?>" /></td>
+                <td><input name="rating" value="0" class="rating_star" type="hidden" postID="<?php echo $bookingid; ?>" /></td>
                              
-    </tr>
+            </tr>
 
-    <tr>
-            <td><label>Additional feedback</label></td>
-            <td><input type="textarea" name="additionalFeedback" id="additionalFeedback"/></td>
-            
-    </tr>
+            <tr>
 
-    <tr>    
-            <td></td>
-            <td><input type="submit" name="submit" /></td>
-    </tr>
-          </table>
-      </form>
+               <td><label>Additional feedback</label></td>
+               <td><input type="textarea" name="additionalFeedback" id="additionalFeedback"/></td>       
+
+            </tr>
+
+            <tr>    
+
+               <td></td>
+               <td><input type="submit" name="submit" /></td>
+
+            </tr>
+
+            <tr>
+              <td></td>
+               <td> <p id="logMsg"> </p></td>
+             
+            </tr>
+    <?php
+  }
+ 
+  else{
+
+    ?>
+<p>You have already voted. Thank you for your feedback</p>
+
+    <?php
+
+    if($checkExists[0]->numofstar == 1){
+      ?>
+
+      <ul class="codexworld_rating_widget"><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>1</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>2</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>3</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>4</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>5</span></li></ul> 
+      <?php
+    }
+    if($checkExists[0]->numofstar == 2){
+      ?>
+      <ul class="codexworld_rating_widget"><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>1</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>2</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>3</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>4</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>5</span></li></ul>
+      <?php
+    }
+    if($checkExists[0]->numofstar == 3){
+      ?>
+    
+      <ul class="codexworld_rating_widget"><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>1</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>2</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>3</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>4</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>5</span></li></ul>
+      <?php
+    }
+    if($checkExists[0]->numofstar == 4){
+      ?>
+    <ul class="codexworld_rating_widget"><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>1</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>2</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>3</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>4</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px 0px;"><span>5</span></li></ul>
+      <?php
+    }
+    if($checkExists[0]->numofstar == 5){
+      ?>
+      <ul class="codexworld_rating_widget"><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>1</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>2</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>3</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>4</span></li><li style="background-image: url(&quot;images//widget_star.gif&quot;); background-position: 0px -28px;"><span>5</span></li></ul>
+      <?php
+  
+    }
+  }
+  ?>
+
+  </table>
+
+</form>
+
       </div>
+   
     </section>
      
      

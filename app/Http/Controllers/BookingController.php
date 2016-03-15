@@ -533,19 +533,22 @@ use Redirect;
 		$user = $request->session()->get('user');
 
 		if (is_null($user)){
+
+			
 			return redirect()->action('MainController@index');
 		}
 		else if($user[0]->type == 'tenant'){ 
 		
 
-		$ratingExist = starReviewModel::where('tenantid','=', $user[0]->id)
-										->where('bookingid','=', $request['id'] ) ->get();						
+/**			$checkExists = starReviewModel::where('tenantid', '=', $user[0]->id)
+								->where('bookingid','=',$bookingid) ->get();
+var_dump($checkExists[0]->numofstar);
+								
+	**/							
+		$checkExists = DB::table('tbluserstarreview')->where('tenantid', '=', $user[0]->id)
+												->where('bookingid','=',$bookingid) ->get();
 
-
-
-
-
-		return view('pages.tenantFeedback',  array('user' => $user, 'ratingExist'=>$ratingExist,'bookingid'=>$bookingid));
+		return view('pages.tenantFeedback',  array('user' => $user, 'checkExists'=>$checkExists,'bookingid'=>$bookingid));
 	}
 	else{
 		return redirect()->action('MainController@index');
@@ -555,6 +558,10 @@ use Redirect;
 
 
 	public function insertRating(Request $request){
+
+		  $messge  = array(
+		    "status" => 0,
+		);
 
 		$user = $user = $request->session()->get('user');
 
@@ -571,20 +578,40 @@ use Redirect;
 
 				$numberOfStars = $request['rating'];
 			}
+			if(isset($request['bookingid'])){
+
+				$bookingid = $request['bookingid'];
+			}
+
+		$checkExists = DB::table('tbluserstarreview')->where('tenantid', '=', $user[0]->id)
+													 ->where('bookingid','=',$bookingid) ->get();
+
+
+
+		if(empty($checkExists) ){
+
+			$InsertReview = DB::table('tbluserstarreview')->insert(
+   													 array('tenantid' => $user[0]->id, 
+   													       'bookingid' => $bookingid, 
+   													       'numofstar' =>  $numberOfStars)
+												  );
+
+												  
+
+			$messge['status'] = 1;
+		 	$messge['msg'] = "Successfully Inserted. Please Wait...";
+    
+		    //Return json formatted rating data
+		    echo json_encode($messge);		
+
+		}
+		else{
+
+
+		}
 
 			
-DB::table('tbluserstarreview')->insert(
-    array('tenantid' => $user[0]->id, 'numofstar' =>  $numberOfStars)
-);
 
-/*
-		$insertStar = new starReviewModel;
-		$insertstar-> tenantid = $user[0]->id;
-		$insertstar-> numofstars = $numberOfStars;
-
-		$insertstar-> save(); */
-
-//query insert
 
 	}
 	else{

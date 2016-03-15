@@ -130,16 +130,26 @@ use App\bookingPackageModel as bookingPackageModel;
 		if (is_null($user)){
 			return redirect()->action('MainController@index');
 		}
-		//Gets buildings
+		elseif($user[0]->type=="Landlord"){
+			//Gets buildings
 		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 
 			//Gets packages of building
 		$packages = packageModel::where('buildingid', '=', $buildings[0]->id)->get();
 
-		
 		//var_dump($packages[0]->id);
 
 		return view('pages.landlordpackages',  array('user' => $user, 'packages' => $packages, 'buildings' => $buildings));
+
+		}
+		else{
+			
+			return redirect()->action('MainController@index');
+		}
+		
+
+		
+		
 
 	}
 

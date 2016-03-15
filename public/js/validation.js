@@ -1983,7 +1983,6 @@ $(document).ready(function(){
 
 
 
-
 		//Ajax delete building in package section
 	$(".buildings-list1 .active a").click();
 
@@ -2100,8 +2099,8 @@ $(document).ready(function(){
 			$html = '<div class="building-left">';
 			$html += '<div class="building-header">';
 			$html += '<div class="buildingname">  <span>'+ data.buildingName +' </span>';
-			  //$html += '<a class="BuildingDelete1"  title = "delete" href="building/delete?id='+ data.id +'"></a>';
-			  //$html += '<a class="BuildingUpdate1" title ="update" href="building/update?id='+ data.id +'"></a>';
+			  $html += '<a class="BuildingDelete1"  title = "delete" href="building/delete?id='+ data.id +'"></a>';
+			  $html += '<a class="BuildingUpdate1" title ="update" href="building/update?id='+ data.id +'"></a>';
               
             $html += '</div>';
 				if (data.image != ''){
@@ -2643,6 +2642,8 @@ var loadingAdv = false;
 			  	  	$html += '<span class="location"> '+obj[i].buildingLocation+'</span><br/>';
 			  	  	$html += '<label>Type: </label>';
 			  	  	$html += '<span class="location"> '+obj[i].category.buildingCatName+'</span><br/>';
+			  	  	$html += '<label>Description: </label>';
+			  	  	$html += '<span class="desription"> '+obj[i].desc+'</span>';
 			  	  	$html += '<label>Description: </label>';
 			  	  	$html += '<span class="desription"> '+obj[i].desc+'</span>';
 			  	  	
