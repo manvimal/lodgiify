@@ -1061,7 +1061,7 @@ $(".contact .submit").click(function(){
 	   return $html;
 	}
 
-	var pageNum = 7;
+	var pageNum = 16;
 
 	 function initPaginationRoom() {
            // count entries inside the hidden content
@@ -1088,7 +1088,6 @@ $(".contact .submit").click(function(){
              str1 = '.dummyroomparent .room:eq('+ (page_index+i)+')';
              
              new_content = $(str1 ).clone();
-           console.log( str1)
               $('#SearchresultRoom').append(new_content);
          }
                 return false;
@@ -1971,7 +1970,7 @@ $(document).ready(function(){
 
     			$(".building_wrapper1").html(str);
 
-
+    			initPaginationPackage();
     		}
     		else{
     			$(".building_wrapper1").html('No result found');
@@ -2136,7 +2135,9 @@ $(document).ready(function(){
         	$html += '<div class="clear"></div></div>';
        
 			$html += '</div>';
-			$html += '<div class="rooms">';
+			$html += '<div class="rooms"  id="SearchresultPackage"></div>';
+
+			$html += '<div class="dummyroomparent hide">';
 
 			if (typeof data.packages !== "undefined") {
 				for (i=0 ; i< data.packages.length ; i++){
@@ -2156,13 +2157,43 @@ $(document).ready(function(){
 						$html += '</div>';
 				}
 			}
-			
+			$html += ' </div>';
         	$html += ' </div>';
-       
+       	 $html += '<div id="Paginationpackage"></div>';
 	   		$html += '<div class="clear"></div>';
 	   		return $html;
 	}
 
+	var pageNumPackage = 16;
+	 function initPaginationPackage() {
+           // count entries inside the hidden content
+          var num_entries = jQuery('.dummyroomparent .room').length;
+
+          // Create content inside pagination element
+           $("#Paginationpackage").pagination(num_entries, {
+                    callback: pageselectCallbackPackage,
+                    items_per_page:pageNumPackage // Show only one item per page
+          });
+            
+      }
+
+
+        function pageselectCallbackPackage(page_index, jq){
+
+        page_index = page_index*pageNumPackage;
+         $('#SearchresultPackage').empty();
+
+          
+            
+
+         for (i=0;i<pageNumPackage;i++){
+             str1 = '.dummyroomparent .room:eq('+ (page_index+i)+')';
+             
+             new_content = $(str1 ).clone();
+              $('#SearchresultPackage').append(new_content);
+         }
+                return false;
+     }
 
 //Ajax update building for package section
 
