@@ -928,9 +928,33 @@ use App\roomFacilityModel as roomFacilityModel;
 			return view('pages.adminManagePackages',  array('user'=>$user,'buildings' => $buildings ,'packages' => $packages));
 
 		}
-		else{
+		else
+		{
 			return redirect()->action('MainController@index');
 		}
+	}
+
+	function manageVehicles(Request $request){
+
+		$user = $request->session()->get('user');
+		
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
+		elseif($user[0]->type == "admin")
+		{
+			//Gets all vehicles
+			$vehicles = vehicleModel::all();
+
+			return view('pages.adminManageVehicles',  array('user' => $user, 'vehicles' => $vehicles));
+		}
+
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
+	
 	}
 
 

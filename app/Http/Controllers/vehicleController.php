@@ -23,6 +23,8 @@ use Session;
 use DB;
 use Redirect;
 use App\travelModel as travelModel;
+use App\vehicleBooking as vehicleBooking;
+
 
 
 
@@ -70,7 +72,15 @@ use App\travelModel as travelModel;
 		if ((isset($request['price'])) && (!empty($request['price'])) ){
 				$price = $request['price'];
 		}
-
+		if ((isset($request['driver'])) && (!empty($request['driver'])) ){
+				$driver = $request['driver'];
+		}
+		if ((isset($request['price'])) && (!empty($request['price'])) ){
+				$price = $request['price'];
+		}
+		if ((isset($request['desc'])) && (!empty($request['desc'])) ){
+				$desc = $request['desc'];
+		}
 		$uploadMsg = "";
 
 
@@ -99,7 +109,9 @@ use App\travelModel as travelModel;
 		$vehicle-> image = $fileName;
 		$vehicle-> models = $models;
 		$vehicle-> vehicleCatID = $category;		
-		$vehicle-> price = $price;	
+		$vehicle-> price = $price;
+		$vehicle-> driver = $driver;
+		$vehicle-> description = $desc;		
 
 		$vehicle->save();
 		Session::flash('success', 'vehicle successfully registered'); 
@@ -108,34 +120,51 @@ use App\travelModel as travelModel;
 	}
 
 
-	public function viewVehicle(Request $request){
+	public function viewVehicle(Request $request)
+	{
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
-		//Gets buildings
-		$vehicles = vehicleModel::where('vehicleOwnerID', '=', $user[0]->id)->get();
 
-		return view('pages.vehicleOwnerVehicles',  array('user' => $user, 'vehicles' => $vehicles));
+		elseif($user[0]->type=='vehicleowner')
+		{
+			//Gets vehicles
+			$vehicles = vehicleModel::where('vehicleOwnerID', '=', $user[0]->id)->get();
+
+			return view('pages.vehicleOwnerVehicles',  array('user' => $user, 'vehicles' => $vehicles));
+		}
+
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
 
 
 	}
 
 
-	public function delete(Request $request){
+	public function delete(Request $request)
+	{
 		$user = $request->session()->get('user');
-		if (is_null($user)){
+
+		if (is_null($user))
+		{
 			return false;
 		}
-		if ($request['id'] != null){
+
+		if ($request['id'] != null)
+		{
 			$vehicles = vehicleModel::where('id', '=', $request['id'])->delete();
 			
 			$travels = travelModel::where('vehicleID', '=', $request['id'])->delete();
+
+			$vehicleBooking = vehicleBooking::where('vehicleID', '=', $request['id'])->delete();
 		}
 		print json_encode(array(1));
-		//return Redirect::to('viewVehicles');
-
+	
 	}	
 
 

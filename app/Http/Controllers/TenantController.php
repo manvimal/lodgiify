@@ -26,6 +26,8 @@ use App\facilityModel as facilityModel;
  use App\bookingPackageModel as bookingPackageModel;
  use App\travelModel as  travelModel;
  use App\roomBookingModel as  roomBookingModel;
+ use App\vehicleModel as vehicleModel;
+  use App\vehicleCategory as vehicleCategory;
 
  
 
@@ -261,11 +263,44 @@ else{
 
 			roomBookingModel::where("bookingId","=",$request['id'])->delete();
 
-			return redirect()->action('tenantController@myBookings');
+			//return redirect()->action('tenantController@myBookings');
 		}
 			print json_encode(array(1));
 	
 	}
+
+
+	public function vehicleBooking(Request $request)
+	{
+
+		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
+		else if($user[0]->type == 'tenant')
+		{
+			
+
+		
+			$vehicles = vehicleModel::where('created_at', '!=', '')->orderBy('created_at', 'DESC')->get();
+
+			$vehicleCategories = vehicleCategory::all();
+
+			return view('pages.tenantBookVehicles',  array('user' => $user, 'vehicles'=>$vehicles, 'vehicleCategories'=>$vehicleCategories));
+		}
+
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
+
+	}
+
+	
+
+	
 
 
 	

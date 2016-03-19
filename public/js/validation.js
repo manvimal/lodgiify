@@ -77,8 +77,13 @@ function validateLogin(form){
 			  	  else if(obj.status == 1){
 			  	  		$html += "<span class='successMsg'>";
 			  	 		$html += obj.msg ;
+			  	 		
 			  	 		$html += "</span>";
-			  	 		location.reload();
+
+			  	 		$html += '<img src = "./images/loadingLogin.gif" height="20px" width="30px" alt="" href="images/loadingLogin.png" />';
+
+			  	 		window.setTimeout(function(){location.reload()},2000)
+
 
 			  	  }
 			  	  $('#logMsg').html($html);
@@ -410,7 +415,9 @@ function validateLogin(form){
 
 	//Check is dateTime
 	function isDateTime(value){
-		var pattern = /\d{4}\-[0-3]\d\-\d{2} [0-1]\d:[0-5]\d/
+		var pattern = /\d{4}\-[0-3]\d\-\d{2} ([01]?[0-9]|2[0-3]):[0-5][0-9]/
+
+
 		//alt:
 		
 		if (pattern.test(value)) {
@@ -1474,10 +1481,156 @@ $(".checkRoomAvailability").click(function(){
 	 })
 
 
+
+$("#checkVehicleAvail").click(function()
+{
+
+		$obj = $(this);
+
+ 		var vehicleid = $("#vehicleid").val();	
+
+ 		var start = $(".deals-list input[name=date10]").val();
+
+ 		var end = $(".deals-list input[name=date11]").val();
+
+ 		var token = $("#token").val();
+
+ 		var baseform = document.forms['registerVehicleBooking'];
+
+ 		var date10Obj = baseform['date10'];
+ 		var date11Obj = baseform['date11'];
+
+
+ 		removeAllErrors($(baseform));
+
+
+ 		var hasError = false;
+
+ 		$url = $(this).attr("href");
+
+ 		var token = $("#token").val();
+
+ 		var $data =  {"checkin":start , "checkout":end, "vehicleid":vehicleid , '_token': token};
+
+
+ 		if (!checkError(date10Obj))  clearError(date10Obj);
+ 		else hasError = true;
+
+
+
+ 		if (!checkError(date11Obj))  clearError(date11Obj);
+ 		else hasError = true;
+
+ 	
+ 		if (!hasError ){
+ 		
+
+ 			$.ajax({
+			  method: "POST",
+			  url:  $url  ,
+			  data: $data,
+			})
+			  .success(function( data ) {
+			  	data = $.parseJSON( data );
+			  	 if (data.status == 1){
+			  	 	//Successfully booked
+			  	 	 $obj .parents('.pack_label').find('.errorMsgRoom').text('');
+			  	 	 $obj .parents('.pack_label').find('.successMsgRoom').text(data.msg);
+			  	 	 
+			  	 	//$(".errorMsg1sgRoom").text("");
+			   		//$(".successMsgRoom").text(data.msg);
+			   	 } 
+			   	 else{
+
+			   	 	$obj .parents('.pack_label').find('.errorMsgRoom').text(data.msg);
+			  	 	$obj .parents('.pack_label').find('.successMsgRoom').text('');
+			   	 //	$(".successMsgRoom").text("");
+			   	 	//$(".errorMsgRoom").text(data.msg);
+			   	 }
+			   	 
+			  });
+	 		}
+ 		
+		  return false;
+
+	 })
+
+
+/**
+	$('.date10').click(function(){
+		$(this).parents('.pack_label').find('#checkVehicleAvail').click();
+	})
+**/
+
+
+$(".bookVehicles").click(function()
+{
+
+
+	 	//validate booking
+	 	//var numChild = $(".deals-list #children").val();
+
+ 		var start = $(".deals-list input[name=date10]").val();
+ 		var end = $(".deals-list input[name=date11]").val();
+
+ 		var token = $("#token").val();
+ 		
+ 		var $data =  $(this).parents("form").serialize();
+
+ 		var baseform = document.forms['registerVehicleBooking'];
+
+ 		var date10Obj = baseform['date10'];
+ 		var date11Obj = baseform['date11'];
+ 		
+
+ 		removeAllErrors($(baseform));
+ 		
+
+ 		var hasError = false;
+
+
+ 		if (!checkError(date10Obj))  clearError(date10Obj);
+ 		else hasError = true;
+
+
+ 		if (!checkError(date11Obj))  clearError(date11Obj);
+ 		else hasError = true;
+
+
+ 	
+ 		if (!hasError ){
+ 		
+
+ 			$.ajax({
+			  method: "post",
+			  url:  "/vehiclebooking/register" ,
+			  data: $data,
+			})
+			  .success(function( data ) {
+			  	data = $.parseJSON( data );
+			  	if (data.status == 1){
+			  	 	
+			  	 	//Successfully booked
+			  	 	$(".errorMsg1").html("");
+			   		$(".successMsg").html(data.msg);
+			   	 } 
+			   	 else{
+			   	 	$(".successMsg").html("");
+			   	 	$(".errorMsg1").html(data.msg);
+			   	 	
+			   	 }
+			  });
+	 		}
+ 		
+		  return false;
+
+	 })
+
+
  	 
-	//on change room trigger chek availability
+	//on change room trigger check availability
 	$('.rooms').change(function(){
-		$(this).parents('.pack_label').find('.checkRoomAvailability').click();
+		
 	})
 	
  	// Register booking
@@ -2484,6 +2637,11 @@ advSearch($(this));
 })
 
 
+
+
+
+
+
 $('#bestDeals #buildingCat').change(function(e) {
 
 advSearch($(this));
@@ -2521,6 +2679,80 @@ advSearch($(this));
 
 
 })
+
+//vehicles advanced search events
+
+$('#bestDeals #advancedVehicleSearch').click(function(e) 
+{
+
+	advancedVehicleSearch($(this));
+	
+	return false;
+
+
+})
+
+$('#bestDeals #vehicleName').keyup(function(e) 
+{
+
+	advancedVehicleSearch($(this));
+	
+	return true;
+
+
+})
+$('#bestDeals #numberOfSeats').keyup(function(e) 
+{
+
+	advancedVehicleSearch($(this));
+	
+	return true;
+
+
+})
+
+$('#bestDeals #price').keyup(function(e) 
+{
+
+	advancedVehicleSearch($(this));
+	
+	return true;
+
+
+})
+
+$('#bestDeals #vehicleCategory').change(function(e) 
+{
+
+	advancedVehicleSearch($(this));
+	
+	return true;
+
+
+})
+
+$('#bestDeals #driver').change(function(e) 
+{
+
+	advancedVehicleSearch($(this));
+	
+	return true;
+
+
+})
+
+$('#bestDeals #transmission').change(function(e) 
+{
+
+	advancedVehicleSearch($(this));
+	
+	return true;
+
+
+})
+
+
+
 
 
 
@@ -2628,6 +2860,8 @@ advSearch($(this));
 
  $("#advancedSearch").click();
 
+ $("#advancedVehicleSearch").click();
+
 
 
 
@@ -2675,8 +2909,6 @@ var loadingAdv = false;
 			  	  	$html += '<span class="location"> '+obj[i].category.buildingCatName+'</span><br/>';
 			  	  	$html += '<label>Description: </label>';
 			  	  	$html += '<span class="desription"> '+obj[i].desc+'</span>';
-			  	  	$html += '<label>Description: </label>';
-			  	  	$html += '<span class="desription"> '+obj[i].desc+'</span>';
 			  	  	
 			  	  	$html += '</p>';
 
@@ -2686,6 +2918,69 @@ var loadingAdv = false;
 
 
 			  	  $("#AdvSearchResult").append($html+'<div class="clear"></div>');
+			  	  loadingAdv = false;
+			  	}
+			  	 
+				
+			 
+			  }
+			});
+
+
+ }
+
+
+
+ function advancedVehicleSearch($curr){
+ 	
+ 	loadingAdv = true;
+ 			$url = $($curr).parents("form").attr("action");
+	//alert($url);
+			$data =  $($curr).parents("form").serialize();
+			
+			var $html = "";
+			 $("#AdvVehicleSearchResult").html($html);
+			$.ajax({
+			  type: "POST",
+			  url: $url,
+			  data: $data,
+			  success: function(responses){
+			 
+
+			  	if (loadingAdv){
+			  		 
+			  		 var obj = $.parseJSON( responses );
+			  		  	
+			  	  $html = "";
+			  	 // console.log(obj);
+			  	  if (obj.length == 0){
+			  	  	$html  ="No result found";
+			  	  }
+			  	
+			  	  for (i=0;i<obj.length;i++){
+
+			  	  	$html += '<div class="recently-posted-building">';
+			  	  	$html += '<img src="/upload/'+obj[i].image+'" alt="" width="200" height="200">';
+			  	  	$html += '<p>';
+			  	  	$html += '<label>Name: </label>';
+			  	  	$html += '<span class="buildingName">'+obj[i].vehicleName+'</span><br/>';
+			  	  	$html += '<label>Location: </label>';
+			  	  	$html += '<span class="location"> '+obj[i].numOfSeats+'</span><br/>';
+			  	  	$html += '<label>Type: </label>';
+			  	  	$html += '<span class="location"> '+obj[i].category.vehiclecatname+'</span><br/>';
+			  	  	$html += '<label>Description: </label>';
+			  	  	$html += '<span class="desription"> '+obj[i].transmission+'</span><br/>';
+			  	  	$html += '<label>Description: </label>';
+			  	  	$html += '<span class="desription"> '+obj[i].color+'</span><br/>';
+			  	  	
+			  	  	$html += '</p>';
+
+			  	  	$html += ' <a href="/bookVehiclesProcess/'+obj[i].id+'" data-vehicleid="'+obj[i].id+'" data-vehiclename="'+obj[i].vehicleName+'">Book now</a>';
+			  	  	$html += '<div class="clear"></div></div>';
+			  	  }
+			  	  //console.log(	$html )
+
+			  	  $("#AdvVehicleSearchResult").append($html+'<div class="clear"></div>');
 			  	  loadingAdv = false;
 			  	}
 			  	 

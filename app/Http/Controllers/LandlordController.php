@@ -21,6 +21,8 @@ use App\facilityModel as facilityModel;
 use App\buildingFacilityModel as buildingFacilityModel;
 use App\roomFacilityModel as roomFacilityModel;
 use App\packageModel as packageModel;
+use App\bookingModel as bookingModel;
+
 
 
 
@@ -122,6 +124,54 @@ use App\packageModel as packageModel;
 		
 		return view('pages.insertPackage',  array('user' => $user, 'buildings' => $buildings, 'categories' => $categories));
 	}
+
+
+	public function viewBookedRooms(Request $request)
+	{
+
+		$user = $request->session()->get('user');
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
+		elseif($user[0]->type == 'Landlord')
+		{
+
+			$bookingsDone = bookingModel::get();
+
+			$bookingsArr = array();
+
+			foreach ($bookingsDone as $booking ) 
+			{
+
+				if ($booking->building->buildingID == $user[0]->id)
+				{
+							
+					array_push($bookingsArr);
+
+				}
+			}
+
+			$timenow = $this->getTodayDateTime();
+
+
+				return view('pages.landlordViewAllBookingClients',  array('user' => $user, 'bookingsDone'=> $bookingsDone, 'timenow'=>$timenow));
+		}
+
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
+
+	}
+
+	private function getTodayDateTime()
+	{
+
+		date_default_timezone_set("Indian/Mauritius");
+		return date('Y-m-d H:i:s', strtotime('+0 minutes'));
+	}
+	
 
 
 }

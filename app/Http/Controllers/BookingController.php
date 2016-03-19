@@ -22,6 +22,8 @@ use App\buildingCategory as buildingCategory;
 use App\bookingPackageModel as bookingPackageModel;
 use App\roomBookingModel as roomBookingModel;
 use App\starReviewModel as starReviewModel;
+use App\vehicleModel as vehicleModel;
+use App\vehicleBookingModel as vehicleBookingModel;
 
 use Redirect;
 
@@ -619,8 +621,261 @@ var_dump($checkExists[0]->numofstar);
 	}
 
 	}
+
+
+
+	public function bookVehiclesProcess(Request $request,$id)
+	{
+
+		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
+		else if($user[0]->type == 'tenant')
+		{
+
+			
+		
+			$vehicles = vehicleModel::where('id', '=', $id)->get();
+
+		//	var_dump($vehicles);
+		//	die;
+
+			return view('pages.tenantBookVehicleProcess',  array('user' => $user, 'vehicles'=>$vehicles));
+		}
+
+		else
+		{
+			return redirect()->action('MainController@index');
+		}
+
+	}
 	
 
+	public function checkVehicleAvailability(Request $request)
+	{
+
+		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
+		else if($user[0]->type == 'tenant')
+		{
+
+			if ((isset($request['vehicleid'])) && (!empty($request['vehicleid'])) )
+			{
+					$vehicleid = $request['vehicleid'];
+			}	
+
+
+			if ((isset($request['checkin'])) && (!empty($request['checkin'])) )
+			{
+					$fromDate = $request['checkin'];
+			}
+
+
+			if ((isset($request['checkout'])) && (!empty($request['checkout'])) )
+			{
+					$toDate = $request['checkout'];
+			}
+
+			$today = $this->getTodayDateTime();
+
+			
+
+			$CheckvehicleAvail = vehicleBookingModel::where('vehicleid','=', $vehicleid)
+												
+		            								 ->where('todate','>=', $fromDate)
+		            								 ->where('fromdate','<=', $toDate)
+		            								
+
+													->get();
+
+
+
+			$checkTravel = DB::table('tbltravel')
+									           ->join('tblbooking', 'tbltravel.bookingID', '=', 'tblbooking.id')
+									           ->where('tbltravel.vehicleID', '=', $vehicleid)
+									           ->where('tblbooking.checkin','>=', $fromDate )
+									           ->where('tblbooking.checkOut','<=', $toDate)
+									           ->select('tblbooking.*')->get();
+
+//var_dump($CheckvehicleAvail);
+
+	         	$arrmsg = array();
+
+
+	                    
+			   if ((isset($CheckvehicleAvail) && count($CheckvehicleAvail) >0) || (isset($checkTravel) && count($checkTravel) >0))
+			   {
+
+			   		$arrmsg['status'] = -1;
+	           		$arrmsg['msg'] = "This vehicle is not available for the specified date";
+			   }
+	           
+	           else
+	           {
+		           	$arrmsg['status'] = 1;
+	           		$arrmsg['msg'] = "This vehicle is available for the specified date";
+	           }
+	          
+	          
+	           return json_encode($arrmsg);
+		
+			
+		}
+
+		else
+		{
+			   return redirect()->action('MainController@index');
+		}
+
+	}
+
+
+	public function bookVehicles(Request $request)
+	{
+		$user = $request->session()->get('user');
+
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
+		else if($user[0]->type == 'tenant')
+		{
+
+
+// /var_dump($request['date10']);
+            // $numDays = $fromDate->diff($toDate)->format("%a");
+		
+			// $numhours = $fromDate->diff($toDate)->format("%h");
+
+		//	var_dump($request['vehicleid']); 
+
+
+
+
+			 if ((isset($request['vehicleid'])) && (!empty($request['vehicleid'])) )
+			{
+					$vehicleid = $request['vehicleid'];
+			}	
+
+
+			if ((isset($request['date10'])) && (!empty($request['date10'])) )
+			{
+					$fromDate = new \DateTime($request['date10']);
+			}
+
+
+			if ((isset($request['date11'])) && (!empty($request['date11'])) )
+			{
+					 $toDate =  new \DateTime($request['date11']);
+			}
+
+			if ((isset($request['lattitude'])) && (!empty($request['lattitude'])) )
+			{
+					 $lattitude =  ($request['lattitude']);
+			}
+
+			if ((isset($request['longitude'])) && (!empty($request['longitude'])) )
+			{
+					 $longitude =  ($request['longitude']);
+			}
+
+
+
+			$CheckvehicleAvail = vehicleBookingModel::where('vehicleid','=', $vehicleid)
+												
+		            								 ->where('todate','>=', $fromDate)
+		            								 ->where('fromdate','<=', $toDate)
+		            								
+
+													->get();
+
+
+
+			$checkTravel = DB::table('tbltravel')
+									           ->join('tblbooking', 'tbltravel.bookingID', '=', 'tblbooking.id')
+									           ->where('tbltravel.vehicleID', '=', $vehicleid)
+									           ->where('tblbooking.checkin','>=', $fromDate )
+									           ->where('tblbooking.checkOut','<=', $toDate)
+									           ->select('tblbooking.*')->get();
+
+
+
+	         	$arrmsg = array();
+
+
+	                    
+			   if ((isset($CheckvehicleAvail) && count($CheckvehicleAvail) >0) || (isset($checkTravel) && count($checkTravel) >0))
+			   {
+
+			   		$arrmsg['status'] = -1;
+	           		$arrmsg['msg'] = "This vehicle is not available for the specified date";
+			   }
+	           
+	           else
+	           {
+
+		           	$vehicle = vehicleModel::where('id', '=', $vehicleid)->get();
+
+	            	$numDays = $fromDate->diff($toDate)->format("%a");
+
+	           		$numHour1 = $numDays * 24;
+		
+					$numhours = $fromDate->diff($toDate)->format("%h");
+
+					$totalHours = $numHour1 + $numhours;
+
+
+
+					$vehiclePrice = $vehicle[0]->price;
+	          		$price = 50 * $vehiclePrice;
+
+	           		$vehicleBooking = new vehicleBookingModel;
+	           		$vehicleBooking->tenantid = $user[0]->id;
+	           		$vehicleBooking->vehicleid = $vehicleid;
+	           		$vehicleBooking->fromdate = $fromDate;
+	           		$vehicleBooking->todate = $toDate;
+	           		$vehicleBooking->price = $price;
+
+	           		if (!is_null($request['lattitude']))
+	           			$vehicleBooking->pickuplat = $lattitude;
+
+	           		if (!is_null($request['longitude']))
+	           			$vehicleBooking->pickuplong = $longitude;
+
+	           		$vehicleBooking->save();
+
+		           	$arrmsg['status'] = 1;
+	           		$arrmsg['msg'] = "Vehicle booking successful";
+	           }
+	          
+	          
+	           return json_encode($arrmsg);
+ 
+
+    	}
+
+    	else
+    	{
+    		return redirect()->action('MainController@index');
+    	}
+
+	}
+
+
+
+	private function getTodayDateTime()
+	{
+
+		date_default_timezone_set("Indian/Mauritius");
+		return date('Y-m-d H:i:s', strtotime('+0 minutes'));
+	}
 
 
 }

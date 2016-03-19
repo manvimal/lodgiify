@@ -61,11 +61,6 @@
          </tr> 
 
         <tr>
-        	 <td><label>Description: </label></td>
-            <td><textarea type = "textbox" class="required" name = "desc" id = "desc" ></textarea><span class="errorMsg"></span></td>
-        </tr>
-
-        <tr>
             <td><label>Model: </label></td>
             <td><input type = "text" class="required" name = "models" id = "models" ></textarea><span class="errorMsg"></span></td>
         </tr>
@@ -80,17 +75,31 @@
             <td><input type = "number" class="required" name = "numOfSeats" id = "numOfSeats" ></textarea><span class="errorMsg"></span></td>
         </tr>
 
-        <tr>
-            <td><label>Price per km: </label></td>
-            <td><input type = "text" class="required numeric" name = "price" id = "price" ></textarea><span class="errorMsg"></span></td>
-        </tr>
-
-
-        <tr>
+         <tr>
             <td><label>Transmission: </label></td>
             <td><input type="radio" name="transmission" value="Automatic" checked>Automatic
                 <input type="radio" name="transmission" value="Manual">Manual<span class="errorMsg"></span>
             </td>
+        </tr>
+
+        <tr>
+             <td><label>Provide driver: </label></td>
+            <td> <input type="radio" name="driver" value="0" checked> No
+                 <input type="radio" name="driver" value="1"> Yes </td>
+
+        </tr>
+
+        <tr>
+            <td><label>Price per hour: </label></td>
+            <td><input type = "text" class="required numeric" name = "price" id = "price" /><span class="errorMsg"></span></td>
+        </tr>
+
+
+       
+
+         <tr>
+             <td><label>Description: </label></td>
+            <td><textarea type = "textbox" class="required" name = "desc" id = "desc" ></textarea><span class="errorMsg"></span></td>
         </tr>
 
       

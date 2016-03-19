@@ -1113,6 +1113,10 @@ span a:hover{
 	background:#ffea00;
 	margin-bottom: 20px;
 }
+.marginForResponsive{
+	
+	margin-bottom: 0px;
+}
 .blog-img, .blog-img1{
 	margin-bottom:20px;
 }
@@ -3785,6 +3789,60 @@ width: 95%;
     
 
 }
+
+
+
+#AdvVehicleSearchResult .recently-posted-building{
+	
+    float: left;
+    margin-right: 30px;
+    height: 240px;
+    text-align: center;
+
+}
+
+#AdvVehicleSearchResult p{
+text-align: left;
+
+
+}
+
+#AdvVehicleSearchResult .recently-posted-building img{
+
+width: 95%;
+    height: 50%;
+    margin: 6px;
+
+}
+
+#AdvVehicleSearchResult .recently-posted-building {
+	width:162px;
+	background-color: white;
+    color: black;
+}
+
+
+#AdvVehicleSearchResult .recently-posted-building a{
+
+    color: blue;
+}
+
+
+#AdvVehicleSearchResult{
+	    padding: 20px;
+}
+
+#AdvVehicleSearchResult .recently-posted-building p{
+	padding-left:0.5em;
+}
+
+#AdvVehicleSearchResult .recently-posted-building span{
+	word-break: break-word;
+    
+
+}
+
+
 
 
 .recently-posted-building a{

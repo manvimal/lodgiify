@@ -198,20 +198,7 @@
 				<?php
 
 			}
-			?>
-			<diV>
-			<ul>
-				<li>
-					<?php
-
-		//echo $building->render();
-
-		?>
-	</li>
-</ul>
-</diV
-
-		<?php
+		
 		}
 				?>
 				

@@ -481,5 +481,185 @@ use App\packageModel as packageModel;
 		return json_encode($buildings);
 	
 	}
+
+
+
+	public function getVehicleAdvancedSearch(Request $request){
+
+		$error=False;
+
+		
+		if(isset($request['vehicleName'])){
+
+			$vehicleName = $request['vehicleName'];
+
+		}
+		
+
+						if(isset($request['vehicleCategory']) && ($request['vehicleCategory'])!= -1)
+						{
+								
+						$vehicleCategory = $request['vehicleCategory'];
+
+						}
+
+						else{
+							$vehicleCategory = False;
+
+						}
+
+
+						if((isset($request['driver'])) && ($request['driver'])!= -1){
+					
+							$driver = $request['driver'];
+						//	var_dump($request['buildingFacility']);
+
+
+						}
+
+						else{
+
+							$driver = False;
+
+
+						}
+
+						if(isset($request['price'])){
+					
+							$price = $request['price'];
+						//	var_dump($request['buildingFacility']);
+
+
+						}
+
+						else{
+
+							$price = False;
+
+
+						}
+
+						
+						if((isset($request['transmission'])) && ($request['transmission'])!= -1)
+						{
+					
+							$transmission = $request['transmission'];
+						//	var_dump($request['buildingFacility']);
+
+
+						}
+
+						else
+						{
+
+							$transmission = False;
+
+						}
+
+						if((isset($request['numberOfSeats'])) && ($request['numberOfSeats'])!= -1)
+						{
+					
+							$numberOfSeats = $request['numberOfSeats'];
+						//	var_dump($request['buildingFacility']);
+
+
+						}
+
+						else
+						{
+
+							$numberOfSeats = False;
+
+						}
+
+						if(isset($request['checkIn']))
+						{
+					
+							$checkIn = $request['checkIn'];
+						
+						}
+
+						else
+						{
+
+							$checkIn = False;
+
+						}
+						if(isset($request['checkout']))
+						{
+					
+							$checkout = $request['checkout'];
+						//	var_dump($request['buildingFacility']);
+
+
+						}
+
+						else
+						{
+
+							$checkout = False;
+
+
+						}
+
+						
+			$vehicles = vehicleModel::where('vehicleName','Like', $vehicleName.'%')
+
+
+							  ->Where(function($query) use ($vehicleCategory, $driver, $transmission, $price, $numberOfSeats){
+
+								if($vehicleCategory)
+								{
+							
+
+									$query->where('vehicleCatID', 'like', $vehicleCategory .'%');
+
+								}
+
+								if($driver) 
+								{
+								
+
+									$query->where('driver', 'like', $driver .'%');
+
+								}
+								if($transmission) 
+								{
+								
+
+									$query->where('transmission', 'like', $transmission .'%');
+
+								}
+								if($price) 
+								{
+								
+									$query->where('price', 'like', $price .'%');
+
+								}
+
+								if($numberOfSeats) 
+								{
+								
+									$query->where('numOfSeats', 'like', $numberOfSeats .'%');
+
+								}
+
+								
+                     
+            				})
+  						  ->get();	
+
+
+
+
+//var_dump($request['buildingCat']);
+
+
+//var_dump($buildings);
+	
+
+		return json_encode($vehicles);
+	
+	}
 	
 }

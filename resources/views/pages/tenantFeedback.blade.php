@@ -48,6 +48,8 @@ function processRating(val1, val2){
                 $html += "<span class='successMsg'>";
                 $html += data.msg ;
                 $html += "</span>";
+                $html += '<img src = "./images/feedbackloader.gif" height="35px" width="45px" alt="" href="images/loadingLogin.png" />';
+
                  window.setTimeout(function(){location.reload()},2000)
 
             }

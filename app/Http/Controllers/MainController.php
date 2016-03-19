@@ -16,7 +16,9 @@ use App\buildingModel as buildingModel;
 
 use App\adminModel as adminModel;
 use App\tenantModel as tenantModel;
+use App\sessionModel as sessionModel;
 use URL;
+use Carbon\Carbon;
 
 
 
@@ -276,6 +278,7 @@ use URL;
 		    "status" => 0,
 		);
 
+
 		$userName = strip_tags(trim($_REQUEST['LoginUserName']));
 		$password = md5(strip_tags(trim($_REQUEST['LoginPassword'])));
 		
@@ -289,13 +292,47 @@ use URL;
 			                    ->Where('userStatus', '=', '1' )
 			                    ->get();
 
-			if(!empty($users)){
+			if(!empty($users))
+			{
+
 				$messge['status'] = 1;
 				$messge['msg'] = "Tenant logged in. Please wait...";
 				$users['type'] = 'tenant';
 				$request->session()->put('user', $users);
 
+				
+				
+
+				sessionModel::where('username','=',$users[0]->UserName)->get();
+
+				
+				//var_dump($checkLoginExists);
+				//die;
+				if(isset($checkLoginExists) && !empty($checkLoginExists) && (count($checkLoginExists) >0))
+				{
+
+
+					DB::table('tblsession')
+		                	->where('username', $users[0]->UserName )
+		                	->update(array('logindatetime' =>  $this->getTodayDateTime() ));
+
+
 				}
+
+				else
+				{
+				
+					$userStatusInsert = new sessionModel;
+					$userStatusInsert-> username = $users[0]->UserName;
+					$userStatusInsert-> logindatetime = $this->getTodayDateTime();
+					$userStatusInsert-> type = $users[0]->type;
+					$userStatusInsert->save();
+		
+
+				}
+				
+
+			}
 
 
 			else 
@@ -907,6 +944,14 @@ function sendEmail($contactName, $to, $subject, $body){
 	  }
 	  return $random;
 	}
+
+	private function getTodayDateTime()
+	{
+
+		date_default_timezone_set("Indian/Mauritius");
+		return date('Y-m-d H:i:s', strtotime('+0 minutes'));
+	}
+
 	
 }
 ?>

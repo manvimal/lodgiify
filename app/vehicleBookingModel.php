@@ -11,7 +11,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use DB;
 
-class vehicleModel extends Model implements AuthenticatableContract,
+class vehicleBookingModel extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
 {
@@ -22,7 +22,7 @@ class vehicleModel extends Model implements AuthenticatableContract,
      *
      * @var string
      */
-    protected $table = 'tblvehicle';
+    protected $table = 'tblvehiclebooking';
 
     /**
      * The attributes that are mass assignable.
@@ -33,31 +33,25 @@ class vehicleModel extends Model implements AuthenticatableContract,
     protected $primarykey = 'id';
 
      protected $fillable = ['id',
-                            'vehicleName',
-                            'vehicleCatID',
-                            'vehicleOwnerID',
-                            'models',
-                            'color',
-                            'numOfSeats',
-                            'image',
-                            'transmission',
-                            'description',
-                            'driver'.
-                            'location'
-                            ];
+                            'vehicleid',
+                            'tenantid',
+                            'fromdate',
+                            'todate',
+                            'price'                          
+                                            ];
 
     //displays the relationships in json format
-    protected $with = array('category', 'vehicleOwner');
+    protected $with = array('vehicle', 'tenant');
 
 
-    public function category()
+    public function vehicle()
     {
-        return $this->belongsTo('App\vehicleCategory' , 'vehicleCatID');
+        return $this->belongsTo('App\vehicleModel' , 'vehicleid');
     }
 
-    public function vehicleOwner()
+    public function tenant()
     {
-        return $this->belongsTo('App\vehicleOwnerModel' , 'vehicleOwnerID');
+        return $this->belongsTo('App\User' , 'tenantid');
     }
 
     

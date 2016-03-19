@@ -25,6 +25,7 @@
 						<li><a href="{{ URL::asset('/addFacilityPage') }}">Administer Facility</a></li>
 						<li><a href="{{ URL::asset('/manageBuilding') }}">Manage Building</a></li>
 						<li><a href="{{ URL::asset('/managePackage') }}">Manage Package</a></li>
+						<li><a href="{{ URL::asset('/manageVehicles') }}">Manage Vehicles</a></li>
 					<?php
 						}
 					?>
@@ -36,8 +37,10 @@
 						
 						<li><a href="{{ URL::asset('/booking') }}">Bookings</a></li>
 						<li><a href="{{ URL::asset('/mybooking') }}">My Bookings</a></li>
-						<li><a href="{{ URL::asset('/aboutus') }}">About Us</a></li> 
+						<li><a href="{{ URL::asset('/vehicleBooking') }}">Vehicle Booking</a></li> 
 						<li><a href="{{ URL::asset('/contactus') }}">Contact Us</a></li>
+						
+
 					<?php
 						}
 					?>
@@ -53,6 +56,7 @@
 						<li><a href="{{ URL::asset('/viewBuildings') }}">Building</a></li>
 						<li><a href="{{ URL::asset('/insertPackage') }}">Administer package</a></li>
 						<li><a href="{{ URL::asset('/viewPackage') }}">Package</a></li>
+						<li><a href="{{ URL::asset('/viewBookedRooms') }}">View Booked Rooms</a></li>
 						<li><a href="{{ URL::asset('/contactus') }}">Contact Us</a></li>
 					<?php
 

@@ -45,23 +45,19 @@ $(document).ready(function() {
      <div class="project">
       <div class="blog-left">
       <div class="blog-bg">
-         <h4>Get direction</h4>
+         <h4>Live tracking system</h4>
       </div>
 
 
-      <div class="blog-img">
+      <div class="marginForResponsive">
 
     
-           <table >
-        <tr>
-            <td>
+           
                 <div id="MyMapLOC" style="width: 100%; height: 400px">
                 </div>
-                <div id="MapRoute" style="width: 500px; height: 500px">
+                <div id="MapRoute" style="width: 100%; height: 500px">
                 </div>
-            </td>
-        </tr>
-      </table>
+   
  
 
       </div>

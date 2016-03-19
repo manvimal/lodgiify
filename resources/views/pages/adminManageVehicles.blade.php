@@ -1,9 +1,7 @@
-
  @extends('layout.default')
 
  @section('content')
- 
- <style type="text/css">
+<style type="text/css">
       .hide{display:none}
     </style>
 <script type="text/javascript">
@@ -26,7 +24,19 @@
              console.log(  new_content );
               $('#Searchresult').append(new_content);
          }
-
+        
+        
+       
+        
+                
+      
+        
+        // var new_content1 = $(str2).clone();
+       
+        
+           
+               
+               // $('#Searchresult').append(new_content1);
                 return false;
      }
            
@@ -36,25 +46,24 @@
     function initPagination() {
            // count entries inside the hidden content
           var num_entries = jQuery('.dummy li').length;
-
+        
           // Create content inside pagination element
            $("#Pagination").pagination(num_entries, {
                     callback: pageselectCallback,
                     items_per_page:pageNum // Show only one item per page
           });
 
-           $(".buildings-list1 .active a").click();
-          
+
+           $(".inner-list a:eq(0)").click();
       }
 
     initPagination();
 });
 </script>
-   
-    </script> 
+
    <div class="banner">
       	<div class="wrap">
-      	     <h2>My packages</h2><div class="clear"></div>
+      	     <h2>My Vehicles</h2><div class="clear"></div>
       	</div>
     </div>
 	<div class="main">	
@@ -62,38 +71,34 @@
 	 <div class="project-wrapper">
     <div class="project-sidebar">
     <div class="project-list">
-        <h4>My Buildings</h4>
-
-        <ul class="buildings-list1"  id="Searchresult"></ul>
+        <h4>My Vehicles</h4>
+      <ul  class="inner-list" id="Searchresult">
+      
+     </ul>
       <ul class="dummy hide">
-      <?php $active=0;
-          if (isset($buildings)){
-                foreach($buildings as $building){
-                                $link = "search?action=buildings&id=".$building->id.'&landlord='.  $user[0]->id ."&limit=1";
+      <?php if (isset($vehicles)){
+                foreach($vehicles as $vehicle){
+                                $link = "search?action=vehicles&id=".$vehicle->id."&limit=1";
                                 ?>
-                                    <li class="<?php echo ($active == 0) ? 'active' : '' ;?>"><img src="{{ URL::asset('images/arrow.png') }}" alt=""><p><a href="<?php echo $link; ?>"> <?php echo $building->buildingName  ?></a></p><div class="clear"></div></li>
+                                    <li><img src="images/arrow.png" alt=""><p><a href="<?php echo $link; ?>"> <?php echo $vehicle->vehicleName  ?></a></p><div class="clear"></div></li>
                                 <?php 
-                                 $active++;
                             }
-
                         }
                     ?>
       </ul>
-      <div id="Pagination"></div>
+       <div id="Pagination"></div>
       <div class="clear"></div>
      </div>
      
      
      
    </div>
-
-
-	  <div class="building_wrapper1"></div>
+	  <div class="inner_wrapper"></div>
 	 
 
 
 	 <div class="clear"></div>
   </div>
-   	</div>	
+   		
       	   		                                                                                            
 @stop

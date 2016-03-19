@@ -115,6 +115,8 @@ public function building()
     {
         return $this->belongsTo('App\buildingModel' , 'buildingID');
     }
+
+    
    
 }
 

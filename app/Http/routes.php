@@ -21,6 +21,8 @@ Route::get('/viewPackage','packageController@viewPackage');
 Route::get('/viewVehicleBookings','VehicleOwnerController@viewVehicleBookinga');
 Route::get('/user/forgetPassword','MainController@forgetPassword');
 Route::get('/user/sessionTimeOutRedirect','MainController@sessionTimeOutRedirect');
+Route::get('/viewBookedRooms','LandlordController@viewBookedRooms');
+
 
 
 /**** USER ***/
@@ -66,6 +68,11 @@ Route::get('/package/{id}', 'bookingController@packages');
 Route::get('/booking/viewBooking', 'tenantController@viewBookingPDF');
 Route::get('/booking/delete','tenantController@deleteBooking');
 Route::post('/checkRoomAvail','bookingController@checkAvailability');
+Route::get('/vehicleBooking','tenantController@vehicleBooking');
+Route::get('/bookVehiclesProcess/{id}','bookingController@bookVehiclesProcess');
+Route::post('/checkVehicleAvail','bookingController@checkVehicleAvailability');
+Route::post('/vehiclebooking/register','bookingController@bookVehicles');
+
 
 
 
@@ -76,6 +83,7 @@ Route::get('/insertPackage','LandlordController@insertPackage');
 Route::post('/package/register','packageController@registerPackage');
 Route::get('/deletePackage/delete','packageController@delete');
 Route::post('/updatePackage/update','packageController@update');
+
 
 
 /**Admin **/
@@ -105,7 +113,7 @@ Route::get('/tenant/update','adminController@tenantUpdatePage');
 Route::get('/user/block', 'adminController@blockUsers');
 Route::get('/manageBuilding', 'adminController@manageBuilding');
 Route::get('/managePackage','adminController@managePackage');
-//Route::post('/searchUser', 'adminController@searchUser');
+Route::get('/manageVehicles', 'adminController@manageVehicles');
 
 
 
@@ -119,7 +127,7 @@ Route::get('/RoomFacility/delete', 'RoomController@deleteRoomFacility');
 Route::get('/buildingSuggestion','searchController@buildingSuggestion');
 
 Route::post('/getAdvancedSearch','searchController@getAdvancedSearch');
-
+Route::post('/getVehicleAdvancedSearch','searchController@getVehicleAdvancedSearch');
 
 
 
