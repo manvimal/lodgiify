@@ -124,7 +124,6 @@ use App\roomBookingModel as roomBookingModel;
 		}
 
 
-
 		return Redirect::to('addRoom');
 	}
 

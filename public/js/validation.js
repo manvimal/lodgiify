@@ -212,8 +212,6 @@ function validateLogin(form){
 			  	 		$html += obj.msg ;
 			  	 		$html += "</span><br />";
 
-
-
 				
 			  	 		$('#Password').val("");
 			  	 		  $('#Email').val("");
@@ -996,6 +994,7 @@ $(".contact .submit").click(function(){
 
 
 	function searchSkeleton(data){
+		var $buildingImage
 		prevData = data;
 		$html = '<div class="building-left">';
 			$html += '<div class="building-header">';
@@ -1019,47 +1018,66 @@ $(".contact .submit").click(function(){
            $html += '<div class="buildingDetails">';
 
               
-              $html += '<div class="buildingCat">  Building type : <span> '+ data.category.buildingCatName +'</span></div>';
-              $html += '<div class="buildingdesc">  Description : <span> '+ data.desc +'</span></div>';
+              $html += '<div class="buildingCat"><span class="buildFont">  Building type </span> : <span> '+  data.category.buildingCatName +'</span></div>';
+              $html += '<div class="buildingdesc"><span class="buildFont">  Description </span>   : <span> '+ data.desc +'</span></div>';
 
-              $html += '<div class="buildingLoc">  Address : <span> '+ data.buildingLocation +'</span></div>';
-              $html += '<div class="buildingrooms">  No of rooms : <span> '+ data.rooms.length +'</span></div>';
-              $html += '<div class="buildingrooms">   <span> <img height="80" width="120" src  = "' + ' upload/' + data.image +' " </span></div>';
+              $html += '<div class="buildingLoc"> <span class="buildFont">  Address </span> : <span> '+ data.buildingLocation +'</span></div>';
+              $html += '<div class="buildingrooms"> <span class="buildFont"> Num of rooms </span> : <span> '+ data.rooms.length +'</span></div>';
+              if(data.image != '')
+              {
+              	$buildingImage = data.image;
+              }
+              else
+              {
+              	$buildingImage = nopreview.jpg;
+
+              }
+              $html += '<div class="buildingrooms">   <span> <img height="80" width="120" src  = "' + ' upload/' + $buildingImage +' " </span></div>';
+            
               //	alert('./upload/' + data.image);
+          
           $html += '</div>';
            
           $html += '<div id="googleMap">';
-            $html += '';
+          $html += '';
           $html += '</div>';
-        $html += '<div class="clear"></div></div>';
+          $html += '<div class="clear"></div></div>';
 
 
-        infowindow = new google.maps.InfoWindow({
-				  content:data.buildingName + " - " + data.desc
-		 });
+         //google map markers information
+        infowindow = new google.maps.InfoWindow
+        ({
+			content:data.buildingName + " - " + data.desc
+		});
+
         myCenter=new google.maps.LatLng( data.lattitude, data.longitude);
 
 
 		$html += '</div>';
 		$html += '<div class="rooms" id="SearchresultRoom"> </div>';
 		$html += '<div class="dummyroomparent hide">';
-			for (i=0 ; i< data.rooms.length ; i++){
-				room =  data.rooms[i];
-				$html += '<div class="room">';
-					 $html += '<div class="roomDetails">';
-					  $html += '<a class="RoomDelete"  title = "delete" href="room/delete?id='+ room.id +'"></a>';
-			  $html += '<a class="RoomUpdate" title ="update" href="room/update?id='+ room.id +'"></a>';
-              	   $html += '<div class="roomName"> Room name : <span> '+ room.roomName +'</span></div>';
-	              $html += '<div class="roomCat"> Room type : <span> '+ room.roomCatID +'</span></div>';
-	              $html += '<div class="roomdesc">  Description : <span> '+ room.desc +'</span></div>';
-	              $html += '<div class="roomisOccupied">  Occupied : <span>'+ room.isOccupied +' </span></div>';
-	               $html += '<div class="roomstart"> StartDate : <span> '+ room.startDate +'</span></div>';
-	               $html += '<div class="roomend">  End date : <span> '+ room.endDate +'</span></div>';
-	               $html += '<div class="roomPrice">  price : <span>Rs. '+ room.price +'</span></div>';
+
+
+			for (i=0 ; i< data.rooms.length ; i++)
+			{
+					room =  data.rooms[i];
+					$html += '<div class="room">';
+					$html += '<h1 class="roomheader">Rooms</h1>';
+					$html += '<div class="roomDetails">';
+					$html += '<a class="RoomDelete"  title = "delete" href="room/delete?id='+ room.id +'"></a>';
+					$html += '<a class="RoomUpdate" title ="update" href="room/update?id='+ room.id +'"></a>';
+	              	$html += '<div class="roomName"> Room name : <span> '+ room.roomName +'</span></div>';
+		              $html += '<div class="roomdesc">  Description : <span> '+ room.desc +'</span></div>';
+		              $html += '<div class="roomisOccupied">  Occupied : <span>'+ room.isOccupied +' </span></div>';
+		              $html += '<div class="roomstart"> StartDate : <span> '+ room.startDate +'</span></div>';
+		              $html += '<div class="roomend">  End date : <span> '+ room.endDate +'</span></div>';
+		              $html += '<div class="roomPrice">  price : <span>Rs. '+ room.price +'</span></div>';
 	              
           $html += '</div>';
 				$html += '</div>';
 			}
+		
+	
 			
         $html += ' </div>';
         $html += '<div id="Paginationroom"></div>';
@@ -1499,6 +1517,7 @@ $("#checkVehicleAvail").click(function()
 
  		var date10Obj = baseform['date10'];
  		var date11Obj = baseform['date11'];
+ 		
 
 
  		removeAllErrors($(baseform));
@@ -1512,7 +1531,7 @@ $("#checkVehicleAvail").click(function()
 
  		var $data =  {"checkin":start , "checkout":end, "vehicleid":vehicleid , '_token': token};
 
-
+ 
  		if (!checkError(date10Obj))  clearError(date10Obj);
  		else hasError = true;
 
@@ -1581,6 +1600,8 @@ $(".bookVehicles").click(function()
 
  		var date10Obj = baseform['date10'];
  		var date11Obj = baseform['date11'];
+
+
  		
 
  		removeAllErrors($(baseform));
@@ -1630,7 +1651,8 @@ $(".bookVehicles").click(function()
  	 
 	//on change room trigger check availability
 	$('.rooms').change(function(){
-		
+		$this.parents('.pack_label').find('.checkRoomAvailability').click();
+
 	})
 	
  	// Register booking
@@ -1912,32 +1934,23 @@ removeAllErrors($(form));
 
 	var packageName = form['packageName'];
 		if (!checkError(packageName)) clearError(packageName);
-
 		else hasError = true;
 
 
-var capacity = form['capacity'];
-		if (!checkError(capacity)) clearError(capacity);
+	
 
-		else hasError = true;
-
-		var childrenCapacity = form['childrenCapacity'];
-		if (!checkError(childrenCapacity)) clearError(childrenCapacity);
-
-		else hasError = true;
-
-		var newPrice = form['newPrice'];
-		if (!checkError(newPrice)) clearError(newPrice);
-
-		else hasError = true;
+		
 	if (!hasError) {
+
+
 			url = "/package/register";
-			data =  $(form).serialize();
+			$data =  $(form).serialize();
+			console.log($data );
 			var $html='';
 			$.ajax({
 			  type: "POST",
 			  url: url,
-			  data: data,
+			  data: $data,
 			  success: function(response){
 
 			  	 	
@@ -1945,6 +1958,13 @@ var capacity = form['capacity'];
 			  	  var obj = $.parseJSON( response );
 
 			  	 	if (obj.status == 1 ){
+
+			  	 		$("#packageName").val('');
+			  	 		$("#adultPrice").val('');
+			  	 		$("#childrenPrice").val('');
+			  	 		$("#newPrice").val('');
+			  	 		$("#desc").val('');
+			  	 		
 			  	 		$html += "<span class='successMsg'>";
 			  	 		$html += obj.msg ;
 			  	 		$html += "</span><br />";
@@ -2158,7 +2178,7 @@ $(document).ready(function(){
 
 	//Package Delete
 	$("body").on('click','.packageDelete', function(){
-		var r = confirm("Are you sure you want to delete the room!");
+		var r = confirm("Are you sure you want to delete this package!");
 		if (r == true) {
 			var obj =  $(this);
 		    $.getJSON( $(this).attr("href"), function( data ) {
@@ -2263,7 +2283,7 @@ $(document).ready(function(){
 				}
 				
             
-         //  alert(data.packages.length);
+          console.log(data.facility);
             
   			$html += '</div>';
         	$html += '<div class="building-footer">';
@@ -2278,6 +2298,7 @@ $(document).ready(function(){
             if (typeof data.packages !== "undefined") {
             	$html += '<div class="buildingpackages">  No of packages : <span> '+ data.packages.length +'</span></div>';
             }
+
             
             $html += '<div class="buildingrooms">   <span> <img height="80" width="120" src  = "' + ' upload/' + data.image +' " </span></div>';
          	$html += '</div>';
@@ -2291,21 +2312,22 @@ $(document).ready(function(){
 			$html += '<div class="rooms"  id="SearchresultPackage"></div>';
 
 			$html += '<div class="dummyroomparent hide">';
-
+ 
 			if (typeof data.packages !== "undefined") {
 				for (i=0 ; i< data.packages.length ; i++){
 							packages =  data.packages[i];
 							$html += '<div class="room">';
-							$html += '<div class="roomDetails">';
+						
+							$html += '<div style="height:100px;width:200px;overflow:auto;"  class="roomDetails">';
 							$html += '<a class="packageDelete"  title = "delete" href="deletePackage/delete?id='+ packages.id +'"></a>';
 						 	$html += '<a class="packageUpdate" title ="update" href="/updatePackage/update?id='+ packages.id +'"></a>';
 			              	$html += '<div class="packageName"> Package name : <span> '+ packages.packageName +'</span></div>';
-			              	$html += '<div class="packageDesc"> Package Description : <span> '+ packages.packageDesc +'</span></div>';
+			              	$html += '<div class="packageDesc"> Description : <span> '+ packages.packageDesc +'</span></div>';
 			              	$html += '<div class="oldPrice"> Old Price : <span> '+ packages.oldPrice +'</span></div>';
 			              	$html += '<div class="promotionExpiryDate"> Promotion Expiry Date : <span> '+ packages.promotionExpiryDate +'</span></div>';
 			              	$html += '<div class="capacityAdult"> Capacity Adult : <span> '+ packages.capacityAdult +'</span></div>';
 				         
-				              
+				    
 			          	$html += '</div>';
 						$html += '</div>';
 				}
@@ -2382,7 +2404,7 @@ $(document).ready(function(){
               $html += '<div class="buildingdesc">  Description : <input  id="buildingdesc" name="buildingdesc" value="'+ data.desc + '" />  </div>';
 
               $html += '<div class="buildingLoc">  Address : <input  id="buildingLocation" name="buildingLocation" value="'+ data.buildingLocation + '" />  </div>';
-              $html += '<div class="buildingrooms">  No of rooms : <span> '+ data.packages.length +'</span></div>';
+              $html += '<div class="buildingrooms">  Nym of packages : <span> '+ data.packages.length +'</span></div>';
                $html += '<div class="">  <input type="submit" class="buildingUpdate1" value="Update building" />  </div> </form>';
 
           $html += '</div>';
@@ -2525,7 +2547,7 @@ $(document).ready(function(){
 	
 	$('a.deleteBuildingFacility').click(function(e) {
 
-		var r = confirm("Are you sure you want to delete the building!");
+		var r = confirm("Are you sure you want to delete the building facility!");
 		if (r == true) {
 
 			var obj = $(this);
@@ -2547,7 +2569,7 @@ $(document).ready(function(){
 
 	$('a.deleteRoomFacility').click(function(e) {
 
-		var r = confirm("Are you sure you want to delete the building!");
+		var r = confirm("Are you sure you want to delete the room facility!");
 		if (r == true) {
 
 			var obj = $(this);
@@ -2576,7 +2598,7 @@ $(document).ready(function(){
 
 $("body").on('click', 'a.deleteBooking',function(e) {
 
-		var r = confirm("Are you sure you want to delete the building!");
+		var r = confirm("Are you sure you want to delete the booking!");
 		if (r == true) {
 
 			var obj = $(this);
@@ -2597,6 +2619,120 @@ $("body").on('click', 'a.deleteBooking',function(e) {
 
 
 
+$("body").on('click', 'a.deleteVehicleBooking',function(e) 
+{
+
+		var r = confirm("Are you sure you want to delete the Booking!");
+		if (r == true) {
+
+			var obj = $(this);
+			$.ajax({
+			  type: "GET",
+			  url: $(this).attr("href"),
+			  data: {"_token": $("#token").val()},
+			  success: function(response){
+			  	  //var obj = $.parseJSON( response );
+			  	  $(obj).parents("tr.booking").remove();
+	    			
+    				
+			  }
+			});
+		}
+		return false;
+		})
+
+
+$("body").on('click', 'a.adminDeleteVehicleBooking',function(e) 
+{
+
+		var r = confirm("Are you sure you want to delete the Booking!");
+		if (r == true) {
+
+			var obj = $(this);
+			$.ajax({
+			  type: "GET",
+			  url: $(this).attr("href"),
+			  data: {"_token": $("#token").val()},
+			  success: function(response){
+			  	  //var obj = $.parseJSON( response );
+			  	  $(obj).parents("tr.booking").remove();
+	    			
+    				
+			  }
+			});
+		}
+		return false;
+		})
+
+
+
+
+$("body").on('click', 'a.LandlordDeleteBooking',function(e) {
+
+		var r = confirm("Are you sure you want to delete the booking!");
+		if (r == true) {
+
+			var obj = $(this);
+			$.ajax({
+			  type: "GET",
+			  url: $(this).attr("href"),
+			  data: {"_token": $("#token").val()},
+			  success: function(response){
+			  	  //var obj = $.parseJSON( response );
+			  	  $(obj).parents("tr.job").remove();
+	    			
+    				
+			  }
+			});
+		}
+		return false;
+		})
+
+
+$("body").on('click', 'a.adminDeleteRoomBooking',function(e) {
+
+		var r = confirm("Are you sure you want to delete the booking!");
+		if (r == true) {
+
+			var obj = $(this);
+			$.ajax({
+			  type: "GET",
+			  url: $(this).attr("href"),
+			  data: {"_token": $("#token").val()},
+			  success: function(response){
+			  	  //var obj = $.parseJSON( response );
+			  	  $(obj).parents("tr.job").remove();
+	    			
+    				
+			  }
+			});
+		}
+		return false;
+		})
+
+
+
+
+$("body").on('click', 'a.tenantDeleteBooking',function(e) {
+
+		var r = confirm("Are you sure you want to delete the booking!");
+		if (r == true) {
+
+			var obj = $(this);
+			$.ajax({
+			  type: "GET",
+			  url: $(this).attr("href"),
+			  data: {"_token": $("#token").val()},
+			  success: function(response){
+			  	  //var obj = $.parseJSON( response );
+			  	  $(obj).parents("tr.job").remove();
+	    			
+    				
+			  }
+			});
+		}
+		return false;
+		})
 
 
 });
@@ -2900,17 +3036,19 @@ var loadingAdv = false;
 
 			  	  	$html += '<div class="recently-posted-building">';
 			  	  	$html += '<img src="/upload/'+obj[i].image+'" alt="" width="50" height="50">';
+			  	  	$html += '<div class="advRoomDivInfo">';
 			  	  	$html += '<p>';
-			  	  	$html += '<label>Name: </label>';
+			  	  	$html += '<label class="advRoom">Name: </label>';
 			  	  	$html += '<span class="buildingName">'+obj[i].buildingName+'</span><br/>';
-			  	  	$html += '<label>Location: </label>';
+			  	  	$html += '<label class="advRoom">Location: </label>';
 			  	  	$html += '<span class="location"> '+obj[i].buildingLocation+'</span><br/>';
-			  	  	$html += '<label>Type: </label>';
+			  	  	$html += '<label class="advRoom">Type: </label>';
 			  	  	$html += '<span class="location"> '+obj[i].category.buildingCatName+'</span><br/>';
-			  	  	$html += '<label>Description: </label>';
-			  	  	$html += '<span class="desription"> '+obj[i].desc+'</span>';
+			  	  	$html += '<label class="advRoom ">Description: </label>';
+			  	  	$html += '<span class="description"> '+obj[i].desc+'</span>';
 			  	  	
 			  	  	$html += '</p>';
+			  	  	$html += '</div>';
 
 			  	  	$html += ' <a href="/package/'+obj[i].id+'" data-buildingid="'+obj[i].id+'" data-buildingname="'+obj[i].buildingName+'">Book now</a>';
 			  	  	$html += '<div class="clear"></div></div>';
@@ -2962,17 +3100,22 @@ var loadingAdv = false;
 			  	  	$html += '<div class="recently-posted-building">';
 			  	  	$html += '<img src="/upload/'+obj[i].image+'" alt="" width="200" height="200">';
 			  	  	$html += '<p>';
-			  	  	$html += '<label>Name: </label>';
-			  	  	$html += '<span class="buildingName">'+obj[i].vehicleName+'</span><br/>';
-			  	  	$html += '<label>Location: </label>';
-			  	  	$html += '<span class="location"> '+obj[i].numOfSeats+'</span><br/>';
-			  	  	$html += '<label>Type: </label>';
-			  	  	$html += '<span class="location"> '+obj[i].category.vehiclecatname+'</span><br/>';
-			  	  	$html += '<label>Description: </label>';
-			  	  	$html += '<span class="desription"> '+obj[i].transmission+'</span><br/>';
-			  	  	$html += '<label>Description: </label>';
-			  	  	$html += '<span class="desription"> '+obj[i].color+'</span><br/>';
-			  	  	
+			  	  	$html += '<div class="advRoomDivInfo">';
+			  	  	$html += '<label class="fontVehicleAdv">Name: </label>';
+			  	  	$html += '<span class="Name">'+obj[i].vehicleName+'</span><br/>';
+			  	  	$html += '<label class="fontVehicleAdv">Seats: </label>';
+			  	  	$html += '<span class="Seats"> '+obj[i].numOfSeats+'</span><br/>';
+			  	  	$html += '<label class="fontVehicleAdv">Type: </label>';
+			  	  	$html += '<span class="Type"> '+obj[i].category.vehiclecatname+'</span><br/>';
+			  	  	$html += '<label class="fontVehicleAdv">Transmission: </label>';
+			  	  	$html += '<span class="Transmission"> '+obj[i].transmission+'</span><br/>';
+			  	  	$html += '<label class="fontVehicleAdv">Color: </label>';
+			  	  	$html += '<span class="Color"> '+obj[i].color+'</span><br/>';
+			  	  	$html += '<label class="fontVehicleAdv">Price per hour: </label>';
+			  	  	$html += '<span class="Price"> ' + 'Rs'+ obj[i].price+'</span><br/>';
+			  	  	$html += '<label class="fontVehicleAdv" >Description: </label>';
+			  	  	$html += '<span class="Description "> ' +  obj[i].description+'</span><br/>';
+			  	  	$html += '</div>';
 			  	  	$html += '</p>';
 
 			  	  	$html += ' <a href="/bookVehiclesProcess/'+obj[i].id+'" data-vehicleid="'+obj[i].id+'" data-vehiclename="'+obj[i].vehicleName+'">Book now</a>';

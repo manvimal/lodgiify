@@ -73,7 +73,15 @@ use App\vehicleBooking as vehicleBooking;
 				$price = $request['price'];
 		}
 		if ((isset($request['driver'])) && (!empty($request['driver'])) ){
-				$driver = $request['driver'];
+				if(($request['driver']) == 'true')
+				{
+					$driver = 1;
+				}
+				else
+				{
+					$driver = 0;
+				}
+				
 		}
 		if ((isset($request['price'])) && (!empty($request['price'])) ){
 				$price = $request['price'];

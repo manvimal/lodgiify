@@ -38,102 +38,152 @@ use App\bookingPackageModel as bookingPackageModel;
     private $destinationPath = 'upload';
 
 	// Add building
-	public function register(Request $request){
+	public function register(Request $request)
+	{
 		$user = $request->session()->get('user');
-		if (is_null($user)){
+
+		$error = false;
+
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
-		$categories = buildingCategory::all();
 
-		if ((isset($request['buildingName'])) && (!empty($request['buildingName'])) ){
-			$buildingName = $request['buildingName'];
-		}
-		if ((isset($request['lattitude'])) && (!empty($request['lattitude'])) ){
-			$lattitude = $request['lattitude'];
-		}
-		if ((isset($request['longitude'])) && (!empty($request['longitude'])) ){
-			$longitude = $request['longitude'];
-		}
-
-		if ((isset($request['category'])) && (!empty($request['category'])) ){
-				$category = $request['category'];
-		}
-		if ((isset($request['location'])) && (!empty($request['location'])) ){
-				$location = $request['location'];
-		}
-		
-		if ((isset($request['desc'])) && (!empty($request['desc'])) ){
-				$desc = $request['desc'];
-		}
-
-		if ((isset($request['facilityCheckboxes'])) && (!empty($request['facilityCheckboxes'])) ){
-				$facilityCheckboxes = $request['facilityCheckboxes'];
-		}
-
-
-		$uploadMsg = "";
-
-
-		$fileName = '';
-		if (RequestStatic::hasFile('image')  && RequestStatic::file('image')-> isValid() )
+		elseif($user[0]->type=="Landlord")
 		{
-		   $extension = Input::file('image')->getClientOriginalExtension(); // getting image extension
-		   $fileName = rand(11111,99999).'.'.$extension; // renameing image
-		   $name = $this->destinationPath ;
-		   
-		   RequestStatic::file('image')->move($name,  $fileName );
+		
+			$categories = buildingCategory::all();
+
+			if ((isset($request['buildingName'])) && (!empty($request['buildingName'])) ){
+				$buildingName = $request['buildingName'];
+			}
+			else{
+				$error = true;
+			}
+			if ((isset($request['lattitude'])) && (!empty($request['lattitude'])) ){
+				$lattitude = $request['lattitude'];
+			}
+			else{
+				$error = true;
+			}
+			if ((isset($request['longitude'])) && (!empty($request['longitude'])) ){
+				$longitude = $request['longitude'];
+			}
+			else{
+				$error = true;
+			}
+
+			if ((isset($request['category'])) && (!empty($request['category'])) ){
+					$category = $request['category'];
+			}
+			else{
+				$error = true;
+			}
+			if ((isset($request['location'])) && (!empty($request['location'])) ){
+					$location = $request['location'];
+			}
+			
+			if ((isset($request['desc'])) && (!empty($request['desc'])) ){
+					$desc = $request['desc'];
+			}
+			else{
+				$error = true;
+			}
+
+			if ((isset($request['facilityCheckboxes'])) && (!empty($request['facilityCheckboxes'])) ){
+					$facilityCheckboxes = $request['facilityCheckboxes'];
+			}
+			else{
+				$facilityCheckboxes = '';
+				$error = true;
+			}
+
+
+			$uploadMsg = "";
+
+
+			$fileName = '';
+			if (RequestStatic::hasFile('image')  && RequestStatic::file('image')-> isValid() )
+			{
+			   $extension = Input::file('image')->getClientOriginalExtension(); // getting image extension
+			   $fileName = rand(11111,99999).'.'.$extension; // renameing image
+			   $name = $this->destinationPath ;
+			   
+			   RequestStatic::file('image')->move($name,  $fileName );
+			}
+			else
+			{
+				$fileName = 'nopreview.jpg';
+			}
+
+			if($error ==false){
+				
+				// Retrieve user session
+				$user = $request->session()->get('user');
+
+				//Save building for user
+				$building = new buildingModel;
+				$building-> buildingName = $buildingName ;
+				$building-> lattitude = $lattitude ;
+				$building-> longitude = $longitude ;
+				$building-> buildingLocation = $location ;
+				$building-> buildingCatId = $category;
+				$building-> landlordID = $user[0]->id; 
+				$building-> desc = $desc ;
+				$building-> image = $fileName;
+
+				$building->save();
+				Session::flash('success', 'Building successfully registered'); 
+
+				
+					foreach($facilityCheckboxes as $facilityCheckbox)
+					{
+
+						$facility = new buildingFacilityModel;
+						$facility-> facilityid = $facilityCheckbox;
+						$facility-> buildingid = $building->id;
+						$facility->save();
+
+						//var_dump($facilityCheckboxes[0]);
+
+					}
+				
+			}
+			return Redirect::to('addBuilding');
 		}
+
 		else
 		{
-			$fileName = 'nopreview.jpg';
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
-
 
 		
-		// Retrieve user session
-		$user = $request->session()->get('user');
-
-		//Save building for user
-		$building = new buildingModel;
-		$building-> buildingName = $buildingName ;
-		$building-> lattitude = $lattitude ;
-		$building-> longitude = $longitude ;
-		$building-> buildingLocation = $location ;
-		$building-> buildingCatId = $category;
-		$building-> landlordID = $user[0]->id; 
-		$building-> desc = $desc ;
-		$building-> image = $fileName;
-
-		$building->save();
-		Session::flash('success', 'Building successfully registered'); 
-
-
-		foreach($facilityCheckboxes as $facilityCheckbox){
-
-			$facility = new buildingFacilityModel;
-			$facility-> facilityid = $facilityCheckbox;
-			$facility-> buildingid = $building->id;
-			$facility->save();
-
-			//var_dump($facilityCheckboxes[0]);
-
-		}
-
-		return Redirect::to('addBuilding');
 	}
 
 
-	public function viewBuildings(Request $request){
+	public function viewBuildings(Request $request)
+	{
+
 		$user = $request->session()->get('user');
-		if (is_null($user)){
+
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
-		//Gets buildings
-		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 
+		elseif($user[0]->type=='Landlord')
+		{
+			//Gets buildings
+			$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
+
+			return view('pages.landlordbuildings',  array('user' => $user, 'buildings' => $buildings));
+		}
+		else
+		{
+			return response()->view('pages.404', ['user'=>$user], 404);
+           
+		}	
 		
-
-		return view('pages.landlordbuildings',  array('user' => $user, 'buildings' => $buildings));
 
 
 	}

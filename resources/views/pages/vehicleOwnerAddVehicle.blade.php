@@ -84,8 +84,8 @@
 
         <tr>
              <td><label>Provide driver: </label></td>
-            <td> <input type="radio" name="driver" value="0" checked> No
-                 <input type="radio" name="driver" value="1"> Yes </td>
+            <td> <input type="radio" name="driver" value="false" checked> No
+                 <input type="radio" name="driver" value="true"> Yes </td>
 
         </tr>
 

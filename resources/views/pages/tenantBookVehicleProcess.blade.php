@@ -167,9 +167,9 @@
                               <label>Please insert you exact pickup location</label>
                                <div id="dvMap" style="width: 500; height: 180px"></div>
 
-                               latitude: <input type="text" class="required numeric" id="lattitude" name = "lattitude" /> <span class="errorMsg"></span></td>
+                               <p>latitude: <input type="text" class="required numeric" id="lattitude" name = "lattitude" /> <span class="errorMsg"></span> </p></td>
                           
-                               Longitude: <input type="text" class="required numeric" name = "longitude" id="longitude" /> <span class="errorMsg"></span></td>
+                              <p> Longitude: <input type="text" class="required numeric" name = "longitude" id="longitude" /> <span class="errorMsg"></span></p></td>
                             
 
                            

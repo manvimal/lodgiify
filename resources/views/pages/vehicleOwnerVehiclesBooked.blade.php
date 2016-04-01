@@ -14,10 +14,8 @@
   <div class="main tenantDealPackage">  
     <input type="hidden" id="token" value="{{ csrf_token() }}" />    
    <div class="project-wrapper vehicleBooking-wrapper">
-   
 
-
-      <?php if (isset($bookingsDone))
+      <?php if (isset($VehiclebookingsDone))
       {    
       ?>
         
@@ -34,35 +32,38 @@
                   <th>Check out: </th>
                     <th>Status: </th>
                      <th>Action: </th>
+                     <th>Pickup: </th>
 
                
               </tr>
 
               <?php
 
-                if(!empty($bookingsDone))
+                if(!empty($VehiclebookingsDone))
                 {
 
-                    foreach($bookingsDone as $booking){
+                    foreach($VehiclebookingsDone as $booking){
                 // var_dump($booking);die;
-                      $deleteLink =  "/bookingTenant/delete?id=". $booking->id;
+                      $deleteLink =  "/deleteVehicleBooking?id=". $booking->id;
+                      $viewPickupLocation = "/viewPickup?id=" . $booking->id . '&' . $booking->pickuplat . '&' . $booking->pickuplong;
                     ?>
                          <tr class="job">
-                              <td> <img src="upload/<?php echo $booking->image  ?>" class="imageSize"/></td>
+
+                             <td> <img src="upload/<?php echo $booking->image  ?>" class="imageSize"/></td>
                              <th><?php echo $booking->FirstName .' '.$booking->LastName ?></th>
                              <th><?php echo $booking->Phone ?></th>
                              <th><?php echo $booking->Email ?></th>
-                             <th><?php echo $booking->buildingName ?></th>
-                             <th><?php echo $booking->buildingCatName ?></th>
+                             <th><?php echo $booking->vehicleName ?></th>
+                             <th><?php echo $booking->vehicleCatName ?></th>
                              <th><?php echo 'Rs ' .$booking->price ?></th>
-                             <th><?php echo $booking->checkin ?></th>
-                             <th><?php echo $booking->checkOut ?></th>
+                             <th><?php echo $booking->fromdate ?></th>
+                             <th><?php echo $booking->todate ?></th>
 
 
                             <?php 
 
 
-                              if($booking->checkOut <= $timenow )
+                              if($booking->todate <= $timenow )
                               {
                             ?>
 
@@ -78,13 +79,27 @@
 
                           }
 
+
+
                                 ?>
 
 
                              <th ><a href="<?php echo $deleteLink; ?>" target="_blank" class="btnLogin LandlordDeleteBooking">Delete Booking</a></td></th>
-                            
-
-                            
+                          
+                          <?php
+                          if($booking->driver == true)
+                          {
+                            ?>
+                             <th ><a href="<?php echo $viewPickupLocation; ?>" target="_blank" class="btnLogin tenantDeleteBooking">view Pickup Location</a></td></th>
+                            <?php
+                          }
+                          else
+                          {
+                            ?>
+                            <th ><?php echo 'No Driver'; ?></th>
+                            <?php
+                          }
+                          ?>
 
                           </tr>
                       <?php 

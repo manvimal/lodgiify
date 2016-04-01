@@ -55,7 +55,7 @@ use Redirect;
 		return view('pages.tenantDealPackage',  array('user' => $user,'packages' => $packages, 'building' => $building, 'buildingCat'=> $buildingCat  ));
 	}
 	else{
-		return redirect()->action('MainController@index');
+		return response()->view('pages.404', ['user'=>$user], 404);
 	}
 
 	
@@ -146,8 +146,6 @@ use Redirect;
 					                     ->where('buildingid', '=', $buildingId)
 					                     ->where('roomCatID', '=', $package->roomCategoryID)
 					                     ->get();
-
-
 
 
 					            $roomsub = DB::table('tblroombooking')
@@ -553,7 +551,7 @@ var_dump($checkExists[0]->numofstar);
 		return view('pages.tenantFeedback',  array('user' => $user, 'checkExists'=>$checkExists,'bookingid'=>$bookingid));
 	}
 	else{
-		return redirect()->action('MainController@index');
+		return response()->view('pages.404', ['user'=>$user], 404);
 	}
 
 	}
@@ -617,7 +615,7 @@ var_dump($checkExists[0]->numofstar);
 
 	}
 	else{
-		return redirect()->action('MainController@index');
+		return response()->view('pages.404', ['user'=>$user], 404);
 	}
 
 	}
@@ -648,7 +646,7 @@ var_dump($checkExists[0]->numofstar);
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 
 	}
@@ -731,7 +729,7 @@ var_dump($checkExists[0]->numofstar);
 
 		else
 		{
-			   return redirect()->action('MainController@index');
+			   return response()->view('pages.404', ['user'=>$user], 404);
 		}
 
 	}
@@ -806,7 +804,6 @@ var_dump($checkExists[0]->numofstar);
 									           ->select('tblbooking.*')->get();
 
 
-
 	         	$arrmsg = array();
 
 
@@ -823,36 +820,44 @@ var_dump($checkExists[0]->numofstar);
 
 		           	$vehicle = vehicleModel::where('id', '=', $vehicleid)->get();
 
-	            	$numDays = $fromDate->diff($toDate)->format("%a");
+	            	$numDays = $fromDate->diff($toDate)->format("%r%a");
 
+	            
 	           		$numHour1 = $numDays * 24;
 		
-					$numhours = $fromDate->diff($toDate)->format("%h");
+					$numhours = $fromDate->diff($toDate)->format("%r%h");
 
 					$totalHours = $numHour1 + $numhours;
 
+					if($totalHours >= 2)
+					{
+						$vehiclePrice = $vehicle[0]->price;
+		          		$price = $totalHours * $vehiclePrice;
 
+		           		$vehicleBooking = new vehicleBookingModel;
+		           		$vehicleBooking->tenantid = $user[0]->id;
+		           		$vehicleBooking->vehicleid = $vehicleid;
+		           		$vehicleBooking->fromdate = $fromDate;
+		           		$vehicleBooking->todate = $toDate;
+		           		$vehicleBooking->price = $price;
 
-					$vehiclePrice = $vehicle[0]->price;
-	          		$price = 50 * $vehiclePrice;
+		           		if (!is_null($request['lattitude']))
+		           			$vehicleBooking->pickuplat = $lattitude;
 
-	           		$vehicleBooking = new vehicleBookingModel;
-	           		$vehicleBooking->tenantid = $user[0]->id;
-	           		$vehicleBooking->vehicleid = $vehicleid;
-	           		$vehicleBooking->fromdate = $fromDate;
-	           		$vehicleBooking->todate = $toDate;
-	           		$vehicleBooking->price = $price;
+		           		if (!is_null($request['longitude']))
+		           			$vehicleBooking->pickuplong = $longitude;
 
-	           		if (!is_null($request['lattitude']))
-	           			$vehicleBooking->pickuplat = $lattitude;
+		           		$vehicleBooking->save();
 
-	           		if (!is_null($request['longitude']))
-	           			$vehicleBooking->pickuplong = $longitude;
+			           	$arrmsg['status'] = 1;
+		           		$arrmsg['msg'] = "Vehicle booking successful";
+	       	    	}
 
-	           		$vehicleBooking->save();
-
-		           	$arrmsg['status'] = 1;
-	           		$arrmsg['msg'] = "Vehicle booking successful";
+	       	    	else
+	       	    	{
+	       	    		 	$arrmsg['status'] = -1;
+		           			$arrmsg['msg'] = "Minimum Booking timespan is 2 hours";
+	       	    	}
 	           }
 	          
 	          
@@ -863,7 +868,7 @@ var_dump($checkExists[0]->numofstar);
 
     	else
     	{
-    		return redirect()->action('MainController@index');
+    		return response()->view('pages.404', ['user'=>$user], 404);
     	}
 
 	}

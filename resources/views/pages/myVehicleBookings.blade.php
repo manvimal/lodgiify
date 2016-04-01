@@ -59,7 +59,7 @@ $(function() {
     </style>
    <div class="banner">
         <div class="wrap">
-             <h2>My Bookings</h2><div class="clear"></div>
+             <h2>Vehicle</h2><div class="clear"></div>
         </div>
     </div>
   <div class="main">  
@@ -67,23 +67,22 @@ $(function() {
     <div class="main-wrapper">
       
       <section >
-        <h4>My Bookings</h4>
+        <h4>My Vehicle Bookings</h4>
         <div class="contentHolder main-list content"  id="contentHolder">
           <table border="1" align="center" id="Searchresult">
                                 </table>
           <table class="main-dummy hide" border="1" align="center">
-            <?php if (isset($bookings)){ ?>
+            <?php if (isset($vehicleBookings)){ ?>
                     <tr>             
-                        <th class="package"> Number</th>
-                        <th class="package"> Image</th>
-                        <th class="buildingName">Building Name </span></th>
-                        <th class="buildingCategory">Type </span></th>
-                        <th class="buildingLoc">Location </span></th>
-                        <th class="checkin">Check in date </span></th>
-                        <th class="checkout">Check out date </th>
-                        <th class="price">Price</th>
-                        <th class="adults">No adults </th>      
-                        <th class="children">No children </th> 
+                        <th class="number"> Number</th>
+                        <th class="image"> Image</th>
+                        <th class="buildingName">Vehicle Name </span></th>
+                        <th class="vehicleMdel">Model </span></th>
+                        <th class="type">Type </span></th>
+                        <th class="From">From </span></th>
+                        <th class="To">To </th>
+                         <th class="price">Price </th>
+                         <th class="price">Driver </th>
                         <th class="action">Action</th>   
 
                         <th ></th> 
@@ -91,37 +90,35 @@ $(function() {
                     </tr>
                                    
                    <?php $i = 1;
-                      foreach($bookings as $booking){ 
-                            if (count($booking->packages) > 0){
-                                 $lattitude = $booking->packages[0]-> building->lattitude ;
-                                 $longitude = $booking->packages[0]-> building->longitude ;
-                                 $building = $booking->packages[0]-> building->buildingName . " : ".  $booking->packages[0]-> building->buildingLocation;
-                                 $getDirection =  "/booking/getDirections?lattitude=". $lattitude."&longitude=".$longitude."&building=" .$building;
-                            } 
+                      foreach($vehicleBookings as $booking){ 
+                          
                             
-                            $deleteLink =  "/booking/delete?id=". $booking->id;
-                            $viewBookingLink =  "/booking/viewBooking?id=". $booking->id;
-                            $feedbackLink =  "/tenantfeedback?id=". $booking->id;
+                            $deleteLink =  "/vehicleBooking/delete?id=". $booking->id;
+                            $viewBookingLink =  "/vehicleBooking/view?id=". $booking->id;
+                         
+                            $getDirection =  "/vehicleBooking/getDirections?lattitude=". $booking->pickuplat."&longitude=". $booking->pickuplong . "&vehiclebookingid" . $booking->id;;
+                    
                               
                           ?>
                            <tr class="booking">
                               <td><?php echo $i ;?> </td>
-                               <td> <img src="upload/<?php echo $booking->building->image  ?>" class="imageSize"/></td>
-                              <td><?php echo $booking->building->buildingName  ?></td>
-                              <td><?php echo $booking->building->category->buildingCatName;  ?></td>
-                              <td><?php echo $booking->building->buildingLocation  ?></td>
-                              <td><?php echo $booking->checkin  ?></td>
-                              <td><?php echo $booking->checkOut  ?></td>
-                              <td><?php echo "Rs " .$booking->price  ?></td>
-                              <td><?php echo $booking->packages[0]->capacityAdult ?></td>
-                              <td><?php echo $booking->packages[0]->capacityChildren ?></td>
+                              <td> <img src="upload/<?php echo $booking->vehicle->image  ?>" class="imageSize"/></td>
+                              <td><?php echo $booking->vehicle->vehicleName  ?></td>
+                              <td><?php echo $booking->vehicle->models  ?></td>
+                              <td><?php echo $booking->vehicle->category->vehicleCatName  ?></td>
+                              <td><?php echo $booking->fromdate  ?></td>
+                              <td><?php echo $booking->todate  ?></td>
+                               <td><?php echo "Rs " .$booking->price  ?></td>
+                              <td><?php if($booking->vehicle->driver==false){echo 'No';}else{ echo 'Yes';}   ?></td>
+                             
+
                               
 
-                              <td> <?php if (count($booking->packages) > 0){  ?> <a href="<?php echo $getDirection; ?>" target="_blank" class="direction btnLogin">Get directions</a>  <?php } ?> <a href="<?php echo $viewBookingLink; ?>" class="Order btnLogin" target="_blank">View booking</a>  <a href="<?php echo $deleteLink; ?>" class="deleteBooking btnLogin" >Delete</a></td>
+                              <td> <?php if (count($booking) > 0){  ?>  <a href="<?php echo $viewBookingLink; ?>" class="Order btnLogin" target="_blank">View booking</a>  <a href="<?php echo $deleteLink; ?>" class="deleteVehicleBooking btnLogin" >Delete</a></td>
                               <?php
-                              if($booking->checkOut < $now){ 
+                              if($booking->driver == true){ 
                                  ?>
-                              <td> <a href="<?php echo $feedbackLink; ?>" target="_blank" class="direction btnLogin">Leave Feedback</a></td>
+                              <td><a href="<?php echo $getDirection; ?>" target="_blank" class="direction btnLogin">Pickup Location</a>  <?php } ?></td>
                            
                                  <?php
 

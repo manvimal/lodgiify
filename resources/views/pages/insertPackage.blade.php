@@ -2,7 +2,78 @@
  @extends('layout.default')
 
  @section('content')
-  
+  <script>
+
+  $(document).ready(function()
+  {
+
+
+      $('#adultprice').hide();
+      $('#childrenprice').hide();
+      $('#oldprice').hide();
+      $('#newPrice').hide();
+/**
+
+if(document.getElementById('promotionrdb').checked) {
+      alert("You have selected Option 1");
+} else {
+      alert("You have selected Option 1");
+}
+**/
+
+  $('#promotionrdb').change(function()
+  {
+        if($('#promotionrdb').prop('checked')) 
+        {
+            $('#newPrice').show();
+            
+        }
+        else
+        {
+            $('#newPrice').hide();
+        }
+
+  });
+ 
+
+       $('#getBuildingCatName').change(function()
+        {
+
+         var text = $(this).find('option:selected').attr("name");
+       //  alert(text);
+        
+          if((text == 'House') || (text == 'Villa') || (text == 'Bungalow') || (text == 'Penthouse'))
+          {
+             $('#adultprice').hide();
+             $('#childrenprice').hide();
+             $('#oldprice').show();
+     
+          }
+
+
+          else if((text == 'Hotel') || $(text == 'Appartment'))
+          {
+           
+
+           // console.log($('#adultprice').val());
+           // alert('asas');
+
+             
+             $('#oldprice').hide();
+              $('#childrenprice').show();
+              $('#adultprice').show();
+
+
+            
+          }
+
+
+       });
+      
+
+    });
+
+  </script>
 
    <div class="banner">
       	<div class="wrap">
@@ -27,19 +98,20 @@
 
         <tr>
             <td width="30%"><label>Package Name:</label></td>
-            <td width="70%"> <input type="text" class="required" name = "packageName" id = "packageName"/><span class="errorMsg"></span> </td>
+            <td width="70%"> <input type="text" class="required" name = "packageName" id = "packageName"/>*<span class="errorMsg"></span> </td>
         </tr>
 
         <tr>
             <td><label>Building: </label></td>
             <td>
-               <select type="text" class="required onlyLetters" name = "building" id ="building" > 
+               <select type="text" class="required" name = "building" id ="getBuildingCatName" > 
+                 <option value="-1">-- Select a building --</option>
                     <?php 
                         if (isset($buildings)){
 
                             foreach($buildings as $building){
                                 ?>
-                                    <option value="<?php echo $building->id ?>"> <?php echo  $building->buildingName  ?></option>
+                                    <option value="<?php echo $building->id ?>"  name = "<?php echo $building->category->buildingCatName ?>"> <?php echo  $building->buildingName  ?></option>
                                 <?php 
                             }
 
@@ -50,20 +122,40 @@
             </td>
         </tr>
 
-         <tr>
-            <td><label>Adults: </label></td>
-            <td><input type="text" class="required numeric" name = "capacity" id = "capacity"/></select> <span class="errorMsg"></span></td>
-         </tr>
 
-          <tr>
-            <td><label>Children: </label></td>
-            <td><input type="text" class="required numeric" name = "childrenCapacity" value="0"/></select> <span class="errorMsg"></span></td>
-         </tr>
 
-         <tr>
-            <td width="30%"><label>New Price:</label></td>
-            <td width="70%"> <input type="text" class="required numeric"  name = "newPrice" id = "newPrice"/><span class="errorMsg"></span> </td>
-         </tr>
+ 
+             <tr id="oldprice">
+                <td width="30%"><label>Price per Day:</label></td>
+                <td width="70%"> <input type="text" class="required numeric"  name = "oldPrice" id = "oldPrice"/><span class="errorMsg"></span> </td>
+             </tr>
+
+
+              <tr id="promotion">
+                  <td width="30%"><label>Promotion:</label></td>
+                <td> <input type="checkbox" name="promotionrdb" id ='promotionrdb' value="promotionrdb"> <td>
+             </tr>
+
+              <tr id="newPrice">
+                <td width="30%"><label>New Promo Price:</label></td>
+                <td width="70%"> <input type="text" class="numeric"  name = "newPrice" id = "newprice"/><span class="errorMsg"></span> </td>
+             </tr>
+
+       
+
+
+            <tr id = "adultprice">
+                <td><label>Adults Price/day: </label></td>
+                <td><input type="text" class="required numeric" name = "adultPrice" id = "adultPrice"/></select>* <span class="errorMsg"></span></td>
+            </tr>
+
+           <tr id="childrenprice">
+              <td><label>Children Price/day: </label></td>
+              <td><input type="text" class="required numeric" name = "childrenPrice"/></select>* <span class="errorMsg"></span></td>
+          </tr>
+        
+
+         
 
          <tr>
             <td><label>Room Category: </label></td>
@@ -86,14 +178,14 @@
 
          <tr>
             <td><label>Description: </label></td>
-            <td><textarea type = "textbox" class="required" name = "desc" id = "desc" ></textarea><span class="errorMsg"></span></td>
+            <td><textarea type = "textbox" class="" name = "desc" id = "desc" ></textarea><span class="errorMsg"></span></td>
         </tr>
 
 
 
             <tr>
               <td></td>
-            <td colspan="2" align="center"><input type = "submit" id = "addPackage" value = "Submit"  class="btnLogin" ></td>
+            <td><input type = "submit" id = "addPackage" value = "Submit"  class="btnLogin" ></td>
             </tr>
 
 

@@ -29,6 +29,8 @@ use App\roomBookingModel as roomBookingModel;
 use App\vehicleModel as vehicleModel;
 use App\buildingFacilityModel as buildingFacilityModel;
 use App\roomFacilityModel as roomFacilityModel;
+use App\sessionModel as sessionModel;
+use App\vehicleBookingModel as vehicleBookingModel;
 
 
 
@@ -42,6 +44,7 @@ use App\roomFacilityModel as roomFacilityModel;
 	public function viewUsers(Request $request){
 		
 		$user = $request->session()->get('user');
+		$todaydatetime = $this->getTodayDateTime();
 
 		if (is_null($user))
 		{
@@ -50,16 +53,44 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		elseif($user[0]->type=="admin")
 		{
-			 $tenants = User::all();
+			// $tenants = User::all();
 			 $landlords = userLandlord::all();
+			 $session = sessionModel::all();
 			 $vehicleowners = vehicleOwnerModel::all();
-			return view('pages.adminViewUsers',  array('user'=>$user, 'tenants' => $tenants, 'landlords' => $landlords, 'vehicleowners' => $vehicleowners));
+
+
+			
+			 $tenants = DB::table('tbltenant')
+							->join('tblsession', 'tbltenant.UserName', '=', 'tblsession.username')
+							->where('tblsession.type','=', 'tenant' )
+						    ->select('tbltenant.*','tblsession.logindatetime','tblsession.logoutdatetime')
+							->get();
+
+
+			$vehicleowners = DB::table('tblvehicleowner')
+							->join('tblsession', 'tblvehicleowner.UserName', '=', 'tblsession.username')
+							->where('tblsession.type','=', 'vehicleowner' )
+						    ->select('tblvehicleowner.*','tblsession.logindatetime','tblsession.logoutdatetime')
+							->get();
+
+
+
+			$landlords = DB::table('tbllandlord')
+							->join('tblsession', 'tbllandlord.UserName', '=', 'tblsession.username')
+							->where('tblsession.type','=', 'Landlord' )
+						    ->select('tbllandlord.*','tblsession.logindatetime','tblsession.logoutdatetime')
+							->get();
+
+			
+
+										          //  var_dump($tenants[0]->logoutdatetime); die;
+			return view('pages.adminViewUsers',  array('user'=>$user, 'tenants' => $tenants, 'todaydatetime'=>$todaydatetime, 'landlords' => $landlords, 'vehicleowners' => $vehicleowners));
 		}
 
 		else
 		{
 
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 	}
 
@@ -70,6 +101,7 @@ use App\roomFacilityModel as roomFacilityModel;
 			
 			$user = $request->session()->get('user');
 
+
 			if (is_null($user))
 			{
 				return redirect()->action('MainController@index');
@@ -78,37 +110,38 @@ use App\roomFacilityModel as roomFacilityModel;
 			elseif($user[0]->type=="admin")
 			{
 
-			if ($request['id'] != null)
-			{
-			$deleteTenant = User::where('id', '=', $request['id'])->delete();
+				if ($request['id'] != null)
+				{
+				$deleteTenant = User::where('id', '=', $request['id'])->delete();
 
-			//Get all bookings
+				//Get all bookings
 
-			//delete travel
-			$bookings = bookingModel::where("tenantID","=",$request['id'])->get();
+				//delete travel
+				$bookings = bookingModel::where("tenantID","=",$request['id'])->get();
 
-			foreach($bookings as $booking)
-			{
-				bookingPackageModel::where("booking_id","=",$booking->id)->delete();
-				travelModel::where("bookingID","=",$booking->id)->delete();
-				roomBookingModel::where("bookingId","=",$booking->id)->delete();
-				
-				$booking->delete();
-			}
+				foreach($bookings as $booking)
+				{
+					bookingPackageModel::where("booking_id","=",$booking->id)->delete();
+					travelModel::where("bookingID","=",$booking->id)->delete();
+					roomBookingModel::where("bookingId","=",$booking->id)->delete();
+					
+					$booking->delete();
+				}
 
 
-			//delete bookings
-			// delete bookingpackage
-			//delete roombooking
-			//delete travel
-				return redirect()->action('adminController@viewUsers');
-			}
+				//delete bookings
+				// delete bookingpackage
+				//delete roombooking
+				//delete travel
+					return redirect()->action('adminController@viewUsers');
+				}
+
 				print json_encode(array(1));
 			}
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 	}
 
@@ -123,55 +156,67 @@ use App\roomFacilityModel as roomFacilityModel;
 	}
 
 
-	public function deleteLandlord(Request $request){
+	public function deleteLandlord(Request $request)
+	{
 			
 			$user = $request->session()->get('user');
 			if (is_null($user)){
 				return false;
 			}
-			if ($_REQUEST['id'] != null){
-				
+
+			elseif($user[0]->type=="admin")
+			{
+
+				if ($_REQUEST['id'] != null)
+				{
 					
-				$buildings = buildingModel::where('landlordID', '=', $request['id'])->get();
-
-				foreach($buildings as $building){
-					// delete facilities
-					$buildingFacilities = buildingFacilityModel::where("buildingid","=",$building->id)->delete();
-					//delete room
-					//delete room facilities
-					//delete room booking
-					$rooms = roomModel::where("buildingID","=",$building->id)->get();
-					foreach($rooms as $room){
-						roomFacilityModel::where("roomid","=",$room->id)->delete();
-
-						roomBookingModel::where("roomid","=",$room->id)->delete();
-						$room->delete();
-					}
-
-					//delete packages
-					$packages = packageModel::where("buildingid","=",$building->id)->delete();
-
-
-					//delete booking
-					//delete travel
-					$bookings = bookingModel::where("buildingID","=",$building->id)->get();
-					foreach($bookings as $booking){
-						bookingPackageModel::where("booking_id","=",$booking->id)->delete();
-						travelModel::where("bookingID","=",$booking->id)->delete();
 						
-						$booking->delete();
+					$buildings = buildingModel::where('landlordID', '=', $request['id'])->get();
+
+					foreach($buildings as $building){
+						// delete facilities
+						$buildingFacilities = buildingFacilityModel::where("buildingid","=",$building->id)->delete();
+						//delete room
+						//delete room facilities
+						//delete room booking
+						$rooms = roomModel::where("buildingID","=",$building->id)->get();
+						foreach($rooms as $room){
+							roomFacilityModel::where("roomid","=",$room->id)->delete();
+
+							roomBookingModel::where("roomid","=",$room->id)->delete();
+							$room->delete();
+						}
+
+						//delete packages
+						$packages = packageModel::where("buildingid","=",$building->id)->delete();
+
+
+						//delete booking
+						//delete travel
+						$bookings = bookingModel::where("buildingID","=",$building->id)->get();
+						foreach($bookings as $booking){
+							bookingPackageModel::where("booking_id","=",$booking->id)->delete();
+							travelModel::where("bookingID","=",$booking->id)->delete();
+							
+							$booking->delete();
+						}
+
+						$building->delete();
 					}
+			
 
-					$building->delete();
+					$deletelandlord = userLandlord::where('id', '=', $_REQUEST['id'])->delete();
+
+
+					return redirect()->action('adminController@viewUsers');
 				}
-		
+				print json_encode(array(1));
+			}
 
-			$deletelandlord = userLandlord::where('id', '=', $_REQUEST['id'])->delete();
-
-
-			return redirect()->action('adminController@viewUsers');
-		}
-			print json_encode(array(1));
+			else
+			{
+				return response()->view('pages.404', ['user'=>$user], 404);
+			}
 	
 	}
    
@@ -189,23 +234,38 @@ use App\roomFacilityModel as roomFacilityModel;
 
 
 	public function deleteVehicleOwner(Request $request){
+
 			$user = $request->session()->get('user');
 			if (is_null($user)){
 				return false;
 			}
 
-			if ($request['id'] != null){
-			$deletevehicleowner = vehicleOwnerModel::where('id', '=', $request['id'])->delete();
-			
-			$vehicles = vehicleModel::where('vehicleOwnerID', '=', $request['id'])->get();
-			foreach($vehicles as $vehicle){
-				$travels = travelModel::where('vehicleID', '=', $vehicle->id)->delete();
-				$vehicle->delete();
+			elseif($user[0]->type=="admin")
+			{
+
+				if ($request['id'] != null)
+				{
+					$deletevehicleowner = vehicleOwnerModel::where('id', '=', $request['id'])->delete();
+
+					$vehicles = vehicleModel::where('vehicleOwnerID', '=', $request['id'])->get();
+
+					foreach($vehicles as $vehicle)
+					{
+						$travels = travelModel::where('vehicleID', '=', $vehicle->id)->delete();
+						$vehicle->delete();
+					}
+					
+					return redirect()->action('adminController@viewUsers');
+				}
+
+				print json_encode(array(1));
+
 			}
-			
-			return redirect()->action('adminController@viewUsers');
-		}
-			print json_encode(array(1));
+
+			else
+			{
+				return response()->view('pages.404', ['user'=>$user], 404);
+			}
 	
 	}
    
@@ -236,7 +296,7 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}		
 	}
 
@@ -359,62 +419,106 @@ use App\roomFacilityModel as roomFacilityModel;
 	}
 
 
-	public function viewCategoryPage(Request $request){
+	public function viewCategoryPage(Request $request)
+	{
 
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
+		if (is_null($user))
+		{
 			return redirect()->action('MainController@index');
 		}
-		$roomCategories = roomCategory::all();
-		$buildingCategories = buildingCategory::all();
-		$vehicleCategories = vehicleCategory::all();
-		return view('pages.adminViewCategories',  array('user'=>$user, 'roomCategories' => $roomCategories, 'buildingCategories' => $buildingCategories, 'vehicleCategories' => $vehicleCategories)); 
+
+		elseif($user[0]->type =="admin")
+		{
+			$roomCategories = roomCategory::all();
+			$buildingCategories = buildingCategory::all();
+			$vehicleCategories = vehicleCategory::all();
+			return view('pages.adminViewCategories',  array('user'=>$user, 'roomCategories' => $roomCategories, 'buildingCategories' => $buildingCategories, 'vehicleCategories' => $vehicleCategories)); 
+		}
+
+		else
+		{
+			return response()->view('pages.404', ['user'=>$user], 404);
+		}
 	}
 
 	function deleteRoomCat(Request $request){
 			$user = $request->session()->get('user');
+
 			if (is_null($user)){
 				return false;
 			}
 
-			if ($request['id'] != null){
-			$deleteRoomcat = roomCategory::where('id', '=', $request['id'])->delete();
-			return redirect()->action('adminController@viewCategoryPage');
-		}
-			print json_encode(array(1));
-	
+			elseif($user[0]->type =="admin")
+			{
+				if ($request['id'] != null)
+				{
+					$deleteRoomcat = roomCategory::where('id', '=', $request['id'])->delete();
+					return redirect()->action('adminController@viewCategoryPage');
+				}
+				print json_encode(array(1));
+			}
+
+			else
+			{
+				return response()->view('pages.404', ['user'=>$user], 404);
+			}
+		
 	}
 
 
 
 	function deleteBuildingCat(Request $request){
 			$user = $request->session()->get('user');
+
 			if (is_null($user)){
 				return false;
 			}
 
-			if ($request['id'] != null){
-			$deleteBuildingCat = buildingCategory::where('id', '=', $request['id'])->delete();
-			return redirect()->action('adminController@viewCategoryPage');
-		}
-			print json_encode(array(1));
-	
+			elseif($user[0]->type =="admin")
+			{
+				if ($request['id'] != null)
+				{
+					$deleteBuildingCat = buildingCategory::where('id', '=', $request['id'])->delete();
+					return redirect()->action('adminController@viewCategoryPage');
+				}
+
+				print json_encode(array(1));
+
+			}
+
+			else
+			{
+				return response()->view('pages.404', ['user'=>$user], 404);
+			}
 	}
 
 
 	function deleteVehicleCat(Request $request){
 			
 			$user = $request->session()->get('user');
+
 			if (is_null($user)){
 				return false;
 			}
-			if ($request['id'] != null){
-			$deletevehicleCat = vehicleCategory::where('id', '=', $request['id'])->delete();
-			return redirect()->action('adminController@viewCategoryPage');
-		}
-			print json_encode(array(1));
-	
+
+			elseif($user[0]->type =="admin")
+			{
+				if ($request['id'] != null)
+				{
+					$deletevehicleCat = vehicleCategory::where('id', '=', $request['id'])->delete();
+					return redirect()->action('adminController@viewCategoryPage');
+				}
+
+				print json_encode(array(1));
+			}
+
+			else
+			{
+				return response()->view('pages.404', ['user'=>$user], 404);
+			}
+
 	}
 
 
@@ -430,14 +534,14 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		elseif($user[0]->type=="admin")
 		{
-		$facilities = facilityModel::all();
+			$facilities = facilityModel::all();
 		
-		return view('pages.adminAddFacility',  array('user'=>$user, 'facilities'=>$facilities)); 
+			return view('pages.adminAddFacility',  array('user'=>$user, 'facilities'=>$facilities)); 
 		}
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 
 	}
@@ -449,59 +553,78 @@ use App\roomFacilityModel as roomFacilityModel;
 			    "status" => 0,
 			);
 
+		$user = $request->session()->get('user');
 
-		if ((isset($request['facilityName'])) && (!empty($request['facilityName'])) ){
-			$facilityName = $request['facilityName'];
-			$error=false;
-		}
-		else{
-			$error=true;
-
+		if (is_null($user))
+		{
+			return redirect()->action('MainController@index');
 		}
 
-		if ((isset($request['facilityType'])) && (!empty($request['facilityType'])) ){
-				$facilityType = $request['facilityType'];
+		elseif($user[0]->type=="admin")
+		{
+			if ((isset($request['facilityName'])) && (!empty($request['facilityName'])) )
+			{
+				$facilityName = $request['facilityName'];
 				$error=false;
-		}
-		else{
-			$error=true;
-
-		}
-	
-		if($error==false){
-
-		$facilityNameCheck = DB::table('tblfacility')
-	                    ->select(DB::raw('*'))
-	                    ->where('name', '=', $facilityName)
-	                    ->get();
-
-	                     
-				
-			if(!empty($facilityNameCheck)) {
-			$messge['status'] = -1;
-			$messge['msg'] = "Already exists";
+			}
+			else
+			{
+				$error=true;
 
 			}
 
+			if ((isset($request['facilityType'])) && (!empty($request['facilityType'])) ){
+					$facilityType = $request['facilityType'];
+					$error=false;
+			}
+			else
+			{
+				$error=true;
 
-			else{
+			}
+		
+			if($error==false)
+			{
 
-					//Save vehicles for specific user
-					$facility = new facilityModel;
-					$facility-> name = $facilityName; 
-					$facility-> type = $facilityType ;
+				$facilityNameCheck = DB::table('tblfacility')
+			                    ->select(DB::raw('*'))
+			                    ->where('name', '=', $facilityName)
+			                    ->get();
+
+		                     
 					
+				if(!empty($facilityNameCheck)) 
+				{
+					$messge['status'] = -1;
+					$messge['msg'] = "Already exists";
 
-					$facility->save();
+				}
 
 
-					return Redirect::to('addFacilityPage');
-							
+				else
+				{
+
+						//Save vehicles for specific user
+						$facility = new facilityModel;
+						$facility-> name = $facilityName; 
+						$facility-> type = $facilityType ;
+						
+
+						$facility->save();
+
+
+						return Redirect::to('addFacilityPage');
+								
 				}
 				echo json_encode ($messge);
 
 			}
+		}
 
+		else
+		{
+			return response()->view('pages.404', ['user'=>$user], 404);
+		}
 	}
 
 	public function deleteFacility(Request $request){
@@ -516,7 +639,15 @@ use App\roomFacilityModel as roomFacilityModel;
 			{
 				if ($_REQUEST['id'] != null)
 				{
+
+					
+
 					$deletFacility = facilityModel::where('id', '=', $request['id'])->delete();
+
+					buildingFacilityModel::where('facilityid', '=', $request['id'])->delete();
+
+					roomFacilityModel::where("facilityid","=",$request['id'])->delete();
+
 					return redirect()->action('adminController@addFacilityPage');
 				}
 					print json_encode(array(1));
@@ -556,7 +687,7 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 
 	
@@ -592,7 +723,7 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 	}
 
@@ -620,7 +751,7 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 
 		
@@ -649,7 +780,7 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 		
 	}
@@ -676,7 +807,7 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		else
 		{
-		return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 	
 		
@@ -768,7 +899,7 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 
 	}
@@ -897,7 +1028,8 @@ use App\roomFacilityModel as roomFacilityModel;
 			return redirect()->action('MainController@index');
 		}
 		//Gets buildings
-		elseif($user[0]->type == "admin"){
+		elseif($user[0]->type == "admin")
+		{
 
 			$buildings = buildingModel::all();
 
@@ -905,9 +1037,10 @@ use App\roomFacilityModel as roomFacilityModel;
 
 
 		}
-		else{
+		else
+		{
 
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 		
 	}
@@ -930,11 +1063,12 @@ use App\roomFacilityModel as roomFacilityModel;
 		}
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 	}
 
-	function manageVehicles(Request $request){
+	function manageVehicles(Request $request)
+	{
 
 		$user = $request->session()->get('user');
 		
@@ -952,9 +1086,127 @@ use App\roomFacilityModel as roomFacilityModel;
 
 		else
 		{
-			return redirect()->action('MainController@index');
+			return response()->view('pages.404', ['user'=>$user], 404);
 		}
 	
+	}
+
+
+	function manageRoomBookings(Request $request)
+	{
+
+		$user = $request->session()->get('user');
+		
+		if (is_null($user)){
+			return redirect()->action('MainController@index');
+		}
+
+		elseif($user[0]->type == "admin")
+		{
+
+			
+			$bookingsDone = bookingModel::all();			
+
+			$timenow = $this->getTodayDateTime();
+
+			return view('pages.adminViewAllRoomBookings',  array('user' => $user, 'bookingsDone'=> $bookingsDone, 'timenow'=>$timenow));
+
+		}
+
+		else
+		{
+			return response()->view('pages.404', ['user'=>$user], 404);
+		}
+	
+	}
+
+
+	
+
+	public function adminDeleteBooking(Request $request)
+	{
+		$user = $request->session()->get('user');
+
+		if (is_null($user))
+		{
+			return redirect()->action('MainController@index');
+		}
+
+		elseif($user[0]->type == 'admin')
+		{
+			if ($request['id'] != null){
+			$deleteBookings = bookingModel::where('id', '=', $request['id'])->delete();
+
+			$deletePackageModel = bookingPackageModel::where("booking_id","=", $request['id'])->delete();
+
+			$travelModel= travelModel::where("bookingID",'=', $request['id'])->delete();
+
+			roomBookingModel::where("bookingId","=",$request['id'])->delete();
+
+
+		}
+			print json_encode(array(1));
+		}		
+		
+		else
+		{
+			return response()->view('pages.404', ['user'=>$user], 404);
+		}
+
+	}
+
+	public function manageAllVehicleBookings(Request $request)
+	{
+		$user = $request->session()->get('user');
+
+		if (is_null($user))
+		{
+			return redirect()->action('MainController@index');
+		}
+
+		elseif($user[0]->type == 'admin')
+		{
+
+			$vehicleBookings = vehicleBookingModel::all();
+
+			return view('pages.adminViewAllBookedVehicles',  array('user' => $user, 'vehicleBookings' => $vehicleBookings));
+		}
+		
+		else
+		{
+			return response()->view('pages.404', ['user'=>$user], 404);
+		}
+
+	}
+
+	public function deleteVehicleBooking(Request $request)
+	{
+
+		$user = $request->session()->get('user');
+
+		if (is_null($user))
+		{
+			return false;
+		}
+
+		if ($request['id'] != null){
+
+			$deleteVehicleBookings = vehicleBookingModel::where('id', '=', $request['id'])->delete();
+
+
+		}
+			print json_encode(array(1));
+	
+		
+	}
+
+	
+
+	private function getTodayDateTime()
+	{
+
+		date_default_timezone_set("Indian/Mauritius");
+		return date('Y-m-d H:i:s', strtotime('+0 minutes'));
 	}
 
 

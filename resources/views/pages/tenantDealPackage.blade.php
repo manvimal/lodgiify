@@ -176,10 +176,25 @@
                              </div>
 
                              <div id="package_desc">
+                                <?php if($buildingCat[0]->buildingCatName == "Hotel" || $buildingCat[0]->buildingCatName == "Appartment")
+                                {
+                                  ?>
+
+                                Price per Adult : <span class="capacityAdult"><?php echo $package->adultPrice ; ?></span><br />
+                                Price per Children : <span class="capacityChildren"><?php echo $package->ChildPrice ; ?></span><br />
+                               <?php
+                               }
                                
+                               else{
+                                ?>
+
+                                Price per Day : <span class="capacityAdult"><?php echo'Rs ' . $package->oldPrice ; ?></span><br />
+                           
+                                <?php
+
+                             }
+                             ?>
                                 Description: <span class="packageDesc"><?php echo $package->packageDesc ; ?></span><br />
-                                Children : <span class="capacityChildren"><?php echo $package->capacityChildren ; ?></span><br />
-                                Adults : <span class="capacityAdult"><?php echo $package->capacityAdult ; ?></span><br />
                             <?php
                             if(($buildingCat[0]->buildingCatName == "Hotel") || ($buildingCat[0]->buildingCatName == "Appartment"))
                            
@@ -197,9 +212,7 @@
                              </div>
 
                               <div class="promotion">
-                                Promotion Description: <span class="promotionDescription"><?php echo $package->promotionDescription ; ?></span><br />
-                                promotionExpiryDate : <span class="promotionExpiryDate"><?php echo $package->promotionExpiryDate ; ?></span><br />
-                                <?php if($buildingCat[0]->buildingCatName == "Hotel"){
+                                    <?php if($buildingCat[0]->buildingCatName == "Hotel" || $buildingCat[0]->buildingCatName == "Appartment"){
 
 
                                         ?>

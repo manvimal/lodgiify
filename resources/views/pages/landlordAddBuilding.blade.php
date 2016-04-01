@@ -39,8 +39,7 @@
         $(document).ready(function() {
                  $('#roomFacilityTableHide').hide();
                  $('#back').hide();
-            
-
+        
              
             $('#edit').click(function() {
                 $('#formRoomFacilityHide').hide();
@@ -95,19 +94,19 @@
 
       <tr>
           <td><label>Latitude:</label></td>
-            <td id="test"> <input type="text" class="numeric" id="lattitude" name = "lattitude" 
-                 /> <span class="errorMsg"></span></td>
+            <td id="test"> <input type="text" class="numeric required" id="lattitude" name = "lattitude" 
+                 readonly/>* <span class="errorMsg"></span></td>
         </tr>
 
       <tr>
           <td><label>Longitude:</label></td>
-            <td> <input type="text" class="numeric" name = "longitude" id="longitude" /> <span class="errorMsg"></span></td>
+            <td> <input type="text" class="numeric required" name = "longitude" id="longitude" readonly/>* <span class="errorMsg"></span></td>
         </tr>
 
 
         <tr>
             <td width="30%"><label>Building Name:</label></td>
-            <td width="70%"> <input type="text" class="required" name = "buildingName" id = "buildingName"/><span class="errorMsg"></span> </td>
+            <td width="70%"> <input type="text" class="required" name = "buildingName" id = "buildingName"/>*<span class="errorMsg"></span> </td>
             <span class="errorMsg"></span>
         </tr>
 
@@ -116,8 +115,11 @@
             <td> <label>Facilities</label></td>
 
               <td>
+                <div style=" width: 180px; height: 70px;overflow:auto;">
                    <?php $i = 1;
-                      foreach($facilities as $facility){   
+                      foreach($facilities as $facility){  
+                  
+              
                     ?>
                             
                       <?php echo " $facility->name:<input type=Checkbox name='facilityCheckboxes[]' value=$facility->id> &nbsp" ?>
@@ -127,6 +129,7 @@
                       }
 
                     ?>
+                  </div>
              </td>
 
         </tr>
@@ -155,12 +158,12 @@
 
         <tr>
         	<td><label>Location:</label></td>
-            <td> <input type="text" class="required" name = "location" id ="location"?> <span class="errorMsg"></span></td>
+            <td> <input type="text" class="" name = "location" id ="location"?> <span class="errorMsg"></span></td>
         </tr>
 
         <tr>
             <td><label>Image: </label></td>
-            <td><input type = "file"  name="image" accept="image/*" id = "image" /> <span class="errorMsg"></span></td>
+            <td><input type = "file"  name="image" accept="image/*" id = "image" /> </td>
          </tr> 
 
      <tr>
@@ -177,7 +180,8 @@
 
 
             <tr>
-            <td colspan="3" align="center"><input type = "submit" id = "addBuildingSubmit" value = "Submit"  class="btnAll" ></td>
+              <td></td>
+            <td colspan="3" align="center"><input type = "submit" id = "addBuildingSubmit" value = "Submit"  class="btnLogin" ></td>
             </tr>
 
         </table>
@@ -209,7 +213,7 @@
             <td><label>Buildings: </label></td>
          <td>
       
-
+          
             <select type="text" class="required onlyLetters" name = "ddlAddBuildingFacility" id ="building" > 
 
                     <?php 
@@ -226,25 +230,30 @@
                     ?>
                     
                 </select> <span class="errorMsg"></span></td>
+     
         </tr>  
 
  <tr>
             <td> <label>Facilities</label></td>
-
+            
               <td>
+                 <div style=" width: 180px; height:70px;overflow:auto;">
+             
                    <?php $i = 1;
                       foreach($facilities as $facility){ 
                        
                     ?>
                             
                       <?php echo " $facility->name:<input type=Checkbox name='addBuildingFacilityCheckboxes[]' value=$facility->id> &nbsp" ?>
-                        
+                              
                     <?php 
                     $i ++;
                       }
 
                     ?>
+                    <div>
              </td>
+           </tr>
 
              <tr>
               <td></td>
@@ -257,10 +266,10 @@
 
 </table>
 
-      </ul>
+      </ul  >
     </form>
 
-
+  <div style=" width: 270px; height: 150px;overflow:auto;">
     <table id="roomFacilityTableHide" class="main-list2 content" border="1" align="center">
             <?php if (isset($buildingFacilities)){ ?>
                     <tr class="booking">             
@@ -278,13 +287,15 @@
                             foreach( $facilityind as $facility){ 
                                  
                             $deleteLink =  "/buildingFacility/delete?id=". $facility->id;
+
+                           // var_dump($facility->facility);
                            // $viewBookingLink =  "/facility/viewBooking?id=". $booking->id;
                              
                           ?>
                            <tr class="booking">
                               <td><?php echo $i ;?> </td>
                               <td><?php echo $facility->building->buildingName  ?></td>
-                              <td><?php echo $facility->facility->name ?></td>
+                              <td><?php  echo (!is_null($facility->facility)   ? $facility->facility->name : ""); ?></td>
                               <td> <?php if (count($facility->id) > 0){  ?>  <?php } ?>  <a href="<?php echo $deleteLink; ?>"  class="btnLogin deleteBuildingFacility" >Delete</a></td>
                            
                             </tr> 
@@ -311,11 +322,12 @@
   <div class="project-list">
      <div class="project-list">
         <h4>My Buildings</h4>
-      <ul class="blog-list">
+      <ul class="blog-list" style=" width: 200px; height: 150px;overflow:auto;">
       <?php if (isset($buildings)){
                 foreach($buildings as $building){
                                 ?>
-                                    <li><img src="images/arrow.png" alt=""><p><a href="#"> <?php echo $building->buildingName  ?></a></p><div class="clear"></div></li>
+                              <li><img src="images/arrow.png" alt=""><p><a href="{{ URL::asset('/viewBuildings') }}"> <?php echo $building->buildingName  ?></a></p><div class="clear"></div></li>
+                             
                                 <?php 
                             }
 

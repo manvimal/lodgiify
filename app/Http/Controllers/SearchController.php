@@ -21,6 +21,7 @@ use Redirect;
 use App\buildingFacilityModel as buildingFacilityModel;
 use App\travelModel as travelModel;
 use App\packageModel as packageModel;
+use App\roomModel as roomModel;
 
 
 
@@ -354,131 +355,163 @@ use App\packageModel as packageModel;
 		if($error==False){
 
 
-						if(isset($request['buildingLocation'])){
-								
-						$buildingLocation = $request['buildingLocation'];
-
+						if(isset($request['buildingLocation']))
+						{
+							$buildingLocation = $request['buildingLocation'];
 
 						}
 
-						else{
+						else
+						{
 							$buildingLocation = False;
 
 						}
 
 
-						if((isset($request['buildingCat'])) && ($request['buildingCat'])!= -1){
+						if((isset($request['buildingCat'])) && ($request['buildingCat'])!= -1)
+						{
 					
 							$buildingCat = $request['buildingCat'];
-						
 
 						}
 
-						else{
+						else
+						{
 							$buildingCat = False;
 
-
 						}
 
-						if((isset($request['buildingFacility'])) && ($request['buildingFacility'])!= -1){
+						if((isset($request['buildingFacility'])) && ($request['buildingFacility'])!= -1)
+						{
 					
 							$buildingFacility = $request['buildingFacility'];
 						//	var_dump($request['buildingFacility']);
-
-
 						}
 
-						else{
+						else
+						{
 
 							$buildingFacility = False;
-
-
+						}
+						if((isset($request['checkIn'])) && ($request['checkIn'])!= -1)
+						{
+					
+							$checkIn = $request['checkIn'];
+						//	var_dump($request['buildingFacility']);
 						}
 
+						else
+						{
 
+							$checkIn = False;
+						}
+						if((isset($request['checkOut'])) && ($request['checkOut'])!= -1)
+						{
+					
+							$checkOut = $request['checkOut'];
+						//	var_dump($request['buildingFacility']);
+						}
 
+						else
+						{
 
-								
+							$checkOut = False;
+						}
 
-
-						//foreach($buildingFacilities as $x){
-
-						//	$a[]=$x->buildingid;
-							
-					//	}
-
-
-
-
-						//var_dump($buildingFacility);
-						//var_dump($buildingFacilities[0]);
-					// /	var_dump($a);
 
 						
 			$buildings = buildingModel::where('buildingName','Like', $buildingName.'%')
 
 
-							  ->Where(function($query) use ($buildingLocation, $buildingCat, $buildingFacility){
+							->Where(function($query) use ($buildingLocation, $buildingCat, $buildingFacility)
+							  {
 
-								if($buildingLocation){
-							
+								if($buildingLocation)
+								{
 
 									$query->where('buildingLocation', 'like', $buildingLocation .'%');
 
 								}
 
-								if($buildingCat) {
-								
+								if($buildingCat) 
+								{
 
 									$query->where('buildingCatID', 'like', $buildingCat .'%');
 
 								}
 
-								if($buildingFacility){
+								
+            				}) ->get();	
+
+
+											
+/**
+								 $buildingBooked = DB::table('tblbooking')
+										            ->join('tblbuilding', 'tblbooking.buildingID', '=', 'tblbuilding.id')
+										            ->join('tblbuildingcat', 'tblbuildingcat.id', '=', 'tblbuilding.buildingCatID')
+										            ->where('tblbooking.checkin','<=', $checkIn )
+										            ->where('tblbooking.checkOut','>=', $checkOut)
+										            ->where('tblbuildingcat.buildingCatName','!=', 'Appartment')
+										            ->where('tblbuildingcat.buildingCatName','!=', 'Hotel')
+										            ->select('tblbuilding.*')
+
+										            ->get();
+
+
+										          
+
+
+								$rooms = roomModel::all();
 
 
 
-									$buildingFacilities = buildingFacilityModel::where('facilityid', '=', $buildingFacility)
 
-																		->get();
+								 $roomsBooked = DB::table('tblroombooking')
+										            ->join('tblbooking', 'tblroombooking.bookingid', '=', 'tblbooking.id')
+										            ->join('tblbuilding', 'tblbooking.buildingID', '=', 'tblbuilding.id')
+										            ->join('tblbuildingcat', 'tblbuildingcat.id', '=', 'tblbuilding.buildingCatID')
+										            ->join('tblroom', 'tblroom.buildingid', '=', 'tblbuilding.id')
+										            ->where('tblbooking.checkin','<=', $checkIn )
+										            ->where('tblbooking.checkOut','>=', $checkOut)
+										            ->where('tblbuildingcat.buildingCatName','!=', 'Bungalow')
+										            ->where('tblbuildingcat.buildingCatName','!=', 'House')
+										            ->where('tblbuildingcat.buildingCatName','!=', 'Villa')
+										            ->where('tblbuildingcat.buildingCatName','!=', 'Penthouse')
+										            ->select('tblroom.*')
+
+										            ->get();
 
 
-										foreach($buildingFacilities as $buildingFacility){
 
-										//$a[]=$buildingFacility->building->buildingName;
-											$buildingFacilitiesArray[]=$buildingFacility->buildingid;
-												//$query->where('id', '=', $buildingFacility->buildingid);
-										
-										
-										//var_dump('<br />'.$buildingFacility->building->buildingName);
-									}
+				        //   var_dump($roomsBooked);die;
+					  						  //$vehicleTrav =  array_diff($vehicles, $vehicleOccupiedTravel);
+					  						 	 		
+  											//	  var_dump($vehicleOccupiedBooking);
+
+														//$vehicleBook =  array_diff($vehicles, $vehicleOccupiedBooking);
+                     				  	
+	
+													$buildings = $this->removeFromArray($buildings, $buildingBooked);
+
+													$rooms = $this->removeFromArray($rooms, $roomsBooked);
 
 
-									foreach($buildingFacilitiesArray as $buildingFacilityArray){
-									
-
-											$query->orwhere('id', '=', $buildingFacilityArray);
-
-										
-									}
-
+														//$vehicles = $this->removeFromArray($vehicles, $vehicleOccupiedBooking);
 							
-               			
-               			}
-                     
-            				})
-  						  ->get();	
 
-
-//var_dump($buildings);
+//var_dump($buildings);						
+													var_dump($building);die;
 
 //var_dump($request['buildingCat']);
 
 
 //var_dump($buildings);
+													
+**/
+													return json_encode($buildings);
 	}
 
-		return json_encode($buildings);
+		
 	
 	}
 
@@ -542,8 +575,16 @@ use App\packageModel as packageModel;
 						
 						if((isset($request['transmission'])) && ($request['transmission'])!= -1)
 						{
+							if($request['transmission'] == 0)
+							{
+								$transmission = "Automatic";
+							}
+							else
+							{
+								$transmission = "Manual";
+							}
 					
-							$transmission = $request['transmission'];
+							
 						//	var_dump($request['buildingFacility']);
 
 
@@ -585,10 +626,10 @@ use App\packageModel as packageModel;
 							$checkIn = False;
 
 						}
-						if(isset($request['checkout']))
+						if(isset($request['checkOut']))
 						{
 					
-							$checkout = $request['checkout'];
+							$checkout = $request['checkOut'];
 						//	var_dump($request['buildingFacility']);
 
 
@@ -602,11 +643,14 @@ use App\packageModel as packageModel;
 
 						}
 
+						$vehicleAvailable = '';
+
 						
 			$vehicles = vehicleModel::where('vehicleName','Like', $vehicleName.'%')
 
 
-							  ->Where(function($query) use ($vehicleCategory, $driver, $transmission, $price, $numberOfSeats){
+							  ->Where(function($query) use ($vehicleCategory, $driver, $transmission, $price, $numberOfSeats, $vehicleAvailable)
+							  {
 
 								if($vehicleCategory)
 								{
@@ -643,23 +687,100 @@ use App\packageModel as packageModel;
 									$query->where('numOfSeats', 'like', $numberOfSeats .'%');
 
 								}
-
 								
-                     
-            				})
-  						  ->get();	
+
+            				})->get();	
 
 
 
 
-//var_dump($request['buildingCat']);
+								    $vehicleOccupiedTravel = DB::table('tbltravel')
+										            ->join('tblvehicle', 'tbltravel.vehicleID', '=', 'tblvehicle.id')
+										            ->where('tbltravel.pickUpTime1','<=', $checkIn )
+										            ->where('tbltravel.pickUpTime2','>=', $checkout)
+										            ->select('tblvehicle.*')
+
+										            ->get();
 
 
-//var_dump($buildings);
+									/*$vehicleOccupiedBooking = DB::table('tblvehiclebooking')
+										           ->join('tblvehicle', 'tblvehiclebooking.vehicleid', '=', 'tblvehicle.id')
+										            ->where('tblvehiclebooking.fromdate', '<=', $checkIn)
+										            ->where('tblvehiclebooking.todate','>=', $checkout)
+
+										            ->select('tblvehicle.*')
+
+										            ->get();*/
+										            $vehicleOccupiedBooking = DB::table('tblvehiclebooking')
+										           ->join('tblvehicle', 'tblvehiclebooking.vehicleid', '=', 'tblvehicle.id')
+										            ->where('tblvehiclebooking.fromdate', '<=', $checkIn )
+										            ->where('tblvehiclebooking.todate','>=', $checkout)
+
+										            ->select('tblvehicle.*')
+
+										            ->get();
+										            
+
+
+
+										          
+					  						  			//$vehicleTrav =  array_diff($vehicles, $vehicleOccupiedTravel);
+					  						 	 		
+  											//	  var_dump($vehicleOccupiedBooking);
+
+														//$vehicleBook =  array_diff($vehicles, $vehicleOccupiedBooking);
+                     				  	
 	
+														$vehicles = $this->removeFromArray($vehicles, $vehicleOccupiedTravel);
 
+//var_dump($buildings); 
+													//	var_dump(count($vehicles));
+										           
+														$vehicles = $this->removeFromArray($vehicles, $vehicleOccupiedBooking);
+
+												//			var_dump(count($vehicles));
+										         //   die;
+										           
+
+//die;
 		return json_encode($vehicles);
 	
 	}
+
+
+	private function removeFromArray($parents, $children){
+		
+		$arr =  array();
+		if (!is_null($parents) && (count($parents) > 0) && !is_null($children) && (count($children) > 0)){
+		//	var_dump(123);
+			foreach ($parents as $parent){
+				$found = false;	
+				//var_dump($parent->id);
+				foreach ($children as $child){
+					//var_dump('parent id:' . $parent->id . ' ' .  'child id ' . $child->id);
+						//die;
+					if ($child->id == $parent->id){
+						//array_push($arr, $parent);
+					$found = true;	
+					//	unset($parent);
+					//	break;
+					}
+				}
+				if(!$found){
+
+					array_push($arr, $parent);
+				}
+			}
+
+
+		}
+		else {
+			$arr = $parents;
+		}
+		return $arr;
+	}
+
+
+
 	
 }

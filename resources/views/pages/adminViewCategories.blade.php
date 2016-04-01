@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
 function confirm_alert(node) {
-    return confirm("Please click on OK to delete tenant.");
+    return confirm("Please click on OK to delete.");
 
     onclick="return confirm_alert(this);"
 }
@@ -16,7 +16,7 @@ function confirm_alert(node) {
 
    <div class="banner">
         <div class="wrap">
-             <h2>View Tenant</h2><div class="clear"></div>
+             <h2>View Categories</h2><div class="clear"></div>
         </div>
     </div>
   <div class="main">  
@@ -24,7 +24,7 @@ function confirm_alert(node) {
     <div class="main-wrapper">
       
       <section >
-        <h4>View, Edit and Delete Tenant</h4>
+        <h4>View, Edit and Delete Categories</h4>
         <div class="contentHolder"  id="contentHolder">
 
 

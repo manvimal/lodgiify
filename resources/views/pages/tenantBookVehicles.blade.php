@@ -25,9 +25,9 @@
 
     <div class="project-list">
        
-      <h4>Recently Posted</h4>
+      <h4>Recently Posted (Last 9)</h4>
        <div class="contentHolder"  id="contentHolder">
-        <div class="deals-list content">
+        <div class="deals-list">
          <?php if (isset($vehicles)){
                   foreach($vehicles as $vehicle){
                                   $link = "search?action=vehicle&id=".$vehicle->id ."&limit=1";

@@ -22,10 +22,13 @@
 						<li><a href="{{ URL::asset('/viewUsers') }}">Manage All Users</a></li>
 						<li><a href="{{ URL::asset('/addCategoryPage') }}">Add Categories</a></li>
 						<li><a href="{{ URL::asset('/viewCategoryPage') }}">Manage All Categories</a></li>
-						<li><a href="{{ URL::asset('/addFacilityPage') }}">Administer Facility</a></li>
+						<li><a href="{{ URL::asset('/addFacilityPage') }}">Manage Facilities</a></li>
 						<li><a href="{{ URL::asset('/manageBuilding') }}">Manage Building</a></li>
 						<li><a href="{{ URL::asset('/managePackage') }}">Manage Package</a></li>
 						<li><a href="{{ URL::asset('/manageVehicles') }}">Manage Vehicles</a></li>
+						<li><a href="{{ URL::asset('/manageRoomBookings') }}">Manage Room Bookings</a></li>
+						<li><a href="{{ URL::asset('/manageAllVehicleBookings') }}">Manage Vehicle Bookings</a></li>
+
 					<?php
 						}
 					?>
@@ -38,7 +41,10 @@
 						<li><a href="{{ URL::asset('/booking') }}">Bookings</a></li>
 						<li><a href="{{ URL::asset('/mybooking') }}">My Bookings</a></li>
 						<li><a href="{{ URL::asset('/vehicleBooking') }}">Vehicle Booking</a></li> 
+						<li><a href="{{ URL::asset('/myVehicleBookings') }}">My Vehicle Bookings</a></li>
 						<li><a href="{{ URL::asset('/contactus') }}">Contact Us</a></li>
+
+						
 						
 
 					<?php
@@ -68,8 +74,8 @@
 					?>
 						<li><a href="{{ URL::asset('/addVehicle') }}">Add vehicle</a></li>
 						<li><a href="{{ URL::asset('/viewVehicles') }}">Vehicles</a></li>
-						<li><a href="{{ URL::asset('/viewVehicleBookings') }}">View my jobs</a></li> 
-						<li><a href="{{ URL::asset('/aboutus') }}">About Us</a></li>
+						<li><a href="{{ URL::asset('/viewVehicleBookings') }}">View my jobs</a></li>
+						<li><a href="{{ URL::asset('/viewBookedVehicles') }}">View Booked Vehicles</a></li>
 						<li><a href="{{ URL::asset('/contactus') }}">Contact Us</a></li> 
 					<?php
 

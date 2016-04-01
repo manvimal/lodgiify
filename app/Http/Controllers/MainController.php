@@ -28,7 +28,8 @@ use Carbon\Carbon;
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
-	public function index(Request $request){
+	public function index(Request $request)
+	{
 
 		$user = $request->session()->get('user');
 
@@ -37,7 +38,8 @@ use Carbon\Carbon;
 		$building = buildingModel::orderBy('created_at', 'DESC')->paginate(3);
 
 
-		foreach($blockedUsers as $blockedUser){
+		foreach($blockedUsers as $blockedUser)
+		{
 			$blocked = ($blockedUser['id']);
 
 		}
@@ -55,7 +57,8 @@ use Carbon\Carbon;
 	
 	}
 
-	public function registrationPage(Request $request){
+	public function registrationPage(Request $request)
+	{
 		$user = $request->session()->get('user');
 
 		return view('pages.registration',  array('user' => $user));
@@ -129,7 +132,7 @@ use Carbon\Carbon;
 		
 		 if(!empty($users) OR !empty($user1) OR !empty($user2)){
 		 	$messge['status'] = -1;
-		 	$messge['msg'] = "Already exists";
+		 	$messge['msg'] = "User name or Password already exist";
 
 		 }
 		 else{
@@ -177,7 +180,7 @@ use Carbon\Carbon;
 
 		           if(!empty($users) OR !empty($user1) OR !empty($user2)){
 				 	$messge['status'] = -1;
-				 	$messge['msg'] = "Already exists";
+				 	$messge['msg'] = "User name or Password already exist";
 
 					 }
 
@@ -236,7 +239,7 @@ use Carbon\Carbon;
 
  			if(!empty($users) OR !empty($user1) OR !empty($user2)){
 		 	$messge['status'] = -1;
-		 	$messge['msg'] = "Already exists";
+		 	$messge['msg'] = "User name or Password already exist";
 
 		 }
 			 else{
@@ -265,9 +268,20 @@ use Carbon\Carbon;
 
 	}
 
-	public function logoff(Request $request){
-		$request->session()->pull('user');
-		return redirect()->action('MainController@index');
+	public function logoff(Request $request)
+	{
+
+				$user = $request->session()->get('user');
+
+				if($user[0]->UserName != 'admin')
+				{
+					DB::table('tblsession')
+					  ->where('username', $user[0]->UserName )
+				      ->update(array('logoutdatetime' =>  $this->getTodayDateTime() ));
+				}
+
+				$request->session()->pull('user');
+				return redirect()->action('MainController@index');
 	}
 
 
@@ -303,7 +317,7 @@ use Carbon\Carbon;
 				
 				
 
-				sessionModel::where('username','=',$users[0]->UserName)->get();
+				$checkLoginExists = sessionModel::where('username','=',$users[0]->UserName)->get();
 
 				
 				//var_dump($checkLoginExists);
@@ -314,7 +328,7 @@ use Carbon\Carbon;
 
 					DB::table('tblsession')
 		                	->where('username', $users[0]->UserName )
-		                	->update(array('logindatetime' =>  $this->getTodayDateTime() ));
+		                	->update(array('logindatetime' =>  $this->getTodayDateTime(), 'logoutdatetime' => '' ));
 
 
 				}
@@ -345,13 +359,36 @@ use Carbon\Carbon;
 			                     ->Where('userStatus', '=', '1' )
 			                     ->get();
 
-					if(!empty($users)){
+					if(!empty($users))
+					{
 						$messge['status'] = 1;
 						$messge['msg'] = "Landlord logged in. Please wait...";
 						$users['type'] = 'landlord';
 						$request->session()->put('user', $users);
 
+
+						$checkLoginExists = sessionModel::where('username','=',$users[0]->UserName)->get();
+
+
+						if(isset($checkLoginExists) && !empty($checkLoginExists) && (count($checkLoginExists) >0))
+						{
+
+							DB::table('tblsession')
+				              ->where('username', $users[0]->UserName )
+				              ->update(array('logindatetime' =>  $this->getTodayDateTime(), 'logoutdatetime' => ''));
 						}
+
+						else
+						{
+							
+							$userStatusInsert = new sessionModel;
+							$userStatusInsert-> username = $users[0]->UserName;
+							$userStatusInsert-> logindatetime = $this->getTodayDateTime();
+							$userStatusInsert-> type = $users[0]->type;
+							$userStatusInsert->save();
+						}
+
+					}
 
 
 					else
@@ -364,12 +401,39 @@ use Carbon\Carbon;
 							                ->Where('userStatus', '=', '1' )
 							                ->get();
 
-						if(!empty($users)){
+						if(!empty($users))
+						{
 							$messge['status'] = 1;
 							$messge['msg'] = "Vehicle Owner logged in. Please wait...";
 							$users['type'] = 'vehicleowner';
 							$request->session()->put('user', $users);
-																		}
+
+
+
+							$checkLoginExists = sessionModel::where('username','=',$users[0]->UserName)->get();
+
+
+							if(isset($checkLoginExists) && !empty($checkLoginExists) && (count($checkLoginExists) >0))
+							{
+
+
+								DB::table('tblsession')
+					                	->where('username', $users[0]->UserName )
+					                	->update(array('logindatetime' =>  $this->getTodayDateTime(), 'logoutdatetime' => '' ));
+							}
+
+							else
+							{
+							
+								$userStatusInsert = new sessionModel;
+								$userStatusInsert-> username = $users[0]->UserName;
+								$userStatusInsert-> logindatetime = $this->getTodayDateTime();
+								$userStatusInsert-> type = $users[0]->type;
+								$userStatusInsert->save();
+							}
+
+
+						}
 
 
 						else
@@ -503,7 +567,9 @@ use Carbon\Carbon;
 		if (is_null($user)){
 			return redirect()->action('MainController@index');
 		}
+		else{
 		return view('pages.UpdateAccount',  array('user' => $user));
+		}
 
 	}
 
@@ -894,9 +960,10 @@ function sendEmail($contactName, $to, $subject, $body){
 
 
 
-	private function getUserBy($filter,$value){
-		$vehicleOwnerModel = vehicleOwnerModel::where($filter, '=', $value)->first();
-		if (is_null($vehicleOwnerModel)){
+	private function getUserBy($filter,$value)
+	{
+			$vehicleOwnerModel = vehicleOwnerModel::where($filter, '=', $value)->first();
+			if (is_null($vehicleOwnerModel)){
 
 			$userLandlord = userLandlord::where($filter, '=', $value)->first();
 

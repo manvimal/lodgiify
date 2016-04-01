@@ -46,7 +46,7 @@
 	   <div class="project">
 	    <div class="blog-left">
 			<div class="blog-bg">
-			   <h4>Register new room</h4><div class="clear"></div>
+			   <h4>Register new room</h4>NOTE: Only Appartments and Hotels can have rooms for booking, for the other building types like bungalows, the booking will include the building itself.<div class="clear"></div>
 			</div>
 
 
@@ -67,9 +67,12 @@
                         if (isset($buildings)){
 
                             foreach($buildings as $building){
+                               if($building->category->buildingCatName == "Hotel" || $building->category->buildingCatName == "Appartment"){
                                 ?>
+
                                     <option value="<?php echo $building->id ?>"> <?php echo  $building->buildingName  ?></option>
                                 <?php 
+                            }
                             }
 
                         }
@@ -82,6 +85,7 @@
             <td> <label>Facilities</label></td>
 
               <td>
+                <div style=" width: 160px; height: 100px;overflow:auto;">
                    <?php $i = 1;
                       foreach($facilities as $facility){ 
                        
@@ -94,6 +98,7 @@
                       }
 
                     ?>
+                  </div>
              </td>
 
 
@@ -155,7 +160,9 @@
 
 
             <tr>
-            <td colspan="3" align="center"><input type = "submit" id = "submit" value = "Submit"  class="btnAll" ></td>
+              <td></td>
+            <td align="center"><input type = "submit" id = "submit" value = "Submit"  class="btnLogin" ></td>
+            <td></td>
             </tr>
 
         </table>
@@ -206,6 +213,7 @@
             <td> <label>Facilities</label></td>
 
               <td>
+                 <div style=" width: 140px; height: 100px;overflow:auto;">
                    <?php $i = 1;
                       foreach($facilities as $facility){ 
                        
@@ -218,6 +226,7 @@
                       }
 
                     ?>
+                  </div>
              </td>
 
              <tr>
@@ -235,7 +244,7 @@
     </form>
 
 
-
+ <div style=" width: 240px; height: 130px;overflow:auto;">
  <table id="roomFacilityTableHide" class="main-list2 content" border="1" align="center">
             <?php if (isset($roomFacilities)){ ?>
                     <tr class="booking">             
@@ -245,7 +254,9 @@
                         <th class="action">Actions </th>
                                 
                     </tr>
-                                   
+
+
+                                    
                    <?php $i = 1;
 
 
@@ -259,9 +270,9 @@
                            <tr class="booking">
                               <td><?php echo $i ;?> </td>
                               <td><?php echo $facility->room->roomName  ?></td>
-                              <td><?php echo $facility->facility->name ?></td>
+                              <td><?php  echo (!is_null($facility->facility)   ? $facility->facility->name : ""); ?></td>
                               <td> <?php if (count($facility->id) > 0){  ?>  <?php } ?>  <a href="<?php echo $deleteLink; ?>"  class="btnLogin deleteRoomFacility" >Delete</a></td>
-                           
+                            
                             </tr> 
                            <?php 
                             $i ++;
@@ -273,7 +284,7 @@
                       ?>
           </table>
       
-
+</div>
 
 
 
@@ -284,7 +295,7 @@
 		</div>
 		<div class="project-list">
 	     	<h4>My Rooms</h4>
-			<ul class="blog-list">
+			<ul class="blog-list" style=" width: 200px; height: 120px;overflow:auto;">
             <?php if (isset($rooms)){
                 foreach($rooms as $room){
                                 ?>

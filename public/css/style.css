@@ -4247,11 +4247,48 @@ color:white;
 	    background-size: cover;
 }
 
-.successMsgRoom{
+.successMsgRoom
+{
 	font-size:13px;
 	color:green;
 }
-.errorMsgRoom{
+
+.errorMsgRoom
+{
 	font-size:13px;
 	color:red;
+}
+
+.buildFont
+{
+	font-weight:bold;
+	font-size:17px;
+}
+
+.roomheader
+{
+	font-weight: bold;
+	font-size: 13px
+}
+
+.advRoomDivInfo{
+	width: 150px;
+    height: 80px;
+    overflow: auto;
+}
+
+.advRoom
+{
+	font-weight: bold;
+	font-size: 13px
+}
+.fontVehicleAdv
+{
+	font-weight: bold;
+	font-size:12px;
+}
+.imageSize
+{
+	width:180px;
+	height:80px;
 }

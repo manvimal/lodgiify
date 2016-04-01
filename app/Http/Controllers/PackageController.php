@@ -31,7 +31,8 @@ use App\bookingPackageModel as bookingPackageModel;
 
 	
     // GET a package
-	public function get(Request $request, $id){
+	public function get(Request $request, $id)
+	{
 		$package = packageModel::where('id', '=', $id)->first();
 		return $package;
 	}
@@ -40,125 +41,199 @@ use App\bookingPackageModel as bookingPackageModel;
 
 		$user = $request->session()->get('user');
 
-		if (is_null($user)){
-			return redirect()->action('MainController@index');
-		}
-
-		$messge  = array(
+			$messge  = array(
 		    "status" => 0,
-		);
+			);
 
-		 
-	
-		if ((isset($request['packageName'])) && (!empty($request['packageName'])) ){
-			$packageName = $request['packageName'];
-		}
-
-		if ((isset($request['category'])) && (!empty($request['category'])) ){
-				$category = $request['category'];
-		}
-		
-		if ((isset($request['desc'])) && (!empty($request['desc'])) ){
-				$desc = $request['desc'];
-		}
-
-		if ((isset($request['capacity'])) && (!empty($request['capacity'])) ){
-				$capacity = $request['capacity'];
-		}
-		if ((isset($request['childrenCapacity'])) && (!empty($request['childrenCapacity'])) ){
-				$childrenCapacity = $request['childrenCapacity'];
-		}
-
-
-
-		if ((isset($request['building'])) && (!empty($request['building'])) ){
-				$building = $request['building'];
-		}
-
-		if ((isset($request['newPrice'])) && (!empty($request['newPrice'])) ){
-				$newPrice = $request['newPrice'];
-		}
-
-
-
-		// Retrieve use session
-		$user = $request->session()->get('user');
-
-
-		//$checkPackageExist = packageModel::where('packageName', '=', $packageName)->get();
-
-		$checkPackageExist = DB::table('tblpackage')->where('packageName', $packageName)->get();
-
-		if((isset($checkPackageExist)) && (!empty($checkPackageExist))){
-
-			$messge['status'] = -1;
-		 	$messge['msg'] = "Package Name Already Exist";
-
-		
-		}
-		else{
-
-		$package = new packageModel;
-		$package-> buildingID = $building  ;
-		$package-> roomCategoryID = $category;
-		$package-> packageDesc = $desc ;
-		$package-> capacityAdult = $capacity;
-		//$package-> capacityChildren = $childrenCapacity;
-
-		$package-> newPrice = $newPrice;
-		$package-> packageName = $packageName;
-
-			
-
-		$package->save();
-
-		$messge['status'] = 1;
-		$messge['msg'] = "Successfully inserted";
-		
-
-		
-	}
-	return json_encode($messge);
-
-	}
-
-	
-
-	public function viewPackage(Request $request){	
-
-		$user = $request->session()->get('user');
 		if (is_null($user)){
 			return redirect()->action('MainController@index');
 		}
-		elseif($user[0]->type=="Landlord"){
+
+		elseif($user[0]->type=="Landlord")
+		{
+
+
+			// Retrieve use session
+				$user = $request->session()->get('user');
+
+			$error = false;
+	
+			if ((isset($request['packageName'])) && (!empty($request['packageName'])) ){
+				$packageName = $request['packageName'];
+			}
+			else
+			{
+				$packageName = '';
+				$error = true;
+			}
+
+			if ((isset($request['category'])) && (!empty($request['category'])) ){
+					$category = $request['category'];
+			}
+			else
+			{
+				$category = '';
+				$error = true;
+			}
+
+			
+			if ((isset($request['desc'])) && (!empty($request['desc'])) ){
+					$desc = $request['desc'];
+			}
+			else
+			{
+				$desc = '';
+				$error = true;
+			}
+
+			if ((isset($request['adultPrice'])) && (!empty($request['adultPrice'])) ){
+					$adultPrice = $request['adultPrice'];
+			}
+			else
+			{
+				$adultPrice = '';
+				//$error = true;
+			}
+			if ((isset($request['childrenPrice'])) && (!empty($request['childrenPrice'])) ){
+					$childrenPrice = $request['childrenPrice'];
+			}
+			else
+			{
+				$childrenPrice = '';
+				//$error = true;
+			}
+
+			if ((isset($request['building'])) && (!empty($request['building'])) || (($request['building'])!="-1") ){
+					$building = $request['building'];
+			}
+			else
+			{
+				$building = '';
+				$error = true;
+			}
+
+			if ((isset($request['oldPrice'])) && (!empty($request['oldPrice'])) ){
+					$oldPrice = $request['oldPrice'];
+			}
+			else
+			{
+				$oldPrice = '';
+			//	$error = true;
+			}
+
+			if ((isset($request['newPrice'])) && (!empty($request['newPrice'])) ){
+					$newPrice = $request['newPrice'];
+			}
+			else
+			{
+				$newPrice = '';
+			//	$error = true;
+			}
+
+
+
+
+					//$checkPackageExist = packageModel::where('packageName', '=', $packageName)->get();
+
+					$checkPackageExist = DB::table('tblpackage')->where('packageName', $packageName)->get();
+
+					if((isset($checkPackageExist)) && (!empty($checkPackageExist)))
+					{
+
+						$messge['status'] = -1;
+					 	$messge['msg'] = "Package Name Already Exist";
+
+				
+					}
+
+					else
+					{
+						if($error==false)
+						{
+
+						$package = new packageModel;
+						$package-> buildingID = $building;
+						$package-> roomCategoryID = $category;
+						$package-> packageDesc = $desc ;
+						$package-> adultPrice = $adultPrice;
+						$package-> ChildPrice = $childrenPrice;
+						$package-> newPrice = $newPrice;
+						$package-> packageName = $packageName;
+						$package-> oldPrice = $oldPrice;
+
+
+							
+
+						$package->save();
+
+						$messge['status'] = 1;
+						$messge['msg'] = "Successfully inserted";
+					
+						}
+						else
+						{
+							$messge['status'] = -1;
+							$messge['msg'] = "Failed, PLease recheck all fields";
+						}
+				
+					}
+				return json_encode($messge);
+			
+		}
+
+		else
+		{
+			return response()->view('pages.404', ['user'=>$user], 404);
+		}
+
+	}
+
+	
+
+	public function viewPackage(Request $request)
+	{	
+
+		$user = $request->session()->get('user');
+
+		if (is_null($user))
+		{
+			return redirect()->action('MainController@index');
+		}
+
+		elseif($user[0]->type=="Landlord")
+		{
 			//Gets buildings
-		$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
+			$buildings = buildingModel::where('landlordID', '=', $user[0]->id)->get();
 
-			//Gets packages of building
-		$packages = packageModel::where('buildingid', '=', $buildings[0]->id)->get();
+				//Gets packages of building
+			$packages = packageModel::where('buildingid', '=', $buildings[0]->id)->get();
 
-		//var_dump($packages[0]->id);
+			//var_dump($packages[0]->id);
 
-		return view('pages.landlordpackages',  array('user' => $user, 'packages' => $packages, 'buildings' => $buildings));
+			return view('pages.landlordpackages',  array('user' => $user, 'packages' => $packages, 'buildings' => $buildings));
 
 		}
-		else{
+
+		else
+		{
 			
 			return redirect()->action('MainController@index');
 		}
 		
 
-		
-		
 
 	}
 
 
-	public function delete(Request $request){
+	public function delete(Request $request)
+	{
 		$user = $request->session()->get('user');
-		if (is_null($user)){
+
+		if (is_null($user))
+		{
 			return false;
 		}
+
 		if ($request['id'] != null){
 			$buildings = packageModel::where('id', '=', $request['id'])->delete();
 			bookingPackageModel::where('package_id', '=', $request['id'])->delete();
@@ -166,7 +241,8 @@ use App\bookingPackageModel as bookingPackageModel;
 		print json_encode(array(1));
 	}
 
-	public function update(Request $request){
+	public function update(Request $request)
+	{
 		
 		if ((isset($request['roomid'])) && (!empty($request['roomid'])) ){
 			$roomid = $request['roomid'];
@@ -184,6 +260,7 @@ use App\bookingPackageModel as bookingPackageModel;
 		
 		// Retrieve user session
 		$user = $request->session()->get('user');
+
 		if (is_null($user)){
 			return false;
 		}
@@ -195,6 +272,32 @@ use App\bookingPackageModel as bookingPackageModel;
 		$room->save();
 		Session::flash('success', 'Package successfully updated'); 
 		print json_encode(array(1));
+
+	}
+
+	public function getbuildingCat(Request $request)
+	{
+
+		$error = false;
+
+		if(isset($request['building']))
+		{
+			$buildingid = $request['building'];
+		}
+
+		else
+		{
+			$error = true;
+			$buildingid = false;
+		}
+
+
+		$building = buildingModel::where('id','=', $buildingid)->get();
+
+		$buildingCatName = $building[0]->category->buildingCatName;
+
+
+		json_encode($buildingCatName);
 
 	}
 

@@ -22,8 +22,11 @@ Route::get('/viewVehicleBookings','VehicleOwnerController@viewVehicleBookinga');
 Route::get('/user/forgetPassword','MainController@forgetPassword');
 Route::get('/user/sessionTimeOutRedirect','MainController@sessionTimeOutRedirect');
 Route::get('/viewBookedRooms','LandlordController@viewBookedRooms');
+Route::get('/myVehicleBookings','tenantController@myVehicleBookings');
 
 
+Route::get('/viewBookedVehicles','VehicleOwnerController@viewBookedVehicles');
+Route::get('/vehicleBooking/delete','VehicleOwnerController@deleteVehicleBooking');
 
 /**** USER ***/
 Route::post('/user/registration', 'MainController@registerUser');
@@ -73,6 +76,16 @@ Route::get('/bookVehiclesProcess/{id}','bookingController@bookVehiclesProcess');
 Route::post('/checkVehicleAvail','bookingController@checkVehicleAvailability');
 Route::post('/vehiclebooking/register','bookingController@bookVehicles');
 
+Route::get('vehicleBooking/delete','tenantController@deleteVehicleBooking');
+Route::get('vehicleBooking/view','tenantController@viewVehicleBookingPDF');
+
+Route::get('deleteVehicleBooking','VehicleOwnerController@deleteVehicleBooking');
+
+
+
+
+
+Route::get('/bookingTenant/delete','LandlordController@landlordDeleteTenantBooking');
 
 
 
@@ -114,6 +127,13 @@ Route::get('/user/block', 'adminController@blockUsers');
 Route::get('/manageBuilding', 'adminController@manageBuilding');
 Route::get('/managePackage','adminController@managePackage');
 Route::get('/manageVehicles', 'adminController@manageVehicles');
+Route::get('/manageRoomBookings', 'adminController@manageRoomBookings');
+
+Route::get('/manageAllVehicleBookings', 'adminController@manageAllVehicleBookings');
+
+
+Route::get('/adminVehicleBooking/delete','adminController@deleteVehicleBooking');
+Route::get('adminRoombooking/delete','adminController@adminDeleteBooking');
 
 
 

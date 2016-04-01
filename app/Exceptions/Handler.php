@@ -42,9 +42,24 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof ModelNotFoundException) {
+        $user = $request->session()->get('user');
+
+        if ($e instanceof \PDOException) {
+            return response()->view('pages.404', ['Missing', $e->getMessage(), 'user'=>$user], 500);
+        }
+
+        if ($e instanceof ModelNotFoundException) 
+        {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
+
+        if($e instanceof NotFoundHttpException)
+        {
+             return response()->view('pages.404', ['Missing', $e->getMessage(), 'user'=>$user], 404);
+           
+        }
+
+
 
         return parent::render($request, $e);
     }

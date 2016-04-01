@@ -20,6 +20,7 @@ use App\roomModel as roomModel;
 use App\vehicleCategory as vehiclecategory;
 use App\vehicleModel as vehicleModel;
 use App\travelModel as travelModel;
+use App\vehicleBookingModel as vehicleBookingModel;
 
 
  class VehicleOwnerController extends BaseController
@@ -104,6 +105,81 @@ use App\travelModel as travelModel;
 		
 		return $bookinRemaining ;
 	}
+
+
+
+	public function viewBookedVehicles(Request $request)
+	{
+		$user = $request->session()->get('user');
+
+		
+
+		if (is_null($user))
+		{
+			return redirect()->action('MainController@index');
+		}
+
+		elseif($user[0]->type == 'vehicleowner')
+		{	
+
+
+			 $VehiclebookingsDone = DB::table('tblvehiclebooking')
+							->join('tblvehicle', 'tblvehiclebooking.vehicleid', '=', 'tblvehicle.id')
+							->join('tblvehicleowner', 'tblvehicle.vehicleOwnerID', '=', 'tblvehicleowner.id')
+							->join('tbltenant', 'tblvehiclebooking.tenantid', '=', 'tbltenant.id')
+							->join('tblvehiclecat', 'tblvehicle.vehicleCatID','=' ,'tblvehiclecat.id')
+							->where('tblvehicleowner.id','=', $user[0]->id)
+							->select('tblvehiclebooking.*', 'tbltenant.FirstName', 'tbltenant.LastName','tbltenant.Phone', 'tbltenant.Email', 'tblvehicle.vehicleName', 'tblvehicle.driver', 'tblvehicle.image', 'tblvehiclecat.vehicleCatName')
+							->orderBy('fromdate', 'desc')
+							->get();
+
+ 
+//print('<pre>');
+//var_dump($VehiclebookingsDone);
+//die;
+
+			$timenow = $this->getTodayDateTime();
+
+
+			return view('pages.vehicleOwnerVehiclesBooked',  array('user' => $user, 'VehiclebookingsDone'=> $VehiclebookingsDone, 'timenow'=>$timenow));
+		}
+		
+		else
+		{
+			return response()->view('pages.404', ['user'=>$user], 404);
+		}
+
+	}
+
+	private function getTodayDateTime()
+	{
+
+		date_default_timezone_set("Indian/Mauritius");
+		return date('Y-m-d H:i:s', strtotime('+0 minutes'));
+	}
+
+
+	public function deleteVehicleBooking(Request $request){
+
+		$user = $request->session()->get('user');
+
+		if (is_null($user))
+		{
+			return false;
+		}
+
+		if ($request['id'] != null){
+
+			$deleteVehicleBookings = vehicleBookingModel::where('id', '=', $request['id'])->delete();
+
+
+		}
+			print json_encode(array(1));
+	
+		
+	}
+
+	
 
 
 
